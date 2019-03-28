@@ -31,6 +31,18 @@ class ApiDocForm extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
+  protected function getNewRevisionDefault() {
+    /* @var \Drupal\apigee_api_catalog\Entity\ApiDoc $entity */
+    $entity = $this->getEntity();
+
+    // Always use the default revision setting.
+    $new_revision_default = $entity::shouldCreateNewRevision();
+    return $new_revision_default;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save(array $form, FormStateInterface $form_state) {
     $entity = $this->getEntity();
     $insert = $entity->isNew();
