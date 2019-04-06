@@ -25,3 +25,9 @@ apidoc.admin:
   route_name: entity.apidoc.collection
   base_route: system.admin_content
   weight: 10
+
+entity.apidoc.version_history:
+  route_name:  entity.apidoc.version_history
+  base_route:  entity.apidoc.canonical
+  title: 'Revisions'
+  weight: 15
