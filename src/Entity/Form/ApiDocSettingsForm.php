@@ -20,7 +20,6 @@
 
 namespace Drupal\apigee_api_catalog\Entity\Form;
 
-use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -84,6 +83,8 @@ class ApiDocSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    /* @var \Drupal\apigee_api_catalog\Entity\ApiDoc $entity */
+    $entity = $this->entityTypeManager->getStorage('apidoc')->create();
     $form['apigee_api_catalog_settings']['#markup'] = $this->t('Settings for Apigee API catalog. Manage field settings using the tabs above.');
 
     $form['additional_settings'] = [
@@ -96,11 +97,11 @@ class ApiDocSettingsForm extends FormBase {
       '#group' => 'additional_settings',
     ];
     $workflow_options = [
-      'new_revision' => ApiDoc::shouldCreateNewRevision(),
+      'new_revision' => $entity->shouldCreateNewRevision(),
     ];
     // Prepare workflow options to be used for 'checkboxes' form element.
-    $keys = array_keys(array_filter($workflow_options));
-    $workflow_options = array_combine($keys, $keys);
+    $workflow_options_keys = array_keys(array_filter($workflow_options));
+    $workflow_options = array_combine($workflow_options_keys, $workflow_options_keys);
     $form['workflow']['options'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Default options'),
