@@ -68,6 +68,7 @@ use Drupal\link\LinkItemInterface;
  *     "add-form" = "/admin/content/api/add",
  *     "edit-form" = "/admin/content/api/{apidoc}/edit",
  *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "update-spec-form" = "/admin/content/api/{apidoc}/update",
  *     "collection" = "/admin/content/apis",
  *   },
  *   field_ui_base_route = "entity.apidoc.settings"
@@ -148,6 +149,14 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
     }
 
     return (bool) $this->get('spec_as_file')->getValue()[0]['value'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isRevisionable() : bool {
+    // Entity types are revisionable if a revision key has been specified.
+    return (bool) $this->getEntityKey('revision');
   }
 
   /**
@@ -293,6 +302,15 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
+    $this->updateOpenApiSpecFile(FALSE, FALSE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateOpenApiSpecFile($save = TRUE, $new_revision = TRUE) {
+    $needs_save = FALSE;
+
     // If "spec_as_file", grab file from "file_link" and save it into the
     // "spec" file field. The file_link field should already have validated that
     // a valid file exists at that URL.
@@ -307,7 +325,7 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
           ->addMessage($this->t('Could not retrieve OpenAPI specifications file located at %url', [
             '%url' => $file_uri,
           ]), 'error');
-        return;
+        return FALSE;
       }
 
       // Only save file if it hasn't been fetched previously.
@@ -324,6 +342,8 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
           ] + $spec_value;
         $this->set('spec', $spec_value);
         $this->set('spec_md5', $data_md5);
+
+        $needs_save = TRUE;
       }
     }
 
@@ -334,10 +354,25 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
         ->load($spec_value['target_id']);
 
       if ($file) {
-        $this->set('spec_md5', md5_file($file->getFileUri()));
+        $prev_md5 = $this->get('spec_md5')->isEmpty() ? NULL : $this->get('spec_md5')->getValue()[0]['value'];
+        $file_md5 = md5_file($file->getFileUri());
+        if ($prev_md5 != $file_md5) {
+          $this->set('spec_md5', $file_md5);
+
+          $needs_save = TRUE;
+        }
       }
     }
 
+    // Only save if changes were made.
+    if ($save && $needs_save) {
+      if ($new_revision && $this->isRevisionable()) {
+        $this->setNewRevision();
+      }
+      $this->save();
+    }
+
+    return TRUE;
   }
 
 }

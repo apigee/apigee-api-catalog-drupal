@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Plugin\Validation\Constraint;
+namespace Drupal\apigee_api_catalog\Plugin\Validation\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 
