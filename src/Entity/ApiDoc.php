@@ -68,7 +68,7 @@ use Drupal\link\LinkItemInterface;
  *     "add-form" = "/admin/content/api/add",
  *     "edit-form" = "/admin/content/api/{apidoc}/edit",
  *     "delete-form" = "/admin/content/api/{apidoc}/delete",
- *     "update-spec-form" = "/admin/content/api/{apidoc}/update",
+ *     "reimport-spec-form" = "/admin/content/api/{apidoc}/reimport",
  *     "collection" = "/admin/content/apis",
  *   },
  *   field_ui_base_route = "entity.apidoc.settings"
@@ -302,13 +302,13 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
-    $this->updateOpenApiSpecFile(FALSE, FALSE);
+    $this->reimportOpenApiSpecFile(FALSE, FALSE);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function updateOpenApiSpecFile($save = TRUE, $new_revision = TRUE) {
+  public function reimportOpenApiSpecFile($save = TRUE, $new_revision = TRUE) {
     $needs_save = FALSE;
 
     // If "spec_as_file", grab file from "file_link" and save it into the
