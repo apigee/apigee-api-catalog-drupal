@@ -20,7 +20,7 @@
 
 namespace Drupal\apigee_api_catalog\Entity\Form;
 
-use Drupal\apigee_edge_apidocs\Entity\ApiDocInterface;
+use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 

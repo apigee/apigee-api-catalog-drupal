@@ -1,4 +1,9 @@
 services:
+
   logger.channel.apigee_api_catalog:
     parent: logger.channel_base
     arguments: ['apigee_api_catalog']
+
+  apigee_api_catalog.spec_fetcher:
+    class: Drupal\apigee_api_catalog\ApiDocSpecFetcher
+    arguments: ['@file_system', '@http_client', '@entity_type.manager', '@messenger', '@logger.channel.apigee_api_catalog']
