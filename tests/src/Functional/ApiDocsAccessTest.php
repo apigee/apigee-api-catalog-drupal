@@ -17,17 +17,16 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Drupal\Tests\apigee_edge_apidocs\Functional;
+namespace Drupal\Tests\apigee_api_catalog\Functional;
 
-use Drupal\apigee_edge_apidocs\Entity\ApiDoc;
+use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests the ApiDoc term access permissions.
  *
- * @group apigee_edge
- * @group apigee_edge_apidocs
+ * @group apigee_api_catalog
  */
 class ApiDocsAccessTest extends BrowserTestBase {
 
@@ -36,19 +35,19 @@ class ApiDocsAccessTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['apigee_edge_apidocs', 'block', 'field_ui'];
+  public static $modules = ['apigee_api_catalog', 'block', 'field_ui'];
 
   /**
    * A published API Doc.
    *
-   * @var \Drupal\apigee_edge_apidocs\Entity\ApiDoc
+   * @var \Drupal\apigee_api_catalog\Entity\ApiDoc
    */
   protected $apidocPublished;
 
   /**
    * An unpublished API Doc.
    *
-   * @var \Drupal\apigee_edge_apidocs\Entity\ApiDoc
+   * @var \Drupal\apigee_api_catalog\Entity\ApiDoc
    */
   protected $apidocUnpublished;
 
@@ -101,9 +100,9 @@ class ApiDocsAccessTest extends BrowserTestBase {
   public function testApiDocAccessAdmin() {
     $assert_session = $this->assertSession();
 
-    // Test the 'administer apidoc entities' permission.
+    // Test the 'administer apigee api catalog' permission.
     $this->drupalLogin($this->drupalCreateUser([
-      'administer apidoc entities',
+      'administer apigee api catalog',
       'administer apidoc display',
       'administer apidoc fields',
       'administer apidoc form display',
@@ -137,7 +136,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(200);
 
     // Make sure the field manipulation links are available.
@@ -183,7 +182,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(403);
 
     // Get admin settings page.
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -224,7 +223,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -265,7 +264,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -306,7 +305,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -317,7 +316,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
   public function testApiDocAccessPublished() {
     $assert_session = $this->assertSession();
 
-    // Test the 'administer apidoc entities' permission.
+    // Test the 'administer apigee api catalog' permission.
     $this->drupalLogin($this->drupalCreateUser(['view published apidoc entities']));
 
     $this->drupalGet($this->apidocPublished->toUrl());
@@ -348,7 +347,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -359,7 +358,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
   public function testApiDocAccessUnpublished() {
     $assert_session = $this->assertSession();
 
-    // Test the 'administer apidoc entities' permission.
+    // Test the 'administer apigee api catalog' permission.
     $this->drupalLogin($this->drupalCreateUser(['view unpublished apidoc entities']));
 
     $this->drupalGet($this->apidocPublished->toUrl());
@@ -390,7 +389,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_edge_apidocs.settings'));
+    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -398,7 +397,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
   /**
    * Checks access on apidoc.
    *
-   * @param \Drupal\apigee_edge_apidocs\Entity\ApiDoc $apidoc
+   * @param \Drupal\apigee_api_catalog\Entity\ApiDoc $apidoc
    *   An apidoc entity.
    * @param string $access_operation
    *   The entity operation, e.g. 'view', 'edit', 'delete', etc.

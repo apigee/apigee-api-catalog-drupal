@@ -1,0 +1,12 @@
+entity.apidoc.collection:
+  title: 'API catalog'
+  route_name: entity.apidoc.collection
+  description: 'List of all API documentation.'
+  parent: system.admin_structure
+  weight: 100
+
+apigee_api_catalog.settings:
+  title: 'API catalog'
+  description: 'Configure API catalog settings.'
+  route_name: apigee_api_catalog.settings
+  parent: system.admin_config_edge

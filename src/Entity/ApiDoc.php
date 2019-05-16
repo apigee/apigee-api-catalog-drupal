@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Entity;
+namespace Drupal\apigee_api_catalog\Entity;
 
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
@@ -35,24 +35,24 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *   label_plural = @Translation("API Docs"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\apigee_edge_apidocs\ApiDocListBuilder",
+ *     "list_builder" = "Drupal\apigee_api_catalog\ApiDocListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "form" = {
- *       "default" = "Drupal\apigee_edge_apidocs\Form\ApiDocForm",
- *       "add" = "Drupal\apigee_edge_apidocs\Form\ApiDocForm",
- *       "edit" = "Drupal\apigee_edge_apidocs\Form\ApiDocForm",
- *       "delete" = "Drupal\apigee_edge_apidocs\Form\ApiDocDeleteForm",
+ *       "default" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
+ *       "add" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
+ *       "edit" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
+ *       "delete" = "Drupal\apigee_api_catalog\Form\ApiDocDeleteForm",
  *     },
- *     "access" = "Drupal\apigee_edge_apidocs\ApiDocAccessControlHandler",
+ *     "access" = "Drupal\apigee_api_catalog\ApiDocAccessControlHandler",
  *     "route_provider" = {
- *       "html" = "Drupal\apigee_edge_apidocs\ApiDocHtmlRouteProvider",
+ *       "html" = "Drupal\apigee_api_catalog\ApiDocHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "apidoc",
  *   data_table = "apidoc_field_data",
  *   translatable = TRUE,
- *   admin_permission = "administer apidoc entities",
+ *   admin_permission = "administer apigee api catalog",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -67,7 +67,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "delete-form" = "/admin/structure/apidoc/{apidoc}/delete",
  *     "collection" = "/admin/structure/apidoc",
  *   },
- *   field_ui_base_route = "apigee_edge_apidocs.settings"
+ *   field_ui_base_route = "apigee_api_catalog.settings"
  * )
  */
 class ApiDoc extends ContentEntityBase implements ApiDocInterface {
@@ -204,7 +204,7 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
 
     $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('API Product'))
-      ->setDescription(t('The API Product this is documenting.'))
+      ->setDescription(t('The API Product this API is associated to.'))
       ->setSetting('target_type', 'api_product')
       ->setDisplayOptions('form', [
         'label' => 'above',

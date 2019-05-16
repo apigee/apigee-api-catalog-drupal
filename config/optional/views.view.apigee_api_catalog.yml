@@ -4,12 +4,12 @@ dependencies:
   config:
     - system.menu.main
   module:
-    - apigee_edge_apidocs
+    - apigee_api_catalog
     - text
-id: apigee_edge_api_docs
-label: 'Apigee Edge API Docs'
+id: apigee_api_catalog
+label: 'API Catalog'
 module: views
-description: 'APIs published using the API Docs Apigee Edge module.'
+description: 'APIs published using the Apigee API Catalog module.'
 tag: ''
 base_table: apidoc_field_data
 base_field: id
@@ -280,7 +280,7 @@ display:
           entity_field: name
           plugin_id: string
       sorts: {  }
-      title: 'API Documentation'
+      title: 'API Catalog'
       header: {  }
       footer: {  }
       empty:
@@ -319,7 +319,7 @@ display:
       menu:
         type: normal
         title: APIs
-        description: 'API documentation'
+        description: 'API Catalog'
         expanded: false
         parent: ''
         weight: 0

@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Form;
+namespace Drupal\apigee_api_catalog\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -34,7 +34,7 @@ class ApiDocSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'apidoc_settings';
+    return 'apigee_api_catalog_settings';
   }
 
   /**
@@ -47,7 +47,7 @@ class ApiDocSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['apidoc_settings']['#markup'] = $this->t('Settings for API Docs. Manage field settings using the tabs above.');
+    $form['apigee_api_catalog_settings']['#markup'] = $this->t('Settings for Apigee API catalog. Manage field settings using the tabs above.');
     return $form;
   }
 

@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs;
+namespace Drupal\apigee_api_catalog;
 
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
@@ -28,7 +28,7 @@ use Drupal\Core\Access\AccessResult;
 /**
  * Access controller for the API Doc entity.
  *
- * @see \Drupal\apigee_edge_apidocs\Entity\ApiDoc.
+ * @see \Drupal\apigee_api_catalog\Entity\ApiDoc.
  */
 class ApiDocAccessControlHandler extends EntityAccessControlHandler {
 
@@ -39,7 +39,7 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler {
     $parent_access = parent::checkAccess($entity, $operation, $account);
 
     if (!$parent_access->isAllowed()) {
-      /** @var \Drupal\apigee_edge_apidocs\Entity\ApiDocInterface $entity */
+      /** @var \Drupal\apigee_api_catalog\Entity\ApiDocInterface $entity */
       switch ($operation) {
         case 'view':
           if (!$entity->isPublished()) {
@@ -64,7 +64,7 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler {
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
     return AccessResult::allowedIfHasPermission($account, 'add apidoc entities')
-      ->orIf(AccessResult::allowedIfHasPermission($account, 'administer apidoc entities'));
+      ->orIf(AccessResult::allowedIfHasPermission($account, 'administer apigee api catalog'));
   }
 
 }

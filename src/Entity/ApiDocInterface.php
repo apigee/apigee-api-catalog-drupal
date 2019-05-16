@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Entity;
+namespace Drupal\apigee_api_catalog\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -42,7 +42,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @param string $name
    *   The API Doc name.
    *
-   * @return \Drupal\apigee_edge_apidocs\Entity\ApiDocInterface
+   * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The called API Doc entity.
    */
   public function setName(string $name) : self;
@@ -61,7 +61,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @param string $description
    *   Description of the API Doc.
    *
-   * @return \Drupal\apigee_edge_apidocs\Entity\ApiDocInterface
+   * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The API Doc entity.
    */
   public function setDescription(string $description) : self;
@@ -80,7 +80,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @param int $timestamp
    *   The API Doc creation timestamp.
    *
-   * @return \Drupal\apigee_edge_apidocs\Entity\ApiDocInterface
+   * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The called API Doc entity.
    */
   public function setCreatedTime(int $timestamp) : self;
@@ -101,7 +101,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @param bool $published
    *   TRUE to set this API Doc to published, FALSE to set it to unpublished.
    *
-   * @return \Drupal\apigee_edge_apidocs\Entity\ApiDocInterface
+   * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The called API Doc entity.
    */
   public function setPublished(bool $published) : self;

@@ -1,8 +1,8 @@
 # API Doc routing definition
-apigee_edge_apidocs.settings:
-  route_name: apigee_edge_apidocs.settings
+apigee_api_catalog.settings:
+  route_name: apigee_api_catalog.settings
   title: 'Settings'
-  base_route: apigee_edge_apidocs.settings
+  base_route: apigee_api_catalog.settings
 
 entity.apidoc.canonical:
   route_name: entity.apidoc.canonical

@@ -18,9 +18,9 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs;
+namespace Drupal\apigee_api_catalog;
 
-use Drupal\apigee_edge_apidocs\Controller\ApiDocController;
+use Drupal\apigee_api_catalog\Controller\ApiDocController;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Symfony\Component\Routing\Route;
@@ -40,7 +40,7 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
     $collection = parent::getRoutes($entity_type);
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
-      $collection->add('apigee_edge_apidocs.settings', $settings_form_route);
+      $collection->add('apigee_api_catalog.settings', $settings_form_route);
     }
 
     if ($apidoc_collection_route = $collection->get('entity.apidoc.collection')) {
@@ -61,10 +61,10 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   protected function getSettingsFormRoute(EntityTypeInterface $entity_type) {
     if (!$entity_type->getBundleEntityType()) {
-      $route = new Route('admin/config/apigee-edge/api-docs-settings');
+      $route = new Route('admin/config/api-catalog-settings');
       $route
         ->setDefaults([
-          '_form' => 'Drupal\apigee_edge_apidocs\Form\ApiDocSettingsForm',
+          '_form' => 'Drupal\apigee_api_catalog\Form\ApiDocSettingsForm',
           '_title_callback' => ApiDocController::class . '::title',
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())

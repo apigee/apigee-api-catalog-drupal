@@ -20,14 +20,13 @@
 
 namespace Drupal\Tests\content_entity_example\Kernel;
 
-use Drupal\apigee_edge_apidocs\Entity\ApiDoc;
+use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Test basic CRUD operations for our ApiDoc entity type.
  *
- * @group apigee_edge
- * @group apigee_edge_apidocs
+ * @group apigee_api_catalog
  */
 class ApidocEntityTest extends KernelTestBase {
 
@@ -37,7 +36,7 @@ class ApidocEntityTest extends KernelTestBase {
     'file',
     'apigee_edge',
     'key',
-    'apigee_edge_apidocs',
+    'apigee_api_catalog',
   ];
 
   /**

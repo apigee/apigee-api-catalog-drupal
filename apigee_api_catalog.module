@@ -20,7 +20,7 @@
 
 /**
  * @file
- * Module file for Apigee Edge API Docs.
+ * Module file for Apigee Edge: API Docs.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -28,13 +28,13 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements hook_help().
  */
-function apigee_edge_apidocs_help($route_name, RouteMatchInterface $route_match) {
+function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
-    // Main module help for the apigee_edge_apidocs module.
-    case 'help.page.apigee_edge_apidocs':
+    // Main module help for the apigee_api_catalog module.
+    case 'help.page.apigee_api_catalog':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Display OpenAPI documentation of your APIs to your developers.') . '</p>';
+      $output .= '<p>' . t('Display documentation of your APIs to your developers using OpenAPI documentation.') . '</p>';
       return $output;
 
     default:

@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Controller;
+namespace Drupal\apigee_api_catalog\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -26,7 +26,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Generic controller for the apigee_edge_apidocs module.
+ * Generic controller for the apidoc entity.
  */
 class ApiDocController implements ContainerInjectionInterface {
   use StringTranslationTrait;
@@ -60,6 +60,8 @@ class ApiDocController implements ContainerInjectionInterface {
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The translated title.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function title() {
     return $this->t('@label settings', [

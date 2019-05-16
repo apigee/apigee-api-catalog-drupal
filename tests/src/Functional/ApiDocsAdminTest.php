@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\Tests\apigee_edge_apidocs\Functional;
+namespace Drupal\Tests\apigee_api_catalog\Functional;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
@@ -29,8 +29,7 @@ use Drupal\Tests\TestFileCreationTrait;
 /**
  * Simple test to ensure that main page loads with module enabled.
  *
- * @group apigee_edge
- * @group apigee_edge_apidocs
+ * @group apigee_api_catalog
  */
 class ApiDocsAdminTest extends BrowserTestBase {
 
@@ -41,7 +40,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['apigee_edge_apidocs', 'block', 'field_ui'];
+  public static $modules = ['apigee_api_catalog', 'block', 'field_ui'];
 
   /**
    * A user with permission to administer site configuration.
@@ -74,7 +73,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
       'edit apidoc entities',
       'view published apidoc entities',
       'view unpublished apidoc entities',
-      'administer apidoc entities',
+      'administer apigee api catalog',
       'administer apidoc display',
       'administer apidoc fields',
       'administer apidoc form display',

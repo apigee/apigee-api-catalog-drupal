@@ -1,0 +1,4 @@
+services:
+  logger.channel.apigee_api_catalog:
+    parent: logger.channel_base
+    arguments: ['apigee_api_catalog']

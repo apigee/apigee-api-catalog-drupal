@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_edge_apidocs\Form;
+namespace Drupal\apigee_api_catalog\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
@@ -67,7 +67,7 @@ class ApiDocDeleteForm extends ContentEntityConfirmFormBase {
       $container->get('entity.repository'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
-      $container->get('logger.channel.apigee_edge_apidocs')
+      $container->get('logger.channel.apigee_api_catalog')
     );
   }
 
