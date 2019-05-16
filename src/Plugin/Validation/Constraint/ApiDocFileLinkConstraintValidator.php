@@ -72,14 +72,12 @@ class ApiDocFileLinkConstraintValidator extends ConstraintValidator implements C
         continue;
       }
 
-      $uri = $item->getValue()['uri'];
-
-      // Try to resolve the given URI to a URL. It may fail if it's schemeless.
+      // Try to resolve the given URI to a URL. It may fail if it's scheme-less.
       try {
-        $url = Url::fromUri($uri, ['absolute' => TRUE])->toString();
+        $url = Url::fromUri($item->getValue()['uri'], ['absolute' => TRUE])->toString();
       }
       catch (\InvalidArgumentException $e) {
-        $this->context->addViolation("The following error occurred while getting the link URL: @error", ['@error' => $e->getMessage()]);
+        $this->context->addViolation($constraint->urlParseError, ['@error' => $e->getMessage()]);
         return;
       }
 

@@ -292,7 +292,7 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
     \Drupal::service('apigee_api_catalog.spec_fetcher')->fetchSpec($this, FALSE, FALSE);
 
     // Update spec_md5 value if using "file" as source.
-    if ($this->get('spec_file_source')->value == static::SPEC_AS_FILE) {
+    if ($this->get('spec_file_source')->value === static::SPEC_AS_FILE) {
       $spec_value = $this->get('spec')->isEmpty() ? [] : $this->get('spec')->getValue()[0];
       if (!empty($spec_value['target_id'])) {
         /* @var \Drupal\file\Entity\File $file */

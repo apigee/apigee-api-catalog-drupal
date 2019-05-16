@@ -30,12 +30,12 @@ interface SpecFetcherInterface {
   /**
    * A status message.
    */
-  const TYPE_STATUS = 'status';
+  public const TYPE_STATUS = 'status';
 
   /**
    * An error.
    */
-  const TYPE_ERROR = 'error';
+  public const TYPE_ERROR = 'error';
 
   /**
    * Fetch OpenAPI specification file from URL.

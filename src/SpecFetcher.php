@@ -106,7 +106,7 @@ class SpecFetcher implements SpecFetcherInterface {
     // If "spec_file_source" uses URL, grab file from "file_link" and save it
     // into the "spec" file field. The file_link field should already have
     // validated that a valid file exists at that URL.
-    if ($apidoc->get('spec_file_source')->value == ApiDocInterface::SPEC_AS_URL) {
+    if ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_URL) {
 
       // If the file_link field is empty, return without changes.
       if ($apidoc->get('file_link')->isEmpty()) {
@@ -133,7 +133,7 @@ class SpecFetcher implements SpecFetcherInterface {
 
         // In case of a 304 Not Modified there are no changes, but update
         // last fetched timestamp.
-        if ($response->getStatusCode() == 304) {
+        if ($response->getStatusCode() === 304) {
           $apidoc->set('fetched_timestamp', time());
           return TRUE;
         }
@@ -190,7 +190,7 @@ class SpecFetcher implements SpecFetcherInterface {
       }
     }
 
-    elseif ($apidoc->get('spec_file_source')->value == ApiDocInterface::SPEC_AS_FILE) {
+    elseif ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_FILE) {
       $this->log($apidoc, static::TYPE_STATUS, 'API Doc %label is using a file upload as source. Nothing to update.', [
         '%label' => $apidoc->label(),
       ], $show_messages);

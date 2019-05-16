@@ -89,7 +89,7 @@ class ApiDocListBuilder extends EntityListBuilder {
     $operations = parent::getOperations($entity);
 
     // Add "Re-import OpenAPI spec" link.
-    if ($entity->access('update') && $entity->hasLinkTemplate('reimport-spec-form')) {
+    if ($entity->access('reimport')) {
       $operations['reimport_spec'] = [
         'title' => $this->t('Re-import OpenAPI spec'),
         'weight' => 15,

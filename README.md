@@ -29,7 +29,7 @@ To render the OpenAPI spec using Swagger UI:
 The API Doc is an entity, you can configure it at __Configuration > API catalog__ in the admin
 menu.
 
-The "APIs" menu link is a view, you can modify it by  editing the "API Catalog" view
+The "APIs" menu link is a view, you can modify it by editing the "API Catalog" view
 under Structure > Views in the admin menu.
 
 ## Planned Features
@@ -45,10 +45,10 @@ under Structure > Views in the admin menu.
 
 ## Installing
 
-This module must be installed on a Drupal site that is managed by Composer.  Drupal.org has documentation on how to
+This module must be installed on a Drupal site that is managed by Composer. Drupal.org has documentation on how to
 [use Composer to manage Drupal site dependencies](https://www.drupal.org/docs/develop/using-composer/using-composer-to-manage-drupal-site-dependencies) 
 to get you started quickly.
-  
+
 1. Install the module using [Composer](https://getcomposer.org/).
   Composer will download the this module and all its dependencies.
   **Note**: Composer must be executed at the root of your Drupal installation.

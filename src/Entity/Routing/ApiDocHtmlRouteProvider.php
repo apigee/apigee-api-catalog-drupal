@@ -41,7 +41,6 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   public function getRoutes(EntityTypeInterface $entity_type) {
     $collection = parent::getRoutes($entity_type);
-    $entity_type_id = $entity_type->id();
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
       $collection->add('entity.apidoc.settings', $settings_form_route);
@@ -52,7 +51,7 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
     }
 
     if ($reimport_spec_route = $this->getReimportSpecFormRoute($entity_type)) {
-      $collection->add("entity.{$entity_type_id}.reimport_spec_form", $reimport_spec_route);
+      $collection->add("entity.apidoc.reimport_spec_form", $reimport_spec_route);
     }
 
     return $collection;
@@ -92,29 +91,25 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
    *   The generated route, if available.
    */
   protected function getReimportSpecFormRoute(EntityTypeInterface $entity_type) {
-    if ($entity_type->hasLinkTemplate('reimport-spec-form')) {
-      $route = new Route($entity_type->getLinkTemplate('reimport-spec-form'));
-      // Use the reimport_spec form handler.
-      if ($entity_type->getFormClass('reimport_spec')) {
-        $operation = 'reimport_spec';
-      }
-      $route
-        ->setDefaults([
-          '_entity_form' => "apidoc.{$operation}",
-          '_title' => 'Re-import API Doc OpenAPI specification',
-        ])
-        ->setRequirement('_entity_access', "apidoc.reimport")
-        ->setOption('parameters', [
-          'apidoc' => ['type' => 'entity:apidoc'],
-        ]);
+    $route = new Route($entity_type->getLinkTemplate('reimport-spec-form'));
 
-      // Entity types with serial IDs can specify this in their route
-      // requirements, improving the matching process.
-      if ($this->getEntityTypeIdKeyType($entity_type) === 'integer') {
-        $route->setRequirement('apidoc', '\d+');
-      }
-      return $route;
+    $route
+      ->setDefaults([
+        '_entity_form' => "apidoc.reimport_spec",
+        '_title' => 'Re-import API Doc OpenAPI specification',
+      ])
+      ->setRequirement('_entity_access', "apidoc.reimport")
+      ->setOption('parameters', [
+        'apidoc' => ['type' => 'entity:apidoc'],
+      ]);
+
+    // Entity types with serial IDs can specify this in their route
+    // requirements, improving the matching process.
+    if ($this->getEntityTypeIdKeyType($entity_type) === 'integer') {
+      $route->setRequirement('apidoc', '\d+');
     }
+
+    return $route;
   }
 
 }

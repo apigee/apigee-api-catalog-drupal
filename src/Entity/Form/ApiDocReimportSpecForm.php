@@ -96,13 +96,6 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     /* @var \Drupal\apigee_api_catalog\Entity\ApiDocInterface $entity */
     $entity = $this->getEntity();
@@ -113,7 +106,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
         $entity->setNewRevision();
       }
       $entity->save();
-      $this->messenger->addStatus($this->t('API Doc %label: imported the OpenAPI specification file from URL.', [
+      $this->messenger()->addStatus($this->t('API Doc %label: imported the OpenAPI specification file from URL.', [
         '%label' => $this->entity->label(),
       ]));
     }
