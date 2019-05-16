@@ -105,6 +105,7 @@ class SpecFetcher implements SpecFetcherInterface {
     if ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_URL) {
 
       // If the file_link field is empty, return without changes.
+      // TODO: The file link shouldn't be empty. Consider throwing an error.
       if ($apidoc->get('file_link')->isEmpty()) {
         return FALSE;
       }

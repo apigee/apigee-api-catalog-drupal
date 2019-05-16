@@ -110,6 +110,9 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
         '%label' => $this->entity->label(),
       ]));
     }
+    // TODO: $needs_save doesn't tell us if something went wrong.
+    // If the file wasn't changed we should notify, if something went wrong, we
+    // should notify what went wrong.
   }
 
 }

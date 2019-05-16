@@ -41,6 +41,7 @@ class ApiDocForm extends ContentEntityForm {
       '#weight' => $form['spec_file_source']['#weight'],
     ];
 
+    // TODO: Required states are not working and no server side validation.
     $form['spec']['#states'] = [
       'visible' => [
         ':input[name="spec_file_source"]' => ['value' => ApiDocInterface::SPEC_AS_FILE],
