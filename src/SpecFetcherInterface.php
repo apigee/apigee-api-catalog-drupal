@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Copyright 2019 Google Inc.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@ namespace Drupal\apigee_api_catalog;
 use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 
 /**
- * Interface ApiDocSpecFetcherInterface.
+ * Interface SpecFetcherInterface.
  */
-interface ApiDocSpecFetcherInterface {
+interface SpecFetcherInterface {
 
   /**
    * A status message.

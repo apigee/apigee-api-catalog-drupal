@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Copyright 2019 Google Inc.
  *
  * This program is free software; you can redistribute it and/or
@@ -33,9 +33,9 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class ApiDocSpecFetcher.
+ * Class SpecFetcher.
  */
-class ApiDocSpecFetcher implements ApiDocSpecFetcherInterface {
+class SpecFetcher implements SpecFetcherInterface {
 
   use StringTranslationTrait;
 
@@ -75,7 +75,7 @@ class ApiDocSpecFetcher implements ApiDocSpecFetcherInterface {
   private $logger;
 
   /**
-   * Constructs a new ApiDocSpecFetcher object.
+   * Constructs a new SpecFetcher.
    *
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file_system service.

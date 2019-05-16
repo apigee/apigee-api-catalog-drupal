@@ -2,7 +2,7 @@
 
 namespace Drupal\apigee_api_catalog\Form;
 
-use Drupal\apigee_api_catalog\ApiDocSpecFetcherInterface;
+use Drupal\apigee_api_catalog\SpecFetcherInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -27,7 +27,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
   /**
    * The ApiDoc spec fetcher service.
    *
-   * @var \Drupal\apigee_api_catalog\ApiDocSpecFetcherInterface
+   * @var \Drupal\apigee_api_catalog\SpecFetcherInterface
    */
   protected $specFetcher;
 
@@ -47,10 +47,10 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
    *   The time service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param \Drupal\apigee_api_catalog\ApiDocSpecFetcherInterface $spec_fetcher
+   * @param \Drupal\apigee_api_catalog\SpecFetcherInterface $spec_fetcher
    *   The ApiDoc spec fetcher service.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, MessengerInterface $messenger, ApiDocSpecFetcherInterface $spec_fetcher) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, MessengerInterface $messenger, SpecFetcherInterface $spec_fetcher) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
     $this->messenger = $messenger;
     $this->specFetcher = $spec_fetcher;
