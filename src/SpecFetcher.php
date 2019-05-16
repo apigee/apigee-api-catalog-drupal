@@ -97,7 +97,6 @@ class SpecFetcher implements SpecFetcherInterface {
    * {@inheritdoc}
    */
   public function fetchSpec(ApiDocInterface $apidoc): bool {
-    $needs_save = FALSE;
     $spec_value = $apidoc->get('spec')->isEmpty() ? [] : $apidoc->get('spec')->getValue()[0];
 
     // If "spec_file_source" uses URL, grab file from "file_link" and save it
@@ -110,9 +109,9 @@ class SpecFetcher implements SpecFetcherInterface {
         return FALSE;
       }
 
-      $file_uri = $apidoc->get('file_link')->getValue()[0]['uri'];
-      $file_uri = Url::fromUri($file_uri, ['absolute' => TRUE])->toString();
-      $request = new Request('GET', $file_uri);
+      $source_uri = $apidoc->get('file_link')->getValue()[0]['uri'];
+      $source_uri = Url::fromUri($source_uri, ['absolute' => TRUE])->toString();
+      $request = new Request('GET', $source_uri);
       $options = [
         'exceptions' => TRUE,
         'allow_redirects' => [
@@ -137,16 +136,16 @@ class SpecFetcher implements SpecFetcherInterface {
       }
       catch (RequestException $e) {
         $this->log(LogLevel::ERROR, 'API Doc %label: Could not retrieve OpenAPI specification file located at %url.', [
-          '%url' => $file_uri,
+          '%url' => $source_uri,
           '%label' => $apidoc->label(),
         ]);
         return FALSE;
       }
 
       $data = (string) $response->getBody();
-      if (empty($data)) {
+      if (($file_size = $response->getBody()->getSize()) && $file_size < 1) {
         $this->log(LogLevel::ERROR, 'API Doc %label: OpenAPI specification file located at %url is empty.', [
-          '%url' => $file_uri,
+          '%url' => $source_uri,
           '%label' => $apidoc->label(),
         ]);
         return FALSE;
@@ -156,7 +155,7 @@ class SpecFetcher implements SpecFetcherInterface {
       $data_md5 = md5($data);
       $prev_md5 = $apidoc->get('spec_md5')->isEmpty() ? NULL : $apidoc->get('spec_md5')->value;
       if ($prev_md5 != $data_md5) {
-        $filename = $this->fileSystem->basename($file_uri);
+        $filename = $this->fileSystem->basename($source_uri);
         $specs_definition = $apidoc->getFieldDefinition('spec')->getItemDefinition();
         $target_dir = $specs_definition->getSetting('file_directory');
         $uri_scheme = $specs_definition->getSetting('uri_scheme');
@@ -164,7 +163,7 @@ class SpecFetcher implements SpecFetcherInterface {
 
         try {
           $this->checkRequirements($destination);
-          $file = file_save_data($data, $destination . $filename, FILE_EXISTS_RENAME);
+          $file = file_save_data($data, $destination . $filename, FileSystemInterface::EXISTS_RENAME);
 
           if (empty($file)) {
             throw new \Exception('Could not save API Doc specification file.');
@@ -183,18 +182,11 @@ class SpecFetcher implements SpecFetcherInterface {
         $apidoc->set('spec_md5', $data_md5);
         $apidoc->set('fetched_timestamp', time());
 
-        $needs_save = TRUE;
+        return TRUE;
       }
     }
 
-    elseif ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_FILE) {
-      $this->log(LogLevel::INFO, 'API Doc %label is using a file upload as source. Nothing to update.', [
-        '%label' => $apidoc->label(),
-      ]);
-      $needs_save = FALSE;
-    }
-
-    return $needs_save;
+    return FALSE;
   }
 
   /**
