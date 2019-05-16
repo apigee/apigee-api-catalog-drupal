@@ -22,15 +22,18 @@ namespace Drupal\apigee_api_catalog;
 
 use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Component\Datetime\DateTimePlus;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Class SpecFetcher.
@@ -38,6 +41,7 @@ use Psr\Log\LoggerInterface;
 class SpecFetcher implements SpecFetcherInterface {
 
   use StringTranslationTrait;
+  use MessengerTrait;
 
   /**
    * Drupal\Core\File\FileSystemInterface definition.
@@ -59,13 +63,6 @@ class SpecFetcher implements SpecFetcherInterface {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
-  /**
-   * Drupal\Core\Messenger\MessengerInterface definition.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
 
   /**
    * The logger.
@@ -99,7 +96,7 @@ class SpecFetcher implements SpecFetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchSpec(ApiDocInterface $apidoc, bool $show_messages = TRUE): bool {
+  public function fetchSpec(ApiDocInterface $apidoc): bool {
     $needs_save = FALSE;
     $spec_value = $apidoc->get('spec')->isEmpty() ? [] : $apidoc->get('spec')->getValue()[0];
 
@@ -139,19 +136,19 @@ class SpecFetcher implements SpecFetcherInterface {
         }
       }
       catch (RequestException $e) {
-        $this->log($apidoc, static::TYPE_ERROR, 'API Doc %label: Could not retrieve OpenAPI specification file located at %url.', [
+        $this->log(LogLevel::ERROR, 'API Doc %label: Could not retrieve OpenAPI specification file located at %url.', [
           '%url' => $file_uri,
           '%label' => $apidoc->label(),
-        ], $show_messages);
+        ]);
         return FALSE;
       }
 
       $data = (string) $response->getBody();
       if (empty($data)) {
-        $this->log($apidoc, static::TYPE_ERROR, 'API Doc %label: OpenAPI specification file located at %url is empty.', [
+        $this->log(LogLevel::ERROR, 'API Doc %label: OpenAPI specification file located at %url is empty.', [
           '%url' => $file_uri,
           '%label' => $apidoc->label(),
-        ], $show_messages);
+        ]);
         return FALSE;
       }
 
@@ -174,10 +171,10 @@ class SpecFetcher implements SpecFetcherInterface {
           }
         }
         catch (\Exception $e) {
-          $this->log($apidoc, static::TYPE_ERROR, 'Error while saving API Doc spec file from URL on API Doc ID: %id. Error: %error', [
+          $this->log(LogLevel::ERROR, 'Error while saving API Doc spec file from URL on API Doc ID: %id. Error: %error', [
             '%id' => $apidoc->id(),
             '%error' => $e->getMessage(),
-          ], $show_messages);
+          ]);
           return FALSE;
         }
 
@@ -191,9 +188,9 @@ class SpecFetcher implements SpecFetcherInterface {
     }
 
     elseif ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_FILE) {
-      $this->log($apidoc, static::TYPE_STATUS, 'API Doc %label is using a file upload as source. Nothing to update.', [
+      $this->log(LogLevel::INFO, 'API Doc %label is using a file upload as source. Nothing to update.', [
         '%label' => $apidoc->label(),
-      ], $show_messages);
+      ]);
       $needs_save = FALSE;
     }
 
@@ -203,31 +200,17 @@ class SpecFetcher implements SpecFetcherInterface {
   /**
    * Log a message, and optionally display it on the UI.
    *
-   * @param \Drupal\apigee_api_catalog\Entity\ApiDocInterface $apidoc
-   *   The API Doc entity.
-   * @param string $type
-   *   Type of message.
+   * @param string $level
+   *   The Error level.
    * @param string $message
    *   The message.
    * @param array $params
    *   Optional parameters array.
-   * @param bool $show_messages
-   *   TRUE if message should be displayed to the UI as well.
    */
-  private function log(ApiDocInterface $apidoc, string $type, string $message, array $params = [], bool $show_messages = TRUE) {
-    switch ($type) {
-      case static::TYPE_ERROR:
-        $this->logger->error($message, $params);
-        break;
-
-      case static::TYPE_STATUS:
-
-      default:
-        $this->logger->info($message, $params);
-    }
-    if ($show_messages) {
-      $this->messenger->addMessage($this->t($message, $params), $type);
-    }
+  private function log(string $level, string $message, array $params = []) {
+    $this->logger->log($level, $message, $params);
+    // Show the message.
+    $this->messenger()->addMessage(new FormattableMarkup($message, $params), static::LOG_LEVEL_MAP[$level] ?? MessengerInterface::TYPE_ERROR);
   }
 
   /**

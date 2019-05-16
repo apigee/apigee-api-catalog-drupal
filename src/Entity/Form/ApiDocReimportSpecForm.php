@@ -100,7 +100,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
     /* @var \Drupal\apigee_api_catalog\Entity\ApiDocInterface $entity */
     $entity = $this->getEntity();
 
-    $needs_save = $this->specFetcher->fetchSpec($entity, TRUE);
+    $needs_save = $this->specFetcher->fetchSpec($entity);
     if ($needs_save) {
       if ($entity->getEntityType()->isRevisionable()) {
         $entity->setNewRevision();

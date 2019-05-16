@@ -21,21 +21,21 @@
 namespace Drupal\apigee_api_catalog;
 
 use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Interface SpecFetcherInterface.
  */
 interface SpecFetcherInterface {
 
-  /**
-   * A status message.
-   */
-  public const TYPE_STATUS = 'status';
-
-  /**
-   * An error.
-   */
-  public const TYPE_ERROR = 'error';
+  public const LOG_LEVEL_MAP = [
+    LogLevel::ALERT => MessengerInterface::TYPE_WARNING,
+    LogLevel::WARNING => MessengerInterface::TYPE_WARNING,
+    LogLevel::NOTICE => MessengerInterface::TYPE_STATUS,
+    LogLevel::INFO => MessengerInterface::TYPE_STATUS,
+    LogLevel::DEBUG => MessengerInterface::TYPE_STATUS,
+  ];
 
   /**
    * Fetch OpenAPI specification file from URL.
@@ -46,13 +46,11 @@ interface SpecFetcherInterface {
    *
    * @param \Drupal\apigee_api_catalog\Entity\ApiDocInterface $apidoc
    *   The ApiDoc entity.
-   * @param bool $show_messages
-   *   Boolean indicating if method should display status messages.
    *
    * @return bool
    *   Returns TRUE if the entity was changed and needs to be saved, FALSE
    *   otherwise.
    */
-  public function fetchSpec(ApiDocInterface $apidoc, bool $show_messages = TRUE): bool;
+  public function fetchSpec(ApiDocInterface $apidoc): bool;
 
 }
