@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\apigee_api_catalog\Form;
+namespace Drupal\apigee_api_catalog\Entity\Form;
 
 use Drupal\apigee_api_catalog\SpecFetcherInterface;
 use Drupal\Component\Datetime\TimeInterface;

@@ -46,7 +46,7 @@ use Drupal\link\LinkItemInterface;
  *       "add" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
  *       "edit" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
  *       "delete" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocDeleteForm",
- *       "reimport_spec" = "Drupal\apigee_api_catalog\Form\ApiDocReimportSpecForm",
+ *       "reimport_spec" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm",
  *     },
  *     "access" = "Drupal\apigee_api_catalog\Entity\Access\ApiDocAccessControlHandler",
  *     "route_provider" = {
