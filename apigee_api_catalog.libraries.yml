@@ -1,0 +1,26 @@
+# SmartDocs Drupal Angular application.
+apigee_api_catalog.smartdocs:
+  version: 1.0
+  license:
+    name: Proprietary Google Code
+    gpl-compatible: true
+  css:
+    component:
+      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external }
+  js:
+    js/smartdocs-drupal/es2015-polyfills.js: {}
+    js/smartdocs-drupal/main.js: {}
+    js/smartdocs-drupal/polyfills.js: {}
+    js/smartdocs-drupal/runtime.js: {}
+    js/smartdocs-drupal/styles.js: {}
+    js/smartdocs-drupal/vendor.js: {}
+
+# Integration of SmartDocs Angular application with Drupal,
+# passes the OpenAPI spec URL to the SmartDocs ng app.
+apigee_api_catalog.smartdocs_integration:
+  version: VERSION
+  js:
+    js/smartdocs_integration.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
