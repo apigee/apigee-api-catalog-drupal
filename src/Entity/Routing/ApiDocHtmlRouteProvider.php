@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_api_catalog;
+namespace Drupal\apigee_api_catalog\Entity\Routing;
 
 use Drupal\apigee_api_catalog\Controller\ApiDocController;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -64,7 +64,7 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
       $route = new Route('admin/config/api-catalog-settings');
       $route
         ->setDefaults([
-          '_form' => 'Drupal\apigee_api_catalog\Form\ApiDocSettingsForm',
+          '_form' => 'Drupal\apigee_api_catalog\Entity\Form\ApiDocSettingsForm',
           '_title_callback' => ApiDocController::class . '::title',
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())
