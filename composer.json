@@ -5,7 +5,8 @@
     "description": "Apigee API Catalog for Drupal",
     "require": {
         "php": ">=7.1",
-        "drupal/apigee_edge": "~1.0-rc4"
+        "drupal/apigee_edge": "~1.0-rc4",
+        "drupal/file_link": "~1.0"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
