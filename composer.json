@@ -1,0 +1,20 @@
+{
+    "name": "drupal/apigee_api_catalog",
+    "license": "GPL-2.0",
+    "type": "drupal-module",
+    "description": "Apigee API Catalog for Drupal",
+    "require": {
+        "php": ">=7.1",
+        "drupal/apigee_edge": "~1.0-rc4"
+    },
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "phpmd/phpmd": "^2.6",
+        "phpunit/phpunit": "^6.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
