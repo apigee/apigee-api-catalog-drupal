@@ -61,11 +61,11 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/apidoc/{apidoc}",
- *     "add-form" = "/admin/content/apidoc/add",
- *     "edit-form" = "/admin/content/apidoc/{apidoc}/edit",
- *     "delete-form" = "/admin/content/apidoc/{apidoc}/delete",
- *     "collection" = "/admin/content/apidoc",
+ *     "canonical" = "/api/{apidoc}",
+ *     "add-form" = "/admin/content/api/add",
+ *     "edit-form" = "/admin/content/api/{apidoc}/edit",
+ *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "collection" = "/admin/content/apis",
  *   },
  *   field_ui_base_route = "entity.apidoc.settings"
  * )
