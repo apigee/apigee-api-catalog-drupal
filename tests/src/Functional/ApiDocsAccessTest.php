@@ -140,6 +140,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(200);
 
     // Make sure the field manipulation links are available.
+    $assert_session->linkExists('Settings');
     $assert_session->linkExists('Manage fields');
     $assert_session->linkExists('Manage form display');
     $assert_session->linkExists('Manage display');
