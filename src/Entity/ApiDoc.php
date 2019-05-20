@@ -61,13 +61,13 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/apidoc/{apidoc}",
- *     "add-form" = "/admin/structure/apidoc/add",
- *     "edit-form" = "/admin/structure/apidoc/{apidoc}/edit",
- *     "delete-form" = "/admin/structure/apidoc/{apidoc}/delete",
- *     "collection" = "/admin/structure/apidoc",
+ *     "canonical" = "/api/{apidoc}",
+ *     "add-form" = "/admin/content/api/add",
+ *     "edit-form" = "/admin/content/api/{apidoc}/edit",
+ *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "collection" = "/admin/content/apis",
  *   },
- *   field_ui_base_route = "apigee_api_catalog.settings"
+ *   field_ui_base_route = "entity.apidoc.settings"
  * )
  */
 class ApiDoc extends ContentEntityBase implements ApiDocInterface {
