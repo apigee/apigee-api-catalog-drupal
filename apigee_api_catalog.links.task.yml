@@ -24,3 +24,4 @@ apidoc.admin:
   title: API catalog
   route_name: entity.apidoc.collection
   base_route: system.admin_content
+  weight: 10
