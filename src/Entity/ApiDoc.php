@@ -202,18 +202,6 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('API Product'))
-      ->setDescription(t('The API Product this API is associated to.'))
-      ->setSetting('target_type', 'api_product')
-      ->setDisplayOptions('form', [
-        'label' => 'above',
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))
       ->setDescription(t('A boolean indicating whether the API Doc is published.'))
