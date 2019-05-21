@@ -105,9 +105,9 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
     /** @var \Drupal\file\Entity\File $file */
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $file) {
       $openapi_file_urls[] = file_create_url($file->getFileUri());
-      $extension = end(explode(".", $file->getFilename()));
+      $file_extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
       $file_data = file_get_contents($file->getFileUri());
-      if ($extension == 'json') {
+      if ($file_extension == 'json') {
         $spec = Json::decode($file_data);
 
         if (!$spec) {
