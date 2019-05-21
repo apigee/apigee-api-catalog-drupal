@@ -136,10 +136,11 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(200);
 
     // Make sure the field manipulation links are available.
+    $assert_session->linkExists('Settings');
     $assert_session->linkExists('Manage fields');
     $assert_session->linkExists('Manage form display');
     $assert_session->linkExists('Manage display');
@@ -182,7 +183,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(403);
 
     // Get admin settings page.
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -223,7 +224,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(200);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -264,7 +265,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -305,7 +306,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -347,7 +348,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }
@@ -389,7 +390,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $this->drupalGet(Url::fromRoute('entity.apidoc.add_form'));
     $assert_session->statusCodeEquals(403);
 
-    $this->drupalGet(Url::fromRoute('apigee_api_catalog.settings'));
+    $this->drupalGet(Url::fromRoute('entity.apidoc.settings'));
     $assert_session->statusCodeEquals(403);
 
   }

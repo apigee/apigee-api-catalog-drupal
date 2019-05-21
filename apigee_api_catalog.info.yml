@@ -3,7 +3,7 @@ type: module
 description: 'Display OpenAPI documentation of your APIs to your developers.'
 core: 8.x
 package: 'Apigee'
-configure: apigee_api_catalog.settings
+configure: entity.apidoc.settings
 dependencies:
 - drupal:text
 - drupal:file

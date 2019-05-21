@@ -1,8 +1,8 @@
 # API Doc routing definition
-apigee_api_catalog.settings:
-  route_name: apigee_api_catalog.settings
+entity.apidoc.settings:
+  route_name: entity.apidoc.settings
   title: 'Settings'
-  base_route: apigee_api_catalog.settings
+  base_route: entity.apidoc.settings
 
 entity.apidoc.canonical:
   route_name: entity.apidoc.canonical
@@ -18,4 +18,10 @@ entity.apidoc.delete_form:
   route_name:  entity.apidoc.delete_form
   base_route:  entity.apidoc.canonical
   title: 'Delete'
+  weight: 10
+
+apidoc.admin:
+  title: API catalog
+  route_name: entity.apidoc.collection
+  base_route: system.admin_content
   weight: 10

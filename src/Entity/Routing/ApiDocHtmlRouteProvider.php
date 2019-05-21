@@ -18,11 +18,12 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_api_catalog;
+namespace Drupal\apigee_api_catalog\Entity\Routing;
 
 use Drupal\apigee_api_catalog\Controller\ApiDocController;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -33,6 +34,8 @@ use Symfony\Component\Routing\Route;
  */
 class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
 
+  use StringTranslationTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -40,11 +43,11 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
     $collection = parent::getRoutes($entity_type);
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
-      $collection->add('apigee_api_catalog.settings', $settings_form_route);
+      $collection->add('entity.apidoc.settings', $settings_form_route);
     }
 
     if ($apidoc_collection_route = $collection->get('entity.apidoc.collection')) {
-      $apidoc_collection_route->setDefault('_title', 'API Docs');
+      $apidoc_collection_route->setDefault('_title', $this->t('@entity_type catalog', ['@entity_type' => $entity_type->getLabel()])->render());
     }
 
     return $collection;
@@ -61,10 +64,10 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   protected function getSettingsFormRoute(EntityTypeInterface $entity_type) {
     if (!$entity_type->getBundleEntityType()) {
-      $route = new Route('admin/config/api-catalog-settings');
+      $route = new Route('admin/structure/apidoc');
       $route
         ->setDefaults([
-          '_form' => 'Drupal\apigee_api_catalog\Form\ApiDocSettingsForm',
+          '_form' => 'Drupal\apigee_api_catalog\Entity\Form\ApiDocSettingsForm',
           '_title_callback' => ApiDocController::class . '::title',
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())

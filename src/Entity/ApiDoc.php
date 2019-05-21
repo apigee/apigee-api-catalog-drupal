@@ -35,18 +35,18 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *   label_plural = @Translation("API Docs"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\apigee_api_catalog\ApiDocListBuilder",
+ *     "list_builder" = "Drupal\apigee_api_catalog\Entity\ListBuilder\ApiDocListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "form" = {
- *       "default" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
- *       "add" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
- *       "edit" = "Drupal\apigee_api_catalog\Form\ApiDocForm",
- *       "delete" = "Drupal\apigee_api_catalog\Form\ApiDocDeleteForm",
+ *       "default" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
+ *       "add" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
+ *       "edit" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
+ *       "delete" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocDeleteForm",
  *     },
- *     "access" = "Drupal\apigee_api_catalog\ApiDocAccessControlHandler",
+ *     "access" = "Drupal\apigee_api_catalog\Entity\Access\ApiDocAccessControlHandler",
  *     "route_provider" = {
- *       "html" = "Drupal\apigee_api_catalog\ApiDocHtmlRouteProvider",
+ *       "html" = "Drupal\apigee_api_catalog\Entity\Routing\ApiDocHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "apidoc",
@@ -61,13 +61,13 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/apidoc/{apidoc}",
- *     "add-form" = "/admin/structure/apidoc/add",
- *     "edit-form" = "/admin/structure/apidoc/{apidoc}/edit",
- *     "delete-form" = "/admin/structure/apidoc/{apidoc}/delete",
- *     "collection" = "/admin/structure/apidoc",
+ *     "canonical" = "/api/{apidoc}",
+ *     "add-form" = "/admin/content/api/add",
+ *     "edit-form" = "/admin/content/api/{apidoc}/edit",
+ *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "collection" = "/admin/content/apis",
  *   },
- *   field_ui_base_route = "apigee_api_catalog.settings"
+ *   field_ui_base_route = "entity.apidoc.settings"
  * )
  */
 class ApiDoc extends ContentEntityBase implements ApiDocInterface {

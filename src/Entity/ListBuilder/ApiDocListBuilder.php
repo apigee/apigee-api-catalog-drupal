@@ -18,7 +18,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_api_catalog;
+namespace Drupal\apigee_api_catalog\Entity\ListBuilder;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -52,7 +52,7 @@ class ApiDocListBuilder extends EntityListBuilder {
   public function render() {
     $build['description'] = [
       '#markup' => $this->t('Manage your API documentation. You can manage the fields on the <a href=":url">API Docs settings page</a>.', [
-        ':url' => Url::fromRoute('apigee_api_catalog.settings')->toString(),
+        ':url' => Url::fromRoute('entity.apidoc.settings')->toString(),
       ]),
     ];
     $build['table'] = parent::render();
