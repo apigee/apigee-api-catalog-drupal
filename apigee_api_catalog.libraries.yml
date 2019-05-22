@@ -7,13 +7,14 @@ apigee_api_catalog.smartdocs:
   css:
     component:
       https://fonts.googleapis.com/icon?family=Material+Icons: { type: external }
+      https://www.gstatic.com/smartdocs/1.0.1/styles.css: { type: external }
   js:
-    https://www.gstatic.com/smartdocs/1.0.0/es2015-polyfills.js: { type: external }
-    https://www.gstatic.com/smartdocs/1.0.0/main.js: { type: external }
-    https://www.gstatic.com/smartdocs/1.0.0/polyfills.js: { type: external }
-    https://www.gstatic.com/smartdocs/1.0.0/runtime.js: { type: external }
-    https://www.gstatic.com/smartdocs/1.0.0/styles.js: { type: external }
-    https://www.gstatic.com/smartdocs/1.0.0/vendor.js: { type: external }
+    https://www.gstatic.com/smartdocs/1.0.1/es2015-polyfills.js: { type: external, minified: true }
+    https://www.gstatic.com/smartdocs/1.0.1/main.js: { type: external, minified: true }
+    https://www.gstatic.com/smartdocs/1.0.1/polyfills.js: { type: external, minified: true }
+    https://www.gstatic.com/smartdocs/1.0.1/runtime.js: { type: external, minified: true }
+    https://www.gstatic.com/smartdocs/1.0.1/styles.js: { type: external, minified: true }
+    https://www.gstatic.com/smartdocs/1.0.1/vendor.js: { type: external, minified: true }
 
 # Integration of SmartDocs Angular application with Drupal,
 # passes the OpenAPI spec URL to the SmartDocs ng app.

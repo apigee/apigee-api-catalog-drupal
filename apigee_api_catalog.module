@@ -54,17 +54,4 @@ function apigee_api_catalog_page_attachments(array &$attachments) {
   ];
   $attachments['#attached']['html_head'][] = [$xuacompatible, 'base-href'];
 
-  // Add script to fix issue with SmartDocs Angular app.
-  $attachments['#attached']['html_head'][] = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'script',
-      '#value' => '(window as any).global = window; ',
-      '#attributes' => ['src' => ''],
-      '#weight' => -1,
-
-    ],
-    // Key to make it possible to recognize this HTML element when altering.
-    'apigee-smartdocs',
-  ];
 }
