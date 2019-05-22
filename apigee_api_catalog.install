@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Copyright 2019 Google Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License version 2 as published by the
+ * Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * @file
+ * Install file for Apigee API Catalog.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function apigee_api_catalog_requirements($phase) {
+  // Prevent installation alongside of the `apigee_edge_apidocs` module.
+  if ($phase === 'install' && \Drupal::moduleHandler()->moduleExists('apigee_edge_apidocs')) {
+    return [
+      'apigee_api_catalog_module_conflict' => [
+        'title' => t('Apigee API Catalog'),
+        'description' => t('The "Apigee Edge Apidocs" module is currently installed. It is deprecated and should be uninstalled before installing the Apigee API Catalog module.'),
+        'severity' => REQUIREMENT_ERROR,
+      ],
+    ];
+  }
+}
