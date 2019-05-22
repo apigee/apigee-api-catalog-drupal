@@ -94,19 +94,20 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function view(FieldItemListInterface $items, $langcode = NULL) {
-    $elements = parent::view($items, $langcode);
+  public function viewElements(FieldItemListInterface $items, $langcode) {
 
     $entity = $items->getEntity();
     $entity_type = $entity->getEntityTypeId();
 
+    // The list of OpenAPI specs to pass to SmartDocs Angular app.
     $openapi_files = [];
 
     /** @var \Drupal\file\Entity\File $file */
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $file) {
-      $openapi_file_urls[] = file_create_url($file->getFileUri());
       $file_extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
       $file_data = file_get_contents($file->getFileUri());
+
+      // Decode the file to pass to the javascript file.
       if ($file_extension == 'json') {
         $spec = Json::decode($file_data);
 
@@ -142,25 +143,14 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
     ];
 
     $elements['#attached']['drupalSettings']['smartdocsFieldFormatter'][$this->fieldDefinition->getName()] = [
-      'openApiFileUrls' => $openapi_file_urls,
       'openApiFiles' => $openapi_files,
       'entityId' => $entity->id(),
       'entityType' => $entity_type,
     ];
 
-    return $elements;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
-
     foreach ($items as $delta => $item) {
       $elements[$delta] = [
-        // Render out tags for SmartDocs Angular app.
-        // See theme_html_tag().
+        // Create tag on page for SmartDocs Angular app.
         '#type' => 'html_tag',
         '#tag' => 'app-root',
         '#value' => $this->t('Loading...'),

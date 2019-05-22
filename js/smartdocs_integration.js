@@ -1,6 +1,9 @@
 /**
  * @file
  * Integration of SmartDocs file field formatter.
+ *
+ * Take the OpenAPI spec and put into session storage for the SmartDocs
+ * Angular app to use.
  */
 
 (function ($, window, Drupal) {
