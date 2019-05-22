@@ -190,8 +190,8 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
         'type' => 'file',
         'weight' => -4,
       ])->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'file_default',
+        'label' => 'hidden',
+        'type' => 'apigee_api_catalog_smartdocs',
         'weight' => 0,
       ])
       ->setDisplayOptions('form', [
