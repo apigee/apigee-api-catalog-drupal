@@ -32,7 +32,7 @@ function apigee_api_catalog_requirements($phase) {
     return [
       'apigee_api_catalog_module_conflict' => [
         'title' => t('Apigee API Catalog'),
-        'description' => t('The "Apigee Edge Apidocs" module is currently installed. It is deprecated and should be uninstalled before installing the Apigee API Catalog module.'),
+        'description' => t('The "Apigee Edge API Docs" module is currently installed. It is deprecated and should be uninstalled before installing the Apigee API Catalog module.'),
         'severity' => REQUIREMENT_ERROR,
       ],
     ];
