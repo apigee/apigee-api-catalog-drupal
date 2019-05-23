@@ -25,7 +25,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\link\LinkItemInterface;
 
 /**
@@ -78,7 +77,6 @@ use Drupal\link\LinkItemInterface;
 class ApiDoc extends ContentEntityBase implements ApiDocInterface {
 
   use EntityChangedTrait;
-  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
