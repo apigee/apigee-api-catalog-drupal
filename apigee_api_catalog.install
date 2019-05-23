@@ -37,4 +37,6 @@ function apigee_api_catalog_requirements($phase) {
       ],
     ];
   }
+
+  return [];
 }
