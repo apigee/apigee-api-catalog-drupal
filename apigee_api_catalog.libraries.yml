@@ -13,7 +13,6 @@ apigee_api_catalog.smartdocs:
     https://www.gstatic.com/smartdocs/1.0.1/main.js: { type: external, minified: true }
     https://www.gstatic.com/smartdocs/1.0.1/polyfills.js: { type: external, minified: true }
     https://www.gstatic.com/smartdocs/1.0.1/runtime.js: { type: external, minified: true }
-    https://www.gstatic.com/smartdocs/1.0.1/styles.js: { type: external, minified: true }
     https://www.gstatic.com/smartdocs/1.0.1/vendor.js: { type: external, minified: true }
 
 # Integration of SmartDocs Angular application with Drupal,
