@@ -41,17 +41,3 @@ function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) 
   }
 }
 
-/**
- * Implements hook_page_attachments().
- */
-function apigee_api_catalog_page_attachments(array &$attachments) {
-  // Add base tag for SmartDocs Angular application.
-  $xuacompatible = [
-    '#tag' => 'base',
-    '#attributes' => [
-      'href' => '/',
-    ],
-  ];
-  $attachments['#attached']['html_head'][] = [$xuacompatible, 'base-href'];
-
-}
