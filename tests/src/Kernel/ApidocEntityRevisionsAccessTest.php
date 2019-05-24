@@ -158,9 +158,9 @@ class ApidocEntityRevisionsAccessTest extends KernelTestBase {
     $user = $this->createUser([
       'view published apidoc entities',
       'view unpublished apidoc entities',
-      'view all apidoc revisions',
+      'view apidoc revisions',
       'edit apidoc entities',
-      'revert all apidoc revisions',
+      'revert apidoc revisions',
     ]);
     $this->container->get('account_switcher')->switchTo($user);
 

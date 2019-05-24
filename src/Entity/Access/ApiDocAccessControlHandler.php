@@ -123,18 +123,11 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler implements E
     }
 
     $map = [
-      'view' => "view all {$this->entityTypeId} revisions",
-      'update' => "revert all {$this->entityTypeId} revisions",
-      'delete' => "delete all {$this->entityTypeId} revisions",
-    ];
-    $bundle = $entity->bundle();
-    $type_map = [
-      'view' => "view {$this->entityTypeId} $bundle revisions",
-      'update' => "revert {$this->entityTypeId} $bundle revisions",
-      'delete' => "delete {$this->entityTypeId} $bundle revisions",
+      'view' => "view apidoc revisions",
+      'update' => "revert apidoc revisions",
     ];
 
-    if (!$entity || !isset($map[$operation]) || !isset($type_map[$operation])) {
+    if (!$entity || !isset($map[$operation])) {
       // If there was no entity to check against, or the $op was not one of the
       // supported ones, we return access denied.
       return AccessResult::forbidden();
@@ -144,7 +137,6 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler implements E
 
     // Perform basic permission checks first.
     if ($account->hasPermission($map[$operation]) ||
-      $account->hasPermission($type_map[$operation]) ||
       ($admin_permission && $account->hasPermission($admin_permission))) {
       return AccessResult::allowed();
     }
