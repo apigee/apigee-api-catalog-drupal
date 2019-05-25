@@ -24,3 +24,13 @@ apigee_api_catalog.smartdocs_integration:
   dependencies:
     - core/jquery
     - core/drupal
+
+# Library to parse OpenAPI YAML files to pass to SmartDocs Angular app.
+apigee_api_catalog.js_yaml:
+  version: 3.13.1
+  license:
+    name: MIT
+    url: https://github.com/nodeca/js-yaml/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    https://cdn.jsdelivr.net/npm/js-yaml@3.13.1/dist/js-yaml.min.js: { type: external, minified: true }

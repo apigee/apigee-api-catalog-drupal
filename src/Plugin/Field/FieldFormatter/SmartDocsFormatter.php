@@ -122,41 +122,17 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
 
     /** @var \Drupal\file\Entity\File $file */
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $file) {
-      $file_extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
-      $file_data = file_get_contents($file->getFileUri());
-
-      // Decode the file to pass to the javascript file.
-      if ($file_extension == 'json') {
-        $spec = Json::decode($file_data);
-
-        if (!$spec) {
-          $this->loggerFactory->error('Error parsing JSON file ' . $file->getFilename());
-          $this->messenger()->addError($this->t('Error parsing JSON file %filename.', [
-            '%filename' => $file->getFilename(),
-          ]));
-          continue;
-        }
-      }
-      else {
-        try {
-          $spec = Yaml::decode($file_data);
-        }
-        catch (InvalidDataTypeException $e) {
-          $this->loggerFactory->error('Error parsing Yaml file ' . $file->getFilename() . ': ' . $e->getMessage());
-          $this->messenger()->addError($this->t('Error parsing Yaml file %filename: %error', [
-            '%filename' => $file->getFilename(),
-            '%error' => $e->getMessage(),
-          ]));
-          continue;
-        }
-      }
-      $openapi_files[] = $spec;
+      $openapi_files[] = [
+        'fileUrl' => $file->url(),
+        'fileExtension' => pathinfo($file->getFilename(), PATHINFO_EXTENSION),
+      ];
     }
 
     $elements['#attached'] = [
       'library' => [
         'apigee_api_catalog/apigee_api_catalog.smartdocs',
         'apigee_api_catalog/apigee_api_catalog.smartdocs_integration',
+        'apigee_api_catalog/apigee_api_catalog.js_yaml',
       ],
     ];
 
