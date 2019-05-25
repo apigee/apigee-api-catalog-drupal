@@ -23,5 +23,5 @@ view apidoc revisions:
   description: 'To view a revision, you also need permission to view the item.'
 
 revert apidoc revisions:
-  title: 'Revert API Docs revisions'
+  title: 'Revert API Doc revisions'
   description: 'To revert a revision, you also need permission to edit the item.'
