@@ -36,8 +36,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *   label_singular = @Translation("API Doc"),
  *   label_plural = @Translation("API Docs"),
  *   handlers = {
- *
- *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\apigee_api_catalog\Entity\ListBuilder\ApiDocListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
