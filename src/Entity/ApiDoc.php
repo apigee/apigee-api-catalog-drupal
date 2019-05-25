@@ -197,10 +197,8 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
       ->setDisplayOptions('form', [
         'label' => 'hidden',
         'type' => 'file_generic',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('API Product'))
