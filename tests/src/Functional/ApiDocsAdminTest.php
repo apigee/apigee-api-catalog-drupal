@@ -95,8 +95,8 @@ class ApiDocsAdminTest extends BrowserTestBase {
     // Get the API Doc admin page.
     $this->drupalGet(Url::fromRoute('entity.apidoc.collection'));
 
-    // No API Docs yet.
-    $assert->elementTextContains('css', $header_selector, 'There are no API Docs yet.');
+    // No API docs yet.
+    $assert->elementTextContains('css', $header_selector, 'There are no API docs yet.');
 
     // User can add entity content.
     $assert->linkExists('Add API Doc');

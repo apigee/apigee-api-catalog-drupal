@@ -12,13 +12,7 @@ Once added, the API name and description for each API Doc will be displayed in t
 "View published API docs" permissions if you want to allow registered or anonymous users 
 to be able to view published API documentation.
 
-The OpenAPI spec by default is shown on the API Doc detail page by default.
-To render the OpenAPI spec using Swagger UI:
-
-1. Install an enable the [Swagger UI Field Formatter](https://www.drupal.org/project/swagger_ui_formatter) module.
-2. Install the Swagger UI JS library as documented [on the module page](https://www.drupal.org/project/swagger_ui_formatter).
-3. Go to __Configuration > API catalog > Manage display__ in the admin menu.
-4. Change "OpenAPI specification" field format to use the Swagger UI field formatter.
+The OpenAPI spec by default is rendered using Apigee SmartDocs.
 
 The API Doc is an entity, you can configure it at __Configuration > API catalog__ in the admin
 menu.
@@ -28,7 +22,6 @@ under Structure > Views in the admin menu.
 
 ## Planned Features
 
-- Create additional field formatters to use for rendering OpenAPI specs
 - Integration with Apigee API Products
 - Allow OpenAPI specs to be associated to a source location such as Apigee Edge or a URL
 - Add visual notifications when source URL specs have changed on the API Doc admin screen
@@ -36,7 +29,9 @@ under Structure > Views in the admin menu.
 
 ### Known issues
 
-- none
+- The Apigee SmartDocs formatter can only render one OpenAPI spec per page and the URL pattern
+  must match `/api/{entityId}`.  This means that the formatter will probably not work correctly if 
+  you modify the default API Docs view or try to use this file Formatter on nodes or other entities.
 
 ## Installing
 
