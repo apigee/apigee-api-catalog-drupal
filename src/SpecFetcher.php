@@ -22,12 +22,12 @@ namespace Drupal\apigee_api_catalog;
 
 use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Component\Datetime\DateTimePlus;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -80,15 +80,18 @@ class SpecFetcher implements SpecFetcherInterface {
    *   The http_client service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $translation
+   *   The string translation.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
    */
-  public function __construct(FileSystemInterface $file_system, ClientInterface $http_client, EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger, LoggerInterface $logger) {
+  public function __construct(FileSystemInterface $file_system, ClientInterface $http_client, EntityTypeManagerInterface $entityTypeManager, TranslationInterface $translation, MessengerInterface $messenger, LoggerInterface $logger) {
     $this->fileSystem = $file_system;
     $this->httpClient = $http_client;
     $this->entityTypeManager = $entityTypeManager;
+    $this->stringTranslation = $translation;
     $this->messenger = $messenger;
     $this->logger = $logger;
   }
@@ -203,7 +206,7 @@ class SpecFetcher implements SpecFetcherInterface {
   private function log(string $level, string $message, array $params = []) {
     $this->logger->log($level, $message, $params);
     // Show the message.
-    $this->messenger()->addMessage(new FormattableMarkup($message, $params), static::LOG_LEVEL_MAP[$level] ?? MessengerInterface::TYPE_ERROR);
+    $this->messenger()->addMessage($this->t($message, $params), static::LOG_LEVEL_MAP[$level] ?? MessengerInterface::TYPE_ERROR);
   }
 
   /**
