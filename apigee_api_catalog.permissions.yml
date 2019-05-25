@@ -19,7 +19,7 @@ view unpublished apidoc entities:
   title: 'View unpublished API docs'
 
 view apidoc revisions:
-  title: 'View API Docs revisions'
+  title: 'View API Doc revisions'
   description: 'To view a revision, you also need permission to view the item.'
 
 revert apidoc revisions:
