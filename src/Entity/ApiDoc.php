@@ -221,8 +221,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['spec'] = BaseFieldDefinition::create('file')
-      ->setLabel('OpenAPI specification')
-      ->setDescription('The spec snapshot.')
+      ->setLabel(t('OpenAPI specification'))
+      ->setDescription(t('The spec snapshot.'))
       ->setRevisionable(TRUE)
       ->setSettings([
         'file_directory' => 'apidoc_specs',
