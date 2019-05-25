@@ -83,7 +83,6 @@ class ApiDocFileLinkConstraintValidator extends ConstraintValidator implements C
 
       try {
         $options = [
-          'exceptions' => TRUE,
           'allow_redirects' => [
             'strict' => TRUE,
           ],
