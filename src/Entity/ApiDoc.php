@@ -26,6 +26,7 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\link\LinkItemInterface;
 
 /**
  * Defines the API Doc entity.
@@ -45,6 +46,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *       "add" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
  *       "edit" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocForm",
  *       "delete" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocDeleteForm",
+ *       "reimport_spec" = "Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm",
  *     },
  *     "access" = "Drupal\apigee_api_catalog\Entity\Access\ApiDocAccessControlHandler",
  *     "route_provider" = {
@@ -77,6 +79,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "add-form" = "/admin/content/api/add",
  *     "edit-form" = "/admin/content/api/{apidoc}/edit",
  *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "reimport-spec-form" = "/admin/content/api/{apidoc}/reimport",
  *     "version-history" = "/admin/content/api/{apidoc}/revisions",
  *     "revision" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/view",
  *     "revision-revert-form" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/revert",
@@ -92,14 +95,14 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
   /**
    * {@inheritdoc}
    */
-  public function getName() : string {
+  public function getName(): string {
     return $this->get('name')->value;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setName(string $name) : ApiDocInterface {
+  public function setName(string $name): ApiDocInterface {
     $this->set('name', $name);
     return $this;
   }
@@ -107,14 +110,14 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDescription() : string {
+  public function getDescription(): string {
     return $this->get('description')->value;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setDescription(string $description) : ApiDocInterface {
+  public function setDescription(string $description): ApiDocInterface {
     $this->set('description', $description);
     return $this;
   }
@@ -122,14 +125,14 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCreatedTime() : int {
+  public function getCreatedTime(): int {
     return $this->get('created')->value;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setCreatedTime(int $timestamp) : ApiDocInterface {
+  public function setCreatedTime(int $timestamp): ApiDocInterface {
     $this->set('created', $timestamp);
     return $this;
   }
@@ -144,6 +147,23 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
     // the revision author.
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId(\Drupal::currentUser()->id());
+    }
+
+    \Drupal::service('apigee_api_catalog.spec_fetcher')->fetchSpec($this, FALSE, FALSE);
+
+    // API docs that use the "file" source will still need their md5 updated.
+    if ($this->get('spec_file_source')->value === static::SPEC_AS_FILE) {
+      $spec_value = $this->get('spec')->isEmpty() ? [] : $this->get('spec')->getValue()[0];
+      if (!empty($spec_value['target_id'])) {
+        /* @var \Drupal\file\Entity\File $file */
+        $file = $this->entityTypeManager()
+          ->getStorage('file')
+          ->load($spec_value['target_id']);
+
+        if ($file) {
+          $this->set('spec_md5', md5_file($file->getFileUri()));
+        }
+      }
     }
   }
 
@@ -218,8 +238,25 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ])
       ->setDisplayConfigurable('form', TRUE);
 
+    $fields['spec_file_source'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(t('OpenAPI specification file source'))
+      ->setDescription(t('Indicate if the OpenAPI spec will be provided as a
+                          file for upload or a URL.'))
+      ->setDefaultValue(ApiDocInterface::SPEC_AS_FILE)
+      ->setRequired(TRUE)
+      ->setSetting('allowed_values', [
+        ApiDocInterface::SPEC_AS_FILE => t('File'),
+        ApiDocInterface::SPEC_AS_URL => t('URL'),
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'options_buttons',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['spec'] = BaseFieldDefinition::create('file')
-      ->setLabel(t('OpenAPI specification'))
+      ->setLabel(t('OpenAPI specification file'))
       ->setDescription(t('The spec snapshot.'))
       ->setRevisionable(TRUE)
       ->setSettings([
@@ -240,6 +277,31 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayOptions('form', [
         'label' => 'hidden',
         'type' => 'file_generic',
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
+    $fields['file_link'] = BaseFieldDefinition::create('file_link')
+      ->setLabel(t('URL to OpenAPI specification file'))
+      ->setDescription(t('The URL to an OpenAPI file spec.'))
+      ->addConstraint('ApiDocFileLink')
+      ->setSettings([
+        'file_extensions' => 'yml yaml json',
+        'link_type' => LinkItemInterface::LINK_GENERIC,
+        'title' => DRUPAL_DISABLED,
+      ])
+      ->setDisplayOptions('form', [
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['spec_md5'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('OpenAPI specification file MD5'))
+      ->setDescription(t('OpenAPI specification file MD5'))
+      ->setSettings([
+        'text_processing' => 0,
+      ])
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE);
 
@@ -248,13 +310,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDescription(t('The API Product this API is associated with.'))
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'api_product')
-      ->setDisplayOptions('form', [
-        'label' => 'above',
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['status']
       ->setLabel(t('Publishing status'))
@@ -273,6 +330,10 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'))
       ->setRevisionable(TRUE);
+
+    $fields['fetched_timestamp'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Spec fetched from URL timestamp'))
+      ->setDescription(t('When the OpenAPI spec file was last fetched from URL as a Unix timestamp.'));
 
     return $fields;
   }

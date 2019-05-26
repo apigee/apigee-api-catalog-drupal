@@ -74,6 +74,8 @@ class ApidocEntityRevisionsAccessTest extends KernelTestBase {
     'user',
     'text',
     'file',
+    'options',
+    'file_link',
     'apigee_edge',
     'key',
     'apigee_api_catalog',
