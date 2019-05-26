@@ -20,8 +20,10 @@
 
 namespace Drupal\apigee_api_catalog\Entity;
 
+use Drupal\Core\Entity\EditorialContentEntityBase;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 
@@ -47,10 +49,14 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "access" = "Drupal\apigee_api_catalog\Entity\Access\ApiDocAccessControlHandler",
  *     "route_provider" = {
  *       "html" = "Drupal\apigee_api_catalog\Entity\Routing\ApiDocHtmlRouteProvider",
+ *       "revision" = "Drupal\entity\Routing\RevisionRouteProvider",
  *     },
  *   },
  *   base_table = "apidoc",
  *   data_table = "apidoc_field_data",
+ *   revision_table = "apidoc_revision",
+ *   revision_data_table = "apidoc_field_revision",
+ *   show_revision_ui = TRUE,
  *   translatable = TRUE,
  *   admin_permission = "administer apigee api catalog",
  *   entity_keys = {
@@ -58,19 +64,28 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "label" = "name",
  *     "uuid" = "uuid",
  *     "langcode" = "langcode",
- *     "status" = "status",
+ *     "published" = "status",
+ *     "revision" = "revision_id",
+ *   },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_user",
+ *     "revision_created" = "revision_created",
+ *     "revision_log_message" = "revision_log_message",
  *   },
  *   links = {
  *     "canonical" = "/api/{apidoc}",
  *     "add-form" = "/admin/content/api/add",
  *     "edit-form" = "/admin/content/api/{apidoc}/edit",
  *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "version-history" = "/admin/content/api/{apidoc}/revisions",
+ *     "revision" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/view",
+ *     "revision-revert-form" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/revert",
  *     "collection" = "/admin/content/apis",
  *   },
  *   field_ui_base_route = "entity.apidoc.settings"
  * )
  */
-class ApiDoc extends ContentEntityBase implements ApiDocInterface {
+class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
 
   use EntityChangedTrait;
 
@@ -122,16 +137,41 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
   /**
    * {@inheritdoc}
    */
-  public function isPublished() : bool {
-    return (bool) $this->getEntityKey('status');
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+
+    // If no revision author has been set explicitly, make the current user
+    // the revision author.
+    if (!$this->getRevisionUser()) {
+      $this->setRevisionUserId(\Drupal::currentUser()->id());
+    }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setPublished(bool $published) : ApiDocInterface {
-    $this->set('status', $published);
-    return $this;
+  public function preSaveRevision(EntityStorageInterface $storage, \stdClass $record) {
+    parent::preSaveRevision($storage, $record);
+
+    if (!$this->isNewRevision() && isset($this->original) && empty($record->revision_log_message)) {
+      // If we are updating an existing entity without adding a new revision, we
+      // need to make sure $entity->revision_log_message is reset whenever it is
+      // empty. Therefore, this code allows us to avoid clobbering an existing
+      // log  entry with an empty one.
+      $record->revision_log_message = $this->original->revision_log_message->value;
+    }
+  }
+
+  /**
+   * Gets whether a new revision should be created by default.
+   *
+   * @return bool
+   *   TRUE if a new revision should be created by default.
+   */
+  public function shouldCreateNewRevision() {
+    $config = \Drupal::config('apigee_api_catalog.settings');
+    $default_revision = $config->get('default_revision');
+    return is_null($default_revision) ? TRUE : (bool) $default_revision;
   }
 
   /**
@@ -143,6 +183,7 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
       ->setDescription(t('The name of the API.'))
+      ->setRevisionable(TRUE)
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -164,6 +205,7 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
     $fields['description'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Description'))
       ->setDescription(t('Description of the API.'))
+      ->setRevisionable(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'text_default',
@@ -177,8 +219,9 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['spec'] = BaseFieldDefinition::create('file')
-      ->setLabel('OpenAPI specification')
-      ->setDescription('The spec snapshot.')
+      ->setLabel(t('OpenAPI specification'))
+      ->setDescription(t('The spec snapshot.'))
+      ->setRevisionable(TRUE)
       ->setSettings([
         'file_directory' => 'apidoc_specs',
         'file_extensions' => 'yml yaml json',
@@ -202,7 +245,8 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
 
     $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('API Product'))
-      ->setDescription(t('The API Product this API is associated to.'))
+      ->setDescription(t('The API Product this API is associated with.'))
+      ->setRevisionable(TRUE)
       ->setSetting('target_type', 'api_product')
       ->setDisplayOptions('form', [
         'label' => 'above',
@@ -212,10 +256,9 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['status'] = BaseFieldDefinition::create('boolean')
+    $fields['status']
       ->setLabel(t('Publishing status'))
       ->setDescription(t('A boolean indicating whether the API Doc is published.'))
-      ->setDefaultValue(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => 1,
@@ -223,13 +266,28 @@ class ApiDoc extends ContentEntityBase implements ApiDocInterface {
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+      ->setDescription(t('The time that the entity was created.'))
+      ->setRevisionable(TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+      ->setDescription(t('The time that the entity was last edited.'))
+      ->setRevisionable(TRUE);
 
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function urlRouteParameters($rel) {
+    $uri_route_parameters = parent::urlRouteParameters($rel);
+
+    if ($rel === 'revision-revert-form' && $this instanceof RevisionableInterface) {
+      $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
+    }
+
+    return $uri_route_parameters;
   }
 
 }
