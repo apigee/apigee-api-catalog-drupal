@@ -7,4 +7,5 @@ configure: entity.apidoc.settings
 dependencies:
 - drupal:text
 - drupal:file
+- drupal:file_link
 - apigee_edge:apigee_edge

@@ -30,12 +30,26 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface {
 
   /**
+   * The value of "spec_file_source" when it uses a file as source.
+   *
+   * @var string
+   */
+  public const SPEC_AS_FILE = 'file';
+
+  /**
+   * The value of "spec_file_source" when it uses a URL as source.
+   *
+   * @var string
+   */
+  public const SPEC_AS_URL = 'url';
+
+  /**
    * Gets the API Doc name.
    *
    * @return string
    *   Name of the API Doc.
    */
-  public function getName() : string;
+  public function getName(): string;
 
   /**
    * Sets the API Doc name.
@@ -46,7 +60,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The called API Doc entity.
    */
-  public function setName(string $name) : self;
+  public function setName(string $name): self;
 
   /**
    * Gets the description.
@@ -54,7 +68,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @return null|string
    *   The API Doc description.
    */
-  public function getDescription() : string;
+  public function getDescription(): string;
 
   /**
    * Sets the description.
@@ -65,7 +79,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The API Doc entity.
    */
-  public function setDescription(string $description) : self;
+  public function setDescription(string $description): self;
 
   /**
    * Gets the API Doc creation timestamp.
@@ -73,7 +87,7 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @return int
    *   Creation timestamp of the API Doc.
    */
-  public function getCreatedTime() : int;
+  public function getCreatedTime(): int;
 
   /**
    * Sets the API Doc creation timestamp.
@@ -84,6 +98,6 @@ interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface
    * @return \Drupal\apigee_api_catalog\Entity\ApiDocInterface
    *   The called API Doc entity.
    */
-  public function setCreatedTime(int $timestamp) : self;
+  public function setCreatedTime(int $timestamp): self;
 
 }

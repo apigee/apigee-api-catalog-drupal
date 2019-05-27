@@ -20,6 +20,7 @@
 
 namespace Drupal\apigee_api_catalog\Entity\Form;
 
+use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -27,6 +28,44 @@ use Drupal\Core\Form\FormStateInterface;
  * Form controller for API Doc edit forms.
  */
 class ApiDocForm extends ContentEntityForm {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+
+    $form['specifications'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('OpenAPI Specifications File'),
+      '#weight' => $form['spec_file_source']['#weight'],
+    ];
+
+    // TODO: Required states are not working and no server side validation.
+    $form['spec']['#states'] = [
+      'visible' => [
+        ':input[name="spec_file_source"]' => ['value' => ApiDocInterface::SPEC_AS_FILE],
+      ],
+      'required' => [
+        ':input[name="spec_file_source"]' => ['value' => ApiDocInterface::SPEC_AS_FILE],
+      ],
+    ];
+    $form['file_link']['#states'] = [
+      'visible' => [
+        ':input[name="spec_file_source"]' => ['value' => ApiDocInterface::SPEC_AS_URL],
+      ],
+      'required' => [
+        ':input[name="spec_file_source"]' => ['value' => ApiDocInterface::SPEC_AS_URL],
+      ],
+    ];
+
+    $form['specifications']['spec_file_source'] = $form['spec_file_source'];
+    $form['specifications']['spec'] = $form['spec'];
+    $form['specifications']['file_link'] = $form['file_link'];
+    unset($form['spec_file_source'], $form['spec'], $form['file_link']);
+
+    return $form;
+  }
 
   /**
    * {@inheritdoc}

@@ -50,6 +50,10 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
       $apidoc_collection_route->setDefault('_title', $this->t('@entity_type catalog', ['@entity_type' => $entity_type->getLabel()])->render());
     }
 
+    if ($reimport_spec_route = $this->getReimportSpecFormRoute($entity_type)) {
+      $collection->add("entity.apidoc.reimport_spec_form", $reimport_spec_route);
+    }
+
     return $collection;
   }
 
@@ -75,6 +79,37 @@ class ApiDocHtmlRouteProvider extends AdminHtmlRouteProvider {
 
       return $route;
     }
+  }
+
+  /**
+   * Gets the reimport-spec-form route.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type.
+   *
+   * @return \Symfony\Component\Routing\Route|null
+   *   The generated route, if available.
+   */
+  protected function getReimportSpecFormRoute(EntityTypeInterface $entity_type) {
+    $route = new Route($entity_type->getLinkTemplate('reimport-spec-form'));
+
+    $route
+      ->setDefaults([
+        '_entity_form' => "apidoc.reimport_spec",
+        '_title' => 'Re-import API Doc OpenAPI specification',
+      ])
+      ->setRequirement('_entity_access', "apidoc.reimport")
+      ->setOption('parameters', [
+        'apidoc' => ['type' => 'entity:apidoc'],
+      ]);
+
+    // Entity types with serial IDs can specify this in their route
+    // requirements, improving the matching process.
+    if ($this->getEntityTypeIdKeyType($entity_type) === 'integer') {
+      $route->setRequirement('apidoc', '\d+');
+    }
+
+    return $route;
   }
 
 }
