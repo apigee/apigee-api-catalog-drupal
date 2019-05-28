@@ -265,11 +265,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
         'handler' => 'default:file',
         'text_processing' => 0,
       ])
-      ->setDisplayOptions('form', [
-        'label' => 'above',
-        'type' => 'file',
-        'weight' => -4,
-      ])->setDisplayOptions('view', [
+      ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'apigee_api_catalog_smartdocs',
         'weight' => 0,
