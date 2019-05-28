@@ -31,3 +31,9 @@ entity.entity_view_display.apidoc:
   route_name: entity.entity_view_display.apidoc.default
   parent: entity.apidoc.settings
   weight: 30
+
+entity.apidoc.add:
+  title: 'Add API doc'
+  route_name: entity.apidoc.add_form
+  description: 'Menu link to add an apidoc entity.'
+  parent: entity.apidoc.collection
