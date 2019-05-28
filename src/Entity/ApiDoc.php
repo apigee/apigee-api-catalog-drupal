@@ -239,7 +239,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['spec_file_source'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(t('OpenAPI specification file source'))
+      ->setLabel(t('Specification source type'))
       ->setDescription(t('Indicate if the OpenAPI spec will be provided as a
                           file for upload or a URL.'))
       ->setDefaultValue(ApiDocInterface::SPEC_AS_FILE)
@@ -252,24 +252,20 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
         'type' => 'options_buttons',
         'weight' => 0,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['spec'] = BaseFieldDefinition::create('file')
-      ->setLabel(t('OpenAPI specification file'))
+      ->setLabel(t('OpenAPI specification'))
       ->setDescription(t('The spec snapshot.'))
       ->setRevisionable(TRUE)
       ->setSettings([
         'file_directory' => 'apidoc_specs',
         'file_extensions' => 'yml yaml json',
-        'hander' => 'default:file',
+        'handler' => 'default:file',
         'text_processing' => 0,
       ])
-      ->setDisplayOptions('form', [
-        'label' => 'above',
-        'type' => 'file',
-        'weight' => -4,
-      ])->setDisplayOptions('view', [
+      ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'apigee_api_catalog_smartdocs',
         'weight' => 0,
@@ -278,8 +274,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
         'label' => 'hidden',
         'type' => 'file_generic',
       ])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['file_link'] = BaseFieldDefinition::create('file_link')
       ->setLabel(t('URL to OpenAPI specification file'))
@@ -293,8 +289,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayOptions('form', [
         'weight' => 0,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['spec_md5'] = BaseFieldDefinition::create('string')
       ->setLabel(t('OpenAPI specification file MD5'))
@@ -319,7 +315,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => 1,
-      ]);
+      ])
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
