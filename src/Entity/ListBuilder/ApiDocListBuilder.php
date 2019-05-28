@@ -74,11 +74,7 @@ class ApiDocListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\apigee_api_catalog\Entity\ApiDoc */
     $row['id'] = $entity->id();
-    $row['name'] = Link::createFromRoute(
-      $entity->label(),
-      'entity.apidoc.edit_form',
-      ['apidoc' => $entity->id()]
-    );
+    $row['name'] = $entity->toLink();
     return $row + parent::buildRow($entity);
   }
 

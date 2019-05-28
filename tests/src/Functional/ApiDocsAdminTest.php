@@ -142,7 +142,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $assert->linkExists('Delete');
 
     // Click on API Doc to edit.
-    $this->clickLink($random_name);
+    $this->clickLink('Edit');
     $assert->statusCodeEquals(200);
 
     // Edit form should have proper values.
