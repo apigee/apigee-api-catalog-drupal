@@ -7,3 +7,9 @@ services:
   apigee_api_catalog.spec_fetcher:
     class: Drupal\apigee_api_catalog\SpecFetcher
     arguments: ['@file_system', '@http_client', '@entity_type.manager', '@string_translation', '@messenger', '@logger.channel.apigee_api_catalog']
+
+  apigee_api_catalog.page_not_found_subscriber:
+    class: Drupal\apigee_api_catalog\EventSubscriber\PageNotFoundEventSubscriber
+    arguments: ['@path.matcher', '@path.validator']
+    tags:
+      - { name: event_subscriber }
