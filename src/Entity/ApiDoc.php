@@ -307,8 +307,8 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDescription(t('The API Product this API is associated with.'))
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'api_product')
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['status']
       ->setLabel(t('Publishing status'))
