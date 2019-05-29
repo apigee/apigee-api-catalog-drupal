@@ -20,6 +20,7 @@
 
 namespace Drupal\apigee_api_catalog\Entity\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -74,7 +75,14 @@ class ApiDocSettingsForm extends FormBase {
     $config = $this->configFactory()->getEditable(static::CONFIG_NAME);
 
     $options = $form_state->getValue('options');
-    $config->set('default_revision', (bool) $options['new_revision'])->save();
+    $config->set('default_revision', (bool) $options['new_revision']);
+    $config->set('enable_product_access_control', $form_state->getValue('enable_product_access_control'));
+    // Save the config.
+    $config->save();
+
+    // Entity field info has to be rebuilt if you change how access control for
+    // `apidoc` entities work.
+    Cache::invalidateTags(['entity_field_info']);
 
     $this->messenger()->addStatus($this->t('@type settings have been updated.', [
       '@type' => $entity_type->getLabel(),
@@ -85,9 +93,35 @@ class ApiDocSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $settings = $this->config(static::CONFIG_NAME);
+
     /* @var \Drupal\apigee_api_catalog\Entity\ApiDoc $entity */
     $entity = $this->entityTypeManager->getStorage('apidoc')->create();
     $form['apigee_api_catalog_settings']['#markup'] = $this->t('Settings for Apigee API catalog. Manage field settings using the tabs above.');
+
+    // Adds a group for access control.
+    $form['access_control'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Access control'),
+    ];
+    // Adds a flag that will alow enabling access control by API product.
+    $form['access_control']['enable_product_access_control'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Allow API product based access control'),
+      '#description' => $this->t("Select how access to an API doc should be limited based on it's associated API product from the following options.<br />
+        <strong>Never:</strong> Access will not be limited. Only the API doc access permissions are used to determine if a user will have access.<br />
+        <strong>Always:</strong> Access to view an API doc will not be granted if the user doesn't have access to the associated API Product.<br />
+        <strong>Configurable:</strong> Access to view an API doc will only be restricted if the access check is enabled for an individual API doc.
+      "),
+      '#options' => [
+        'none' => $this->t('Never'),
+        'always' => $this->t('Always'),
+        'configurable' => $this->t('Configurable'),
+      ],
+      '#default_value' => $settings->get('enable_product_access_control'),
+      '#group' => 'access_control',
+    ];
 
     $form['additional_settings'] = [
       '#type' => 'vertical_tabs',

@@ -333,11 +333,22 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setLabel(t('Spec fetched from URL timestamp'))
       ->setDescription(t('When the OpenAPI spec file was last fetched from URL as a Unix timestamp.'));
 
-    // Store whether product access should be checked per entity.
+    // Gets whether the access control should be configurable per entity.
+    $product_access_is_configurable = (\Drupal::config(ApiDocSettingsForm::CONFIG_NAME)->get('enable_product_access_control') === 'configurable');
+    // Store weather product access should be checked per entity.
     $fields['product_access_control'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('`product_access_control` placeholder'))
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+      ->setLabel(t('Restrict access based on API product'))
+      ->setDescription(t('If checked, access to view this API doc will restricted to users who have access to the associated API product.'))
+      ->setDisplayOptions('form', $product_access_is_configurable ? [
+        'type' => 'boolean_checkbox',
+        'weight' => 4,
+        'region' => 'content',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+      ] : [])
+      ->setDisplayConfigurable('form', $product_access_is_configurable)
+      ->setDefaultValue($product_access_is_configurable);
 
     return $fields;
   }

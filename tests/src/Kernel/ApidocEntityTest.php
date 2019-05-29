@@ -59,6 +59,8 @@ class ApidocEntityTest extends KernelTestBase {
     $this->installEntitySchema('apidoc');
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');
+    // Make sure module config installs without schema errors.
+    $this->installConfig('apigee_api_catalog');
   }
 
   /**

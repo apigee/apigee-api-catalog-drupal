@@ -1,0 +1,10 @@
+apigee_api_catalog.apidoc.config:
+  type: config_object
+  label: 'API Doc settings'
+  mapping:
+    enable_product_access_control:
+      type: string
+      label: 'Enable API product access control'
+    default_revision:
+      type: boolean
+      label: 'Create new revision'
