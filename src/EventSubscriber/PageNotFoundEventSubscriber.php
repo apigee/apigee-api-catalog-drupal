@@ -69,22 +69,18 @@ class PageNotFoundEventSubscriber implements EventSubscriberInterface {
    *   The exception event.
    */
   public function onNotFoundException(GetResponseForExceptionEvent $event) {
-    $path = NULL;
-
     // Check if the request uri matches an apidoc canonical route.
     // Also check for apidoc valid path.
-    if (!($event->getException() instanceof NotFoundHttpException)
-      || !(($uri = $event->getRequest()->getRequestUri())
-        && ($this->pathMatcher->matchPath($uri, '/api/*/*'))
-        && ([, $prefix, $id] = explode('/', $uri))
-        && ($path = "/api/{$id}")
-        && $this->pathValidator->isValid($path))
+    if ($event->getException() instanceof NotFoundHttpException
+      && ($uri = $event->getRequest()->getRequestUri())
+      && $this->pathMatcher->matchPath($uri, '/api/*/*')
+      && (list(,, $id) = explode('/', $uri))
+      && ($path = "/api/{$id}")
+      && $this->pathValidator->isValid($path)
     ) {
-      return;
+      // Redirect to the apidoc.
+      $event->setResponse(new RedirectResponse($path));
     }
-
-    // Redirect to the apidoc.
-    $event->setResponse(new RedirectResponse($path));
   }
 
   /**
