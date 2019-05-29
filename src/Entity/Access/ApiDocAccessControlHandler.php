@@ -21,6 +21,9 @@
 namespace Drupal\apigee_api_catalog\Entity\Access;
 
 use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
+use Drupal\apigee_api_catalog\Entity\Form\ApiDocSettingsForm;
+use Drupal\apigee_edge\Entity\ApiProduct;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -45,16 +48,26 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler implements E
   protected $entityTypeManager;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Constructs an access control handler instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
    *   The entity type definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The config factory.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(EntityTypeInterface $entity_type, EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $config) {
     parent::__construct($entity_type);
     $this->entityTypeManager = $entityTypeManager;
+    $this->config = $config;
   }
 
   /**
@@ -63,7 +76,8 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler implements E
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static(
       $entity_type,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -81,10 +95,28 @@ class ApiDocAccessControlHandler extends EntityAccessControlHandler implements E
 
     switch ($operation) {
       case 'view':
-        return $access->orIf($entity->isPublished()
+        $access = $access->orIf($entity->isPublished()
           ? AccessResult::allowedIfHasPermission($account, 'view published apidoc entities')
           : AccessResult::allowedIfHasPermission($account, 'view unpublished apidoc entities')
         );
+        // Get the global config for access control.
+        $product_access_scheme = $this->config->get(ApiDocSettingsForm::CONFIG_NAME)->get('enable_product_access_control');
+        // We enforce product access globally or if set on this `apidoc` entity.
+        if ($product_access_scheme === 'always' || ($product_access_scheme === 'configurable' && $entity->product_access_control->value === "1")) {
+          // Get the associated API Product.
+          $api_product_entity = $entity->api_product->value;
+          // Only allow if the product has been set.
+          $access = $access->andIf(AccessResult::allowedIf($api_product_entity instanceof ApiProduct));
+          if ($access->isAllowed()) {
+            // Check the API product for access as well.
+            $access = $access->andIf($api_product_entity->access($operation, $account));
+          }
+
+          // Editors and administrators will need access to set the product.
+          $access = $access->orIf($entity->access('update', $account, TRUE));
+        }
+
+        return $access;
 
       case 'reimport':
         return AccessResult::allowedIf($entity->spec_file_source->value === ApiDocInterface::SPEC_AS_URL)
