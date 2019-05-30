@@ -333,6 +333,12 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setLabel(t('Spec fetched from URL timestamp'))
       ->setDescription(t('When the OpenAPI spec file was last fetched from URL as a Unix timestamp.'));
 
+    // Store weather product access should be checked per entity.
+    $fields['product_access_control'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('`product_access_control` placeholder'))
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
     return $fields;
   }
 
