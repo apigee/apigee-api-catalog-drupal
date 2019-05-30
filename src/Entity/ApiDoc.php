@@ -340,10 +340,10 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
 
     // Gets whether the access control should be configurable per entity.
     $product_access_is_configurable = (\Drupal::config(ApiDocSettingsForm::CONFIG_NAME)->get('enable_product_access_control') === 'configurable');
-    // Store weather product access should be checked per entity.
+    // Store whether product access should be checked per entity.
     $fields['product_access_control'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Restrict access based on API product'))
-      ->setDescription(t('If checked, access to view this API doc will restricted to users who have access to the associated API product.'))
+      ->setDescription(t('If checked, access to view this API doc will restricted using the API product access control settings.'))
       ->setDisplayOptions('form', $product_access_is_configurable ? [
         'type' => 'boolean_checkbox',
         'weight' => 4,

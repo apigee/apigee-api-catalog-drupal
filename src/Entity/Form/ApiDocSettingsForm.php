@@ -109,10 +109,10 @@ class ApiDocSettingsForm extends FormBase {
     $form['access_control']['enable_product_access_control'] = [
       '#type' => 'select',
       '#title' => $this->t('Allow API product based access control'),
-      '#description' => $this->t("Select how access to an API doc should be limited based on it's associated API product from the following options.<br />
-        <strong>Never:</strong> Access will not be limited. Only the API doc access permissions are used to determine if a user will have access.<br />
-        <strong>Always:</strong> Access to view an API doc will not be granted if the user doesn't have access to the associated API Product.<br />
-        <strong>Configurable:</strong> Access to view an API doc will only be restricted if the access check is enabled for an individual API doc.
+      '#description' => $this->t("Select how access to an API doc should be limited based on it's associated API product field from the following options:<br />
+        <strong>Never:</strong> Access will not be limited by the API product field. Only the API doc access permissions are used to determine if a user will have access.<br />
+        <strong>Always:</strong> Access to view an API doc will follow the same settings as the API product access control settings.<br />
+        <strong>Configurable:</strong>Access to view an API doc will follow the same settings as the API product access control settings only if the \"Restrict access based on API product\" is checked on that individual API doc.
       "),
       '#options' => [
         'none' => $this->t('Never'),
