@@ -19,6 +19,7 @@
 
 namespace Drupal\Tests\apigee_api_catalog\Functional;
 
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
@@ -98,6 +99,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test admin access control functionality for apidocs.
    */
   public function testApiDocAccessAdmin() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     // Test the 'administer apigee api catalog' permission.
@@ -150,6 +152,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test no permissions for apidocs.
    */
   public function testApiDocAccessNoPermissions() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     $this->drupalLogin($this->drupalCreateUser());
@@ -192,6 +195,8 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test add permissions for apidocs.
    */
   public function testApiDocAccessAdd() {
+    $this->checkDriverHeaderSupport();
+
     $assert_session = $this->assertSession();
 
     $this->drupalLogin($this->drupalCreateUser(['add apidoc entities']));
@@ -233,6 +238,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test edit permission for apidocs.
    */
   public function testApiDocAccessEdit() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     $this->drupalLogin($this->drupalCreateUser(['edit apidoc entities']));
@@ -274,6 +280,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test delete permission for apidocs.
    */
   public function testApiDocAccessDelete() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     $this->drupalLogin($this->drupalCreateUser(['delete apidoc entities']));
@@ -315,6 +322,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test view published permission for apidocs.
    */
   public function testApiDocAccessPublished() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     // Test the 'administer apigee api catalog' permission.
@@ -357,6 +365,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
    * Test view unpublished apidocs permissions for apidocs.
    */
   public function testApiDocAccessUnpublished() {
+    $this->checkDriverHeaderSupport();
     $assert_session = $this->assertSession();
 
     // Test the 'administer apigee api catalog' permission.
@@ -413,6 +422,18 @@ class ApiDocsAccessTest extends BrowserTestBase {
 
     if ($access_reason) {
       $this->assertSame($access_reason, $access_result->getReason());
+    }
+  }
+
+  /**
+   * Checks if the driver supports headers.
+   */
+  protected function checkDriverHeaderSupport() {
+    try {
+      $this->getSession()->getResponseHeaders();
+    }
+    catch (UnsupportedDriverActionException $exception) {
+      $this->markTestSkipped($exception->getMessage());
     }
   }
 
