@@ -69,6 +69,6 @@ Development is happening in our [GitHub repository](https://github.com/apigee/ap
 queue is disabled; we use the [Github issue queue](https://github.com/apigee/apigee-api-catalog-drupal) to coordinate 
 development. See [CONTRIBUTING.md] for more information on contributing through development.
 
-## Disclaimer
+## Support
 
-This is not an officially supported Google product.
+This project, which integrates Drupal 8 with Apigee Edge, is supported by Google.
