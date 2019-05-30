@@ -303,10 +303,15 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('view', FALSE);
 
     $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('API Product'))
-      ->setDescription(t('The API Product this API is associated with.'))
+      ->setLabel(t('API product'))
+      ->setDescription(t('The API product this API is associated with.'))
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'api_product')
+      ->setDisplayOptions('form', [
+        'label' => 'above',
+        'type' => 'options_select',
+        'weight' => 0,
+      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
