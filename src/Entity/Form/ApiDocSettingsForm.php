@@ -24,6 +24,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -111,9 +112,11 @@ class ApiDocSettingsForm extends FormBase {
       '#title' => $this->t('Allow API product based access control'),
       '#description' => $this->t("Select how access to an API doc should be limited based on it's associated API product field from the following options:<br />
         <strong>Never:</strong> Access will not be limited by the API product field. Only the API doc access permissions are used to determine if a user will have access.<br />
-        <strong>Always:</strong> Access to view an API doc will follow the same settings as the API product access control settings.<br />
+        <strong>Always:</strong> Access to view an API doc will follow the same settings as the @access_control_link.<br />
         <strong>Configurable:</strong>Access to view an API doc will follow the same settings as the API product access control settings only if the \"Restrict access based on API product\" is checked on that individual API doc.
-      "),
+      ", [
+        '@access_control_link' => Link::createFromRoute($this->t('API product access control settings'), 'apigee_edge.settings.developer.api_product_access')->toString(),
+      ]),
       '#options' => [
         'none' => $this->t('Never'),
         'always' => $this->t('Always'),
