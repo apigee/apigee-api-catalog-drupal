@@ -20,6 +20,7 @@
 
 namespace Drupal\apigee_api_catalog\Entity;
 
+use Drupal\apigee_api_catalog\Entity\Form\ApiDocSettingsForm;
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\RevisionableInterface;
@@ -189,7 +190,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
    *   TRUE if a new revision should be created by default.
    */
   public function shouldCreateNewRevision() {
-    $config = \Drupal::config('apigee_api_catalog.settings');
+    $config = \Drupal::config(ApiDocSettingsForm::CONFIG_NAME);
     $default_revision = $config->get('default_revision');
     return is_null($default_revision) ? TRUE : (bool) $default_revision;
   }
