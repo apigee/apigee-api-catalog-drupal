@@ -32,6 +32,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ApiDocSettingsForm extends FormBase {
 
+  public const CONFIG_NAME = 'apigee_api_catalog.apidoc.config';
+
   /**
    * The entity type manager.
    *
@@ -69,7 +71,7 @@ class ApiDocSettingsForm extends FormBase {
     $entity_type = $this->entityTypeManager
       ->getStorage('apidoc')
       ->getEntityType();
-    $config = $this->configFactory()->getEditable('apigee_api_catalog.settings');
+    $config = $this->configFactory()->getEditable(static::CONFIG_NAME);
 
     $options = $form_state->getValue('options');
     $config->set('default_revision', (bool) $options['new_revision'])->save();
