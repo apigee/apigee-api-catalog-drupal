@@ -101,7 +101,7 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
     $xuacompatible = [
       '#tag' => 'base',
       '#attributes' => [
-        'href' => '/',
+        'href' => base_path(),
       ],
     ];
     $elements['#attached']['html_head'][] = [$xuacompatible, 'base-href'];
