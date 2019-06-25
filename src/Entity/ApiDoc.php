@@ -206,7 +206,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDescription(t('The name of the API.'))
       ->setRevisionable(TRUE)
       ->setSettings([
-        'max_length' => 50,
+        'max_length' => 255,
         'text_processing' => 0,
       ])
       ->setDefaultValue('')
