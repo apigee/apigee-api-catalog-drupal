@@ -132,4 +132,19 @@ class ApidocEntityTest extends KernelTestBase {
     $this->assertEquals($description_v1, $reverted->getDescription());
   }
 
+  /**
+   * Basic CRUD operations on a ApiDoc entity.
+   */
+  public function testEntityBaseFieldName() {
+    // Test entity with name longer than 50 characters.
+    $entity = ApiDoc::create([
+      'name' => 'Esse consequatur ad sapiente fugiat deserunt quia veritatis fuga suscipit.',
+      'description' => 'Test API 1',
+      'spec' => NULL,
+      'api_product' => NULL,
+    ]);
+    $this->assertNotNull($entity);
+    $this->assertEquals(SAVED_NEW, $entity->save());
+  }
+
 }
