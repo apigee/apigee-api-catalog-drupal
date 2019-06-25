@@ -133,12 +133,11 @@ class ApidocEntityTest extends KernelTestBase {
   }
 
   /**
-   * Basic CRUD operations on a ApiDoc entity.
+   * Test entity with name longer than 50 characters.
    */
-  public function testEntityBaseFieldName() {
-    // Test entity with name longer than 50 characters.
+  public function testEntityBaseFieldNameLength() {
     $entity = ApiDoc::create([
-      'name' => 'Esse consequatur ad sapiente fugiat deserunt quia veritatis fuga suscipit.',
+      'name' => $this->randomString(100),
       'description' => 'Test API 1',
       'spec' => NULL,
       'api_product' => NULL,
