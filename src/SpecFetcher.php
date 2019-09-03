@@ -29,8 +29,8 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -99,7 +99,7 @@ class SpecFetcher implements SpecFetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchSpec(ApiDocInterface $apidoc): bool {
+  public function fetchSpec(ApiDocInterface $apidoc): string {
     $spec_value = $apidoc->get('spec')->isEmpty() ? [] : $apidoc->get('spec')->getValue()[0];
 
     // If "spec_file_source" uses URL, grab file from "file_link" and save it
@@ -130,20 +130,20 @@ class SpecFetcher implements SpecFetcherInterface {
 
       try {
         $response = $this->httpClient->send($request, $options);
-
-        // In case of a 304 Not Modified there are no changes, but update
-        // last fetched timestamp.
-        if ($response->getStatusCode() === 304) {
-          $apidoc->set('fetched_timestamp', time());
-          return TRUE;
-        }
       }
-      catch (RequestException $e) {
+      catch (GuzzleException $e) {
         $this->log(LogLevel::ERROR, 'API Doc %label: Could not retrieve OpenAPI specification file located at %url.', [
           '%url' => $source_uri,
           '%label' => $apidoc->label(),
         ]);
-        return FALSE;
+        return self::STATUS_ERROR;
+      }
+
+      // In case of a 304 Not Modified there are no changes, but update
+      // last fetched timestamp.
+      if ($response->getStatusCode() === 304) {
+        $apidoc->set('fetched_timestamp', time());
+        return self::STATUS_UNCHANGED;
       }
 
       $data = (string) $response->getBody();
@@ -152,7 +152,7 @@ class SpecFetcher implements SpecFetcherInterface {
           '%url' => $source_uri,
           '%label' => $apidoc->label(),
         ]);
-        return FALSE;
+        return self::STATUS_ERROR;
       }
 
       // Only save file if it hasn't been fetched previously.
@@ -178,7 +178,7 @@ class SpecFetcher implements SpecFetcherInterface {
             '%id' => $apidoc->id(),
             '%error' => $e->getMessage(),
           ]);
-          return FALSE;
+          return self::STATUS_ERROR;
         }
 
         $spec_value = ['target_id' => $file->id()] + $spec_value;
@@ -186,11 +186,11 @@ class SpecFetcher implements SpecFetcherInterface {
         $apidoc->set('spec_md5', $data_md5);
         $apidoc->set('fetched_timestamp', time());
 
-        return TRUE;
+        return self::STATUS_UPDATED;
       }
     }
 
-    return FALSE;
+    return self::STATUS_ERROR;
   }
 
   /**
