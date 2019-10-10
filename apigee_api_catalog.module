@@ -49,12 +49,10 @@ function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) 
  */
 function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
   // Allow admins to see all entities.
-  if ($admin_permission = $entity_type->getAdminPermission()) {
-    if ($account->hasPermission($admin_permission)) {
-      return ([
-        JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, $admin_permission),
-      ]);
-    }
+  if (($admin_permission = $entity_type->getAdminPermission()) && $account->hasPermission($admin_permission)) {
+    return ([
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
+    ]);
   }
 
   // Allow all entities if account has view published and unpublished or
@@ -62,7 +60,7 @@ function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $en
   if ($account->hasPermission('view published apidoc entities') &&
     $account->hasPermission('view unpublished apidoc entities')) {
     return([
-      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed(),
+      AccessResult::allowed()->cachePerPermissions(),
     ]);
   }
 
