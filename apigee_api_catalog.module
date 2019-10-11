@@ -60,7 +60,7 @@ function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $en
   if ($account->hasPermission('view published apidoc entities') &&
     $account->hasPermission('view unpublished apidoc entities')) {
     return([
-      AccessResult::allowed()->cachePerPermissions(),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
     ]);
   }
 
