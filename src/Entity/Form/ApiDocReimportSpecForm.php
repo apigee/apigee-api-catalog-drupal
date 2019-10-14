@@ -100,8 +100,9 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
     /* @var \Drupal\apigee_api_catalog\Entity\ApiDocInterface $entity */
     $entity = $this->getEntity();
 
-    $needs_save = $this->specFetcher->fetchSpec($entity);
-    if ($needs_save) {
+    $fetch_status = $this->specFetcher->fetchSpec($entity);
+    // If STATUS_ERROR the error is displayed already by the fetchSpec() method.
+    if ($fetch_status != SpecFetcherInterface::STATUS_ERROR) {
       if ($entity->getEntityType()->isRevisionable()) {
         $entity->setNewRevision();
       }
@@ -110,9 +111,6 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
         '%label' => $this->entity->label(),
       ]));
     }
-    // TODO: $needs_save doesn't tell us if something went wrong.
-    // If the file wasn't changed we should notify, if something went wrong, we
-    // should notify what went wrong.
   }
 
 }

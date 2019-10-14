@@ -23,7 +23,10 @@
  * Module file for Apigee Edge: API Docs.
  */
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_help().
@@ -39,4 +42,31 @@ function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) 
 
     default:
   }
+}
+
+/**
+ * Implements hook_jsonapi_ENTITY_TYPE_filter_access() for 'apidoc'.
+ */
+function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  // Allow admins to see all entities.
+  if (($admin_permission = $entity_type->getAdminPermission()) && $account->hasPermission($admin_permission)) {
+    return ([
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
+    ]);
+  }
+
+  // Allow all entities if account has view published and unpublished or
+  // account had API Catalog admin permission.
+  if ($account->hasPermission('view published apidoc entities') &&
+    $account->hasPermission('view unpublished apidoc entities')) {
+    return([
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
+    ]);
+  }
+
+  // Allow access to published entities if user has permission to view
+  // published.
+  return ([
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view published apidoc entities'),
+  ]);
 }

@@ -5,14 +5,14 @@ Render OpenAPI specs as documentation to your API developers.
 ## Overview
 
 When you enable this module, it creates a new Drupal entity in your system named
-"API Doc". You can add new API docs under __Configuration > API catalog__ in the admin menu.
+"API Doc". You can add new API docs under __Content > API catalog__ in the admin menu.
 
 Once added, the API name and description for each API Doc will be displayed in the
 "APIs" menu item on the site using a Drupal view. Make sure to change the 
 "View published API docs" permissions if you want to allow registered or anonymous users 
 to be able to view published API documentation.
 
-The OpenAPI spec by default is rendered using Apigee SmartDocs.
+The OpenAPI spec by default is rendered using Apigee's SmartDocs custom field formatter.
 
 The OpenAPI spec can be directly uploaded as a file, or associated to a source location
 such as Apigee Edge or a URL. A "Re-import OpenAPI spec" operation is available per
@@ -21,16 +21,16 @@ API Doc to re-import the spec file when source location changes.
 The OpenAPI spec by default is shown on the API Doc detail page by default.
 To render the OpenAPI spec using Swagger UI:
 
-1. Install an enable the [Swagger UI Field Formatter](https://www.drupal.org/project/swagger_ui_formatter) module.
+1. Install and enable the [Swagger UI Field Formatter](https://www.drupal.org/project/swagger_ui_formatter) module.
 2. Install the Swagger UI JS library as documented [on the module page](https://www.drupal.org/project/swagger_ui_formatter).
-3. Go to __Configuration > API catalog > Manage display__ in the admin menu.
+3. Go to __Configuration > API docs > Manage display__ in the admin menu.
 4. Change "OpenAPI specification" field format to use the Swagger UI field formatter.
 
-The API Doc is an entity, you can configure it at __Configuration > API catalog__ in the admin
+The API Doc is an entity, you can configure it at __Structure > API docs__ in the admin
 menu.
 
-The "APIs" menu link is a view, you can modify it by editing the "API Catalog" view
-under Structure > Views in the admin menu.
+The "/apis" page ("APIs" menu link) is a view. You can modify it by editing the "API Catalog" view
+under __Structure > Views__ in the admin menu.
 
 ## Planned Features
 

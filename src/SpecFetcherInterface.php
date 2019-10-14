@@ -38,19 +38,44 @@ interface SpecFetcherInterface {
   ];
 
   /**
+   * The status when an error happened during the fetch operation.
+   *
+   * @var string
+   */
+  public const STATUS_ERROR = 'status_error';
+
+  /**
+   * The status when a spec update completed successfully.
+   *
+   * @var string
+   */
+  public const STATUS_UPDATED = 'status_updated';
+
+  /**
+   * The status when a spec update finds the remote file unchanged.
+   *
+   * @var string
+   */
+  public const STATUS_UNCHANGED = 'status_unchanged';
+
+  /**
    * Fetch OpenAPI specification file from URL.
    *
-   * Takes care of updating an ApiDoc entity with the updated spec file. If
+   * Takes care of updating an ApiDoc file entity with the updated spec file. If
    * "spec_file_source" uses a URL, it will fetch the specified file and put it
    * in the "spec" file field. If it uses a "file", it won't change it.
+   * This method only updates the file entity if it completed without error (if
+   * it returns STATUS_UPDATED or STATUS_UNCHANGED), it does not save
+   * the ApiDoc entity.
    *
    * @param \Drupal\apigee_api_catalog\Entity\ApiDocInterface $apidoc
    *   The ApiDoc entity.
    *
-   * @return bool
-   *   Returns TRUE if the entity was changed and needs to be saved, FALSE
-   *   otherwise.
+   * @return string
+   *   Returns the status of the operation. If it is STATUS_UPDATED or
+   *   STATUS_UNCHANGED, the ApiDoc entity will need to be saved to store the
+   *   changes.
    */
-  public function fetchSpec(ApiDocInterface $apidoc): bool;
+  public function fetchSpec(ApiDocInterface $apidoc): string;
 
 }
