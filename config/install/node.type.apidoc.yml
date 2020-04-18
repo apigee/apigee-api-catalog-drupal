@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - apigee_api_catalog
+name: 'API Doc'
+type: apidoc
+description: 'Use <em>API Docs</em> to document APIs'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -23,10 +23,13 @@
  * Module file for Apigee Edge: API Docs.
  */
 
+use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\link\LinkItemInterface;
 
 /**
  * Implements hook_help().

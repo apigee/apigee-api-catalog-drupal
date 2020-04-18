@@ -18,6 +18,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Drupal\Component\Serialization\Yaml;
+
 /**
  * @file
  * Install file for Apigee API Catalog.
@@ -84,4 +86,50 @@ function apigee_api_catalog_update_8701() {
       $schema->changeField($revision_data_table, $field_name, $field_name, $field_schema_data[$revision_data_table]['fields'][$field_name]);
     }
   }
+}
+
+/**
+ * Create API Doc node type and fields.
+ */
+function apigee_api_catalog_update_8702() {
+  $module = 'apigee_api_catalog';
+  $configPath = drupal_get_path('module', $module) . '/config/install';
+  $uuidService = \Drupal::service('uuid');
+  $configFactory = \Drupal::configFactory();
+  $configToImport = [
+    'node.type.apidoc',
+    'core.base_field_override.node.apidoc.title',
+    'field.field.node.apidoc.body',
+    'core.entity_form_display.node.apidoc.default',
+    'core.entity_view_display.node.apidoc.default',
+  ];
+  $fields = [
+    'field_apidoc_spec_file_source',
+    'field_apidoc_spec',
+    'field_apidoc_file_link',
+    'field_apidoc_spec_md5',
+    'field_apidoc_api_product',
+    'field_apidoc_fetched_timestamp',
+  ];
+  foreach ($fields as $field) {
+    $configToImport[] = 'field.storage.node.' . $field;
+    $configToImport[] = 'field.field.node.apidoc.' . $field;
+  }
+
+  foreach ($configToImport as $config) {
+    $raw = file_get_contents("$configPath/$config.yml");
+    $data = Yaml::decode($raw);
+    $configFactory
+      ->getEditable($config)
+      ->setData($data)
+      ->set('uuid', $uuidService->generate())
+      ->save(TRUE);
+  }
+
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+  $entityFieldManager->clearCachedFieldDefinitions();
+  $fieldDefinitions = $entityFieldManager->getFieldDefinitions('node', 'apidoc');
+
+  return 'Created API Doc node type and fields.';
 }
