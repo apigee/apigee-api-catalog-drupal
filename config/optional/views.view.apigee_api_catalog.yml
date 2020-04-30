@@ -2,18 +2,21 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.body
+    - node.type.apidoc
     - system.menu.main
   module:
     - apigee_api_catalog
+    - node
     - text
+    - user
 id: apigee_api_catalog
 label: 'API Catalog'
 module: views
 description: 'APIs published using the Apigee API Catalog module.'
 tag: ''
-base_table: apidoc_field_data
-base_field: id
-core: 8.x
+base_table: node_field_data
+base_field: nid
 display:
   default:
     display_plugin: default
@@ -24,7 +27,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'view published apidoc entities'
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -70,10 +73,11 @@ display:
           separator: ''
           hide_empty: false
       fields:
-        name:
-          id: name
-          table: apidoc_field_data
-          field: name
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          plugin_id: field
           relationship: none
           group_type: group
           admin_label: ''
@@ -132,13 +136,10 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: null
-          entity_field: name
-          plugin_id: field
-        description__value:
-          id: description__value
-          table: apidoc_field_data
-          field: description__value
+        body:
+          id: body
+          table: node__body
+          field: body
           relationship: none
           group_type: group
           admin_label: ''
@@ -184,8 +185,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: text_default
-          settings: {  }
+          type: text_summary_or_trimmed
+          settings:
+            trim_length: 600
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -196,13 +198,11 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: apidoc
-          entity_field: description
           plugin_id: field
       filters:
         status:
           id: status
-          table: apidoc_field_data
+          table: node_field_data
           field: status
           relationship: none
           group_type: group
@@ -217,6 +217,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -235,13 +237,55 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: apidoc
+          entity_type: node
           entity_field: status
           plugin_id: boolean
-        name:
-          id: name
-          table: apidoc_field_data
-          field: name
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: in
+          value:
+            apidoc: apidoc
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+        title:
+          id: title
+          table: node_field_data
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -250,11 +294,13 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: name_op
+            operator_id: title_op
             label: 'Find API'
             description: ''
             use_operator: false
-            operator: name_op
+            operator: title_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: name
             required: false
             remember: false
@@ -276,10 +322,24 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: apidoc
-          entity_field: name
+          entity_type: node
+          entity_field: title
           plugin_id: string
-      sorts: {  }
+      sorts:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          order: ASC
+          entity_type: node
+          entity_field: title
+          plugin_id: standard
+          relationship: none
+          group_type: group
+          admin_label: ''
+          exposed: false
+          expose:
+            label: ''
       title: 'API Catalog'
       header: {  }
       footer: {  }
@@ -306,8 +366,10 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'
   page_1:
     display_plugin: page
     id: page_1
@@ -331,5 +393,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.body'

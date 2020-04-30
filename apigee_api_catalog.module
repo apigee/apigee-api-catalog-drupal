@@ -23,13 +23,10 @@
  * Module file for Apigee Edge: API Docs.
  */
 
-use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\link\LinkItemInterface;
 
 /**
  * Implements hook_help().
@@ -72,4 +69,11 @@ function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $en
   return ([
     JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view published apidoc entities'),
   ]);
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function apigee_api_catalog_entity_type_build(array &$entity_types) {
+  $entity_types['node']->setFormClass('reimport_spec', 'Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
 }

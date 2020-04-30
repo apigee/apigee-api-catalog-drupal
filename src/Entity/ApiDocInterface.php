@@ -30,20 +30,6 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 interface ApiDocInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface {
 
   /**
-   * The value of "spec_file_source" when it uses a file as source.
-   *
-   * @var string
-   */
-  public const SPEC_AS_FILE = 'file';
-
-  /**
-   * The value of "spec_file_source" when it uses a URL as source.
-   *
-   * @var string
-   */
-  public const SPEC_AS_URL = 'url';
-
-  /**
    * Gets the API Doc name.
    *
    * @return string

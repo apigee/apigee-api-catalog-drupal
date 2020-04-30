@@ -1,27 +1,3 @@
-add apidoc entities:
-  title: 'Create new API docs'
-
-administer apigee api catalog:
-  title: 'Administer API catalog'
-  description: 'Change configuration the API catalog.'
-  restrict access: true
-
-delete apidoc entities:
-  title: 'Delete API docs'
-
-edit apidoc entities:
-  title: 'Edit API docs'
-
-view published apidoc entities:
-  title: 'View published API docs'
-
-view unpublished apidoc entities:
-  title: 'View unpublished API docs'
-
-view apidoc revisions:
-  title: 'View API Doc revisions'
-  description: 'To view a revision, you also need permission to view the item.'
-
-revert apidoc revisions:
-  title: 'Revert API Doc revisions'
-  description: 'To revert a revision, you also need permission to edit the item.'
+reimport apidoc specs:
+  title: 'Re-import API Doc OpenAPI specification'
+  description: Allow re-importing API Doc OpenAPI specification files.

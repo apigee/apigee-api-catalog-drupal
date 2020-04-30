@@ -1,0 +1,19 @@
+apigee_api_catalog.collection:
+  path: '/admin/content/apis'
+  defaults:
+    _title: 'API Doc catalog'
+    _controller: '\Drupal\apigee_api_catalog\Entity\ListBuilder\ApiDocListBuilder::render'
+  requirements:
+    _premission: 'access content overview'
+  options:
+    _admin_route: TRUE
+
+apigee_api_catalog.node.reimport_spec:
+  path: '/node/{node}/reimport'
+  defaults:
+    _title: 'Re-import API Doc OpenAPI specification'
+    _entity_form: 'node.reimport_spec'
+  requirements:
+    _premission: 'reimport apidoc specs'
+  options:
+    _node_operation_route: TRUE

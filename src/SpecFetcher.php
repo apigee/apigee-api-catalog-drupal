@@ -29,6 +29,7 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
@@ -99,13 +100,13 @@ class SpecFetcher implements SpecFetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchSpec(ApiDocInterface $apidoc): string {
+  public function fetchSpec(NodeInterface $apidoc): string {
     $spec_value = $apidoc->get('spec')->isEmpty() ? [] : $apidoc->get('spec')->getValue()[0];
 
     // If "spec_file_source" uses URL, grab file from "file_link" and save it
     // into the "spec" file field. The file_link field should already have
     // validated that a valid file exists at that URL.
-    if ($apidoc->get('spec_file_source')->value === ApiDocInterface::SPEC_AS_URL) {
+    if ($apidoc->get('spec_file_source')->value === static::SPEC_AS_URL) {
 
       // If the file_link field is empty, return without changes.
       // TODO: The file link shouldn't be empty. Consider throwing an error.
@@ -225,7 +226,7 @@ class SpecFetcher implements SpecFetcherInterface {
       throw new \Exception('Private filesystem has not been configured.');
     }
 
-    if (!file_prepare_directory($destination, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+    if (!$this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
       throw new \Exception('Could not prepare API Doc specification file destination directory.');
     }
   }

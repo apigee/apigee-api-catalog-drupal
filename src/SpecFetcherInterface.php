@@ -20,14 +20,28 @@
 
 namespace Drupal\apigee_api_catalog;
 
-use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\node\NodeInterface;
 use Psr\Log\LogLevel;
 
 /**
  * Interface SpecFetcherInterface.
  */
 interface SpecFetcherInterface {
+
+  /**
+   * The value of "spec_file_source" when it uses a file as source.
+   *
+   * @var string
+   */
+  public const SPEC_AS_FILE = 'file';
+
+  /**
+   * The value of "spec_file_source" when it uses a URL as source.
+   *
+   * @var string
+   */
+  public const SPEC_AS_URL = 'url';
 
   public const LOG_LEVEL_MAP = [
     LogLevel::ALERT => MessengerInterface::TYPE_WARNING,
@@ -68,7 +82,7 @@ interface SpecFetcherInterface {
    * it returns STATUS_UPDATED or STATUS_UNCHANGED), it does not save
    * the ApiDoc entity.
    *
-   * @param \Drupal\apigee_api_catalog\Entity\ApiDocInterface $apidoc
+   * @param \Drupal\node\NodeInterface $apidoc
    *   The ApiDoc entity.
    *
    * @return string
@@ -76,6 +90,6 @@ interface SpecFetcherInterface {
    *   STATUS_UNCHANGED, the ApiDoc entity will need to be saved to store the
    *   changes.
    */
-  public function fetchSpec(ApiDocInterface $apidoc): string;
+  public function fetchSpec(NodeInterface $apidoc): string;
 
 }

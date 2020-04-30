@@ -52,7 +52,10 @@ class ApiDocListBuilder extends EntityListBuilder {
   public function render() {
     $build['description'] = [
       '#markup' => $this->t('Manage your API documentation. You can manage the fields on the <a href=":url">API Docs settings page</a>.', [
-        ':url' => Url::fromRoute('entity.apidoc.settings')->toString(),
+        ':url' => Url::fromRoute('routeName', [
+          'entity_type_id' => $this->entityType->id(),
+          'bundle' => 'apidoc',
+        ])->toString(),
       ]),
     ];
     $build['table'] = parent::render();
@@ -72,7 +75,7 @@ class ApiDocListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var $entity \Drupal\apigee_api_catalog\Entity\ApiDoc */
+    /* @var \Drupal\node\NodeInterface $entity */
     $row['id'] = $entity->id();
     $row['name'] = $entity->toLink();
     return $row + parent::buildRow($entity);
@@ -94,6 +97,21 @@ class ApiDocListBuilder extends EntityListBuilder {
     }
 
     return $operations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityIds() {
+    $query = $this->getStorage()->getQuery()
+      ->condition('type', 'apidoc')
+      ->sort($this->entityType->getKey('id'));
+
+    // Only add the pager if a limit is specified.
+    if ($this->limit) {
+      $query->pager($this->limit);
+    }
+    return $query->execute();
   }
 
 }

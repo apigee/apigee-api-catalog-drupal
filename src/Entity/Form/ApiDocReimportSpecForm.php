@@ -97,7 +97,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    /* @var \Drupal\apigee_api_catalog\Entity\ApiDocInterface $entity */
+    /* @var \Drupal\node\NodeInterface $entity */
     $entity = $this->getEntity();
 
     $fetch_status = $this->specFetcher->fetchSpec($entity);
