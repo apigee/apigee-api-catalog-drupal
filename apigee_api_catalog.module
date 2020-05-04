@@ -23,7 +23,9 @@
  * Module file for Apigee Edge: API Docs.
  */
 
+use Drupal\apigee_api_catalog\SpecFetcherInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -76,4 +78,34 @@ function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $en
  */
 function apigee_api_catalog_entity_type_build(array &$entity_types) {
   $entity_types['node']->setFormClass('reimport_spec', 'Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function apigee_api_catalog_node_presave(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() != 'node') {
+    return;
+  }
+
+  /* @var \Drupal\node\NodeInterface $entity */
+
+  // Fetch spec file.
+  \Drupal::service('apigee_api_catalog.spec_fetcher')
+    ->fetchSpec($entity, FALSE, FALSE);
+
+  // API docs that use the "file" source will still need their md5 updated.
+  if ($entity->get('spec_file_source')->value === SpecFetcherInterface::SPEC_AS_FILE) {
+    $spec_value = $entity->get('spec')->isEmpty() ? [] : $entity->get('spec')->getValue()[0];
+    if (!empty($spec_value['target_id'])) {
+      /* @var \Drupal\file\Entity\File $file */
+      $file = \Drupal::entityTypeManager()
+        ->getStorage('file')
+        ->load($spec_value['target_id']);
+
+      if ($file) {
+        $entity->set('spec_md5', md5_file($file->getFileUri()));
+      }
+    }
+  }
 }

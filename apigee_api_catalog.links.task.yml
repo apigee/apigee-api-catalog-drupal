@@ -1,39 +1,39 @@
-# API Doc routing definition
-entity.apidoc.settings:
-  route_name: entity.apidoc.settings
-  title: 'Settings'
-  base_route: entity.apidoc.settings
-
-entity.apidoc.canonical:
-  route_name: entity.apidoc.canonical
-  base_route: entity.apidoc.canonical
-  title: 'View'
-
-entity.apidoc.edit_form:
-  route_name: entity.apidoc.edit_form
-  base_route: entity.apidoc.canonical
-  title: 'Edit'
-
-entity.apidoc.delete_form:
-  route_name: entity.apidoc.delete_form
-  base_route: entity.apidoc.canonical
-  title: 'Delete'
-  weight: 10
-
-apidoc.admin:
-  title: API catalog
-  route_name: entity.apidoc.collection
-  base_route: system.admin_content
-  weight: 10
-
-entity.apidoc.version_history:
-  route_name:  entity.apidoc.version_history
-  base_route:  entity.apidoc.canonical
-  title: 'Revisions'
-  weight: 15
-
-entity.apidoc.reimport_spec_form:
-  route_name: entity.apidoc.reimport_spec_form
-  base_route: entity.apidoc.canonical
-  title: 'Re-import OpenAPI spec'
-  weight: 15
+## API Doc routing definition
+#entity.apidoc.settings:
+#  route_name: entity.apidoc.settings
+#  title: 'Settings'
+#  base_route: entity.apidoc.settings
+#
+#entity.apidoc.canonical:
+#  route_name: entity.apidoc.canonical
+#  base_route: entity.apidoc.canonical
+#  title: 'View'
+#
+#entity.apidoc.edit_form:
+#  route_name: entity.apidoc.edit_form
+#  base_route: entity.apidoc.canonical
+#  title: 'Edit'
+#
+#entity.apidoc.delete_form:
+#  route_name: entity.apidoc.delete_form
+#  base_route: entity.apidoc.canonical
+#  title: 'Delete'
+#  weight: 10
+#
+#apidoc.admin:
+#  title: API catalog
+#  route_name: entity.apidoc.collection
+#  base_route: system.admin_content
+#  weight: 10
+#
+#entity.apidoc.version_history:
+#  route_name:  entity.apidoc.version_history
+#  base_route:  entity.apidoc.canonical
+#  title: 'Revisions'
+#  weight: 15
+#
+#entity.apidoc.reimport_spec_form:
+#  route_name: entity.apidoc.reimport_spec_form
+#  base_route: entity.apidoc.canonical
+#  title: 'Re-import OpenAPI spec'
+#  weight: 15

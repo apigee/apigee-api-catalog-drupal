@@ -1,6 +1,9 @@
 langcode: en
 status: true
 dependencies:
+  enforced:
+    module:
+      - apigee_api_catalog
   module:
     - file_link
     - node
