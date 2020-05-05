@@ -131,3 +131,25 @@ function apigee_api_catalog_entity_operation(EntityInterface $entity) {
 
   return $operations;
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function apigee_api_catalog_node_insert(EntityInterface $entity) {
+  apigee_api_catalog_node_update($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function apigee_api_catalog_node_update(EntityInterface $entity) {
+  if ($entity->bundle() == 'apidoc') {
+    $systemPath = '/node/' . $entity->id();
+    $pathAlias = '/api/' . $entity->id();
+    $langCode = $entity->language()->getId();
+    $exists = \Drupal::service('path.alias_manager')->getAliasByPath($systemPath, $langCode);
+    if ($exists == $systemPath) {
+      \Drupal::service('path.alias_storage')->save($systemPath, $pathAlias, $langCode);
+    }
+  }
+}
