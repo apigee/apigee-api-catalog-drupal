@@ -68,8 +68,8 @@ class ApidocEntityTest extends KernelTestBase {
     $entity = ApiDoc::create([
       'name' => 'API 1',
       'description' => 'Test API 1',
-      'spec' => NULL,
-      'api_product' => NULL,
+      'field_apidoc_spec' => NULL,
+      'field_apidoc_api_product' => NULL,
     ]);
     $this->assertNotNull($entity);
     $this->assertEquals(SAVED_NEW, $entity->save());
@@ -88,8 +88,8 @@ class ApidocEntityTest extends KernelTestBase {
     $entity = ApiDoc::create([
       'name' => 'API 1',
       'description' => $description_v1,
-      'spec' => NULL,
-      'api_product' => NULL,
+      'field_apidoc_spec' => NULL,
+      'field_apidoc_api_product' => NULL,
     ]);
 
     // Test saving a revision.
@@ -139,8 +139,8 @@ class ApidocEntityTest extends KernelTestBase {
     $entity = ApiDoc::create([
       'name' => $this->randomString(100),
       'description' => 'Test API 1',
-      'spec' => NULL,
-      'api_product' => NULL,
+      'field_apidoc_spec' => NULL,
+      'field_apidoc_api_product' => NULL,
     ]);
     $this->assertNotNull($entity);
     $this->assertEquals(SAVED_NEW, $entity->save());

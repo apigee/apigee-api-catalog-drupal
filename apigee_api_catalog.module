@@ -77,7 +77,10 @@ function apigee_api_catalog_jsonapi_apidoc_filter_access(EntityTypeInterface $en
  * Implements hook_entity_type_build().
  */
 function apigee_api_catalog_entity_type_build(array &$entity_types) {
-  $entity_types['node']->setFormClass('reimport_spec', 'Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
+  if (isset($entity_types['node'])) {
+    $entity_types['node']->setFormClass('reimport_spec', '\Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
+    $entity_types['node']->setLinkTemplate('reimport-spec-form', '/node/{node}/reimport');
+  }
 }
 
 /**
@@ -95,8 +98,8 @@ function apigee_api_catalog_node_presave(EntityInterface $entity) {
     ->fetchSpec($entity, FALSE, FALSE);
 
   // API docs that use the "file" source will still need their md5 updated.
-  if ($entity->get('spec_file_source')->value === SpecFetcherInterface::SPEC_AS_FILE) {
-    $spec_value = $entity->get('spec')->isEmpty() ? [] : $entity->get('spec')->getValue()[0];
+  if ($entity->get('field_apidoc_spec_file_source')->value === SpecFetcherInterface::SPEC_AS_FILE) {
+    $spec_value = $entity->get('field_apidoc_spec')->isEmpty() ? [] : $entity->get('field_apidoc_spec')->getValue()[0];
     if (!empty($spec_value['target_id'])) {
       /* @var \Drupal\file\Entity\File $file */
       $file = \Drupal::entityTypeManager()
@@ -104,8 +107,27 @@ function apigee_api_catalog_node_presave(EntityInterface $entity) {
         ->load($spec_value['target_id']);
 
       if ($file) {
-        $entity->set('spec_md5', md5_file($file->getFileUri()));
+        $entity->set('field_apidoc_spec_md5', md5_file($file->getFileUri()));
       }
     }
   }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function apigee_api_catalog_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  if ($entity->bundle() == 'apidoc' && \Drupal::currentUser()->hasPermission('reimport apidoc specs')) {
+    if ($entity->hasLinkTemplate('reimport-spec-form')) {
+      $operations['reimport_spec'] = [
+        'title' => t('Re-import OpenAPI spec'),
+        'weight' => 100,
+        'url' => $entity->toUrl('reimport-spec-form'),
+      ];
+    }
+  }
+
+  return $operations;
 }

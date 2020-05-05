@@ -67,8 +67,8 @@ class SmartdocRoutingTest extends KernelTestBase {
     $this->apidoc = ApiDoc::create([
       'name' => 'API 1',
       'description' => 'Test API 1',
-      'spec' => NULL,
-      'api_product' => NULL,
+      'field_apidoc_spec' => NULL,
+      'field_apidoc_api_product' => NULL,
     ]);
 
     $this->apidoc->save();

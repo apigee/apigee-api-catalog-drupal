@@ -64,7 +64,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $apidoc_published = ApiDoc::create([
       'name' => 'API 1',
       'description' => 'Test API 1',
-      'spec' => NULL,
+      'field_apidoc_spec' => NULL,
       'status' => 1,
     ]);
     $apidoc_published->save();
@@ -74,7 +74,7 @@ class ApiDocsAccessTest extends BrowserTestBase {
     $apidoc_unpublished = ApiDoc::create([
       'name' => 'API 2',
       'description' => 'Test API 2',
-      'spec' => NULL,
+      'field_apidoc_spec' => NULL,
       'status' => 0,
     ]);
     $apidoc_unpublished->save();

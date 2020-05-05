@@ -98,8 +98,8 @@ class ApidocEntityRevisionsAccessTest extends KernelTestBase {
     $apidoc = $this->entityTypeStorage->create([
       'name' => 'API 1',
       'description' => 'Test API v1',
-      'spec' => NULL,
-      'api_product' => NULL,
+      'field_apidoc_spec' => NULL,
+      'field_apidoc_api_product' => NULL,
       'status' => 1,
     ]);
     $apidoc->save();

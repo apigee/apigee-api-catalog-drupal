@@ -120,7 +120,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('entity.apidoc.collection');
+    return new Url('view.api_catalog_admin.page_1');
   }
 
   /**

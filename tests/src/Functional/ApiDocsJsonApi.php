@@ -69,7 +69,7 @@ class ApiDocsJsonApi extends BrowserTestBase {
     $apidoc_published = ApiDoc::create([
       'name' => 'Published',
       'description' => 'Published API',
-      'spec' => NULL,
+      'field_apidoc_spec' => NULL,
       'status' => 1,
     ]);
     $apidoc_published->save();
@@ -79,7 +79,7 @@ class ApiDocsJsonApi extends BrowserTestBase {
     $apidoc_unpublished = ApiDoc::create([
       'name' => 'Unpublished',
       'description' => 'Unpublished API',
-      'spec' => NULL,
+      'field_apidoc_spec' => NULL,
       'status' => 0,
     ]);
     $apidoc_unpublished->save();
