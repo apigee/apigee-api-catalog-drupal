@@ -20,7 +20,6 @@
 
 namespace Drupal\Tests\apigee_api_catalog\Kernel;
 
-use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\Core\Url;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -35,23 +34,37 @@ class SmartdocRoutingTest extends KernelTestBase {
 
   use UserCreationTrait;
 
+  /**
+   * Set to TRUE to strict check all configuration saved.
+   *
+   * @var bool
+   *
+   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
+   */
+  protected $strictConfigSchema = FALSE;
+
   protected static $modules = [
     'user',
+    'node',
+    'field',
     'system',
     'apigee_edge',
     'key',
-    'apigee_api_catalog',
     'options',
     'text',
     'file',
+    'link',
     'file_link',
     'filter',
+    'path',
+    'path_alias',
+    'apigee_api_catalog',
   ];
 
   /**
    * A test doc.
    *
-   * @var \Drupal\apigee_api_catalog\Entity\ApiDoc
+   * @var \Drupal\node\NodeInterface
    */
   private $apidoc;
 
@@ -61,37 +74,48 @@ class SmartdocRoutingTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
 
+    $this->installSchema('system', ['sequences']);
+    $this->installSchema('user', ['users_data']);
+    $this->installSchema('node', ['node_access']);
     $this->installEntitySchema('user');
-    $this->installEntitySchema('apidoc');
+    $this->installEntitySchema('node');
+    $this->installEntitySchema('node_type');
+    $this->installEntitySchema('path_alias');
+    $this->installConfig(static::$modules);
 
-    $this->apidoc = ApiDoc::create([
-      'name' => 'API 1',
-      'description' => 'Test API 1',
-      'field_apidoc_spec' => NULL,
-      'field_apidoc_api_product' => NULL,
-    ]);
+    $this->apidoc = $this->container->get('entity_type.manager')
+      ->getStorage('node')
+      ->create([
+        'type' => 'apidoc',
+        'title' => 'API 1',
+        'body' => [
+          'value' => 'Test API 1',
+          'format' => 'basic_html',
+        ],
+        'field_apidoc_spec' => NULL,
+        'field_apidoc_api_product' => NULL,
+      ]);
 
     $this->apidoc->save();
 
-    // Prepare to create a user.
-    $this->installEntitySchema('user');
-    $this->installSchema('system', ['sequences']);
-    $this->installSchema('user', ['users_data']);
-
-    // Rendering an apidoc requires the default filter formats be installed.
-    $this->installConfig(['filter']);
-
-    $user = $this->createUser(['view published apidoc entities']);
+    $user = $this->createUser(['access content']);
     $this->setCurrentUser($user);
-
   }
 
   /**
    * Tests the route subscriber will redirect from smartdoc routes.
    */
   public function testNotFoundSubscriber() {
+    $this->assertEqual($this->apidoc->id(), 1);
+
+    // This needs to run before the alias can be picked up?
+    $this->apidoc->toUrl()->toString();
+    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/1', $this->apidoc->language()->getId());
+    $this->assertEqual($alias, '/api/1');
+
     // Tests the normal response.
-    $request = Request::create(Url::fromRoute('entity.apidoc.canonical', ['apidoc' => $this->apidoc->id()])->toString());
+    $path = Url::fromRoute('entity.node.canonical', ['node' => $this->apidoc->id()])->toString();
+    $request = Request::create($path);
     $response = $this->container->get('http_kernel')->handle($request);
     static::assertSame(200, $response->getStatusCode());
     static::assertEmpty($response->headers->get('location'));

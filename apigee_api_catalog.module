@@ -87,7 +87,7 @@ function apigee_api_catalog_entity_type_build(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function apigee_api_catalog_node_presave(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() != 'node') {
+  if ($entity->bundle() != 'apidoc') {
     return;
   }
 
