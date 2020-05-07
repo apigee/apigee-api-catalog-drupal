@@ -636,7 +636,7 @@ display:
           admin_label: ''
           empty: true
           tokenize: false
-          content: 'No content available.'
+          content: 'There are no API docs yet.'
           plugin_id: text_custom
       relationships: {  }
       arguments: {  }
@@ -665,7 +665,7 @@ display:
       display_extenders: {  }
       path: admin/content/apis
       menu:
-        type: 'default tab'
+        type: none
         title: 'API Doc catalog'
         description: ''
         expanded: false
