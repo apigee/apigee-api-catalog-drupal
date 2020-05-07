@@ -18,6 +18,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Drupal\Component\Serialization\Yaml;
+
 /**
  * @file
  * Install file for Apigee API Catalog.
@@ -33,21 +35,6 @@ function apigee_api_catalog_requirements($phase) {
       'apigee_api_catalog_module_conflict' => [
         'title' => t('Apigee API Catalog'),
         'description' => t('The "Apigee Edge API Docs" module is currently installed. It is deprecated and should be uninstalled before installing the Apigee API Catalog module.'),
-        'severity' => REQUIREMENT_ERROR,
-      ],
-    ];
-  }
-
-  // Prevent updating the module from 1.x, as there is no update path yet.
-  // @see https://github.com/apigee/apigee-api-catalog-drupal/issues/80
-  $schemaVersion = \Drupal::keyValue('system.schema')->get('apigee_api_catalog');
-  if (in_array($phase, ['update', 'runtime']) && $schemaVersion < 8801) {
-    return [
-      'apigee_api_catalog_update_unsupported' => [
-        'title' => t('Apigee API Catalog'),
-        'description' => t('The "Apigee Edge API Docs" module 1.x branch is installed, and and update path to 2.x is under development. Revert to the 1.x branch and follow <a href=":link">this issue for updates</a>.', [
-          ':link' => 'https://github.com/apigee/apigee-api-catalog-drupal/issues/80',
-        ]),
         'severity' => REQUIREMENT_ERROR,
       ],
     ];
@@ -106,4 +93,71 @@ function apigee_api_catalog_update_8701() {
  */
 function apigee_api_catalog_update_8801() {
   // Empty - only needed to set the 2.x module schema number.
+}
+
+/**
+ * Create API Doc node type and fields.
+ */
+function apigee_api_catalog_update_8802() {
+  $module = 'apigee_api_catalog';
+  $configPath = drupal_get_path('module', $module) . '/config/install';
+  $uuidService = \Drupal::service('uuid');
+  $configFactory = \Drupal::configFactory();
+  $configToImport = [
+    'node.type.apidoc',
+    'core.base_field_override.node.apidoc.title',
+    'field.field.node.apidoc.body',
+    'core.entity_form_display.node.apidoc.default',
+    'core.entity_view_display.node.apidoc.default',
+  ];
+  $fields = [
+    'field_apidoc_spec_file_source',
+    'field_apidoc_spec',
+    'field_apidoc_file_link',
+    'field_apidoc_spec_md5',
+    'field_apidoc_api_product',
+    'field_apidoc_fetched_timestamp',
+  ];
+  foreach ($fields as $field) {
+    $configToImport[] = 'field.storage.node.' . $field;
+    $configToImport[] = 'field.field.node.apidoc.' . $field;
+  }
+  if (\Drupal::moduleHandler()->moduleExists('views')) {
+    $configToImport[] = 'views.view.api_catalog_admin';
+    $configToImport[] = 'views.view.apigee_api_catalog';
+  }
+
+  foreach ($configToImport as $config) {
+    $raw = file_get_contents("$configPath/$config.yml");
+    $data = Yaml::decode($raw);
+    $configFactory
+      ->getEditable($config)
+      ->setData($data)
+      ->set('uuid', $uuidService->generate())
+      ->save(TRUE);
+  }
+
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+
+  return 'Created API Doc node type and fields.';
+}
+
+/**
+ * Recreate other fields added to the API Doc entity onto the API Doc node type.
+ */
+function apigee_api_catalog_update_8703() {
+  /* @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager */
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+  $entityFieldManager->clearCachedFieldDefinitions();
+  $fieldDefinitions = $entityFieldManager->getFieldDefinitions('node', 'apidoc');
+
+  // Attempt to recreate any custom fields added to the apidoc entity.
+  $fieldDefinitions = $entityFieldManager->getFieldDefinitions('apidoc', 'apidoc');
+}
+
+/**
+ * Convert API Doc entities to nodes, migrating data.
+ */
+function apigee_api_catalog_update_8704(&$sandbox) {
+
 }
