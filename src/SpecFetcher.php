@@ -20,7 +20,6 @@
 
 namespace Drupal\apigee_api_catalog;
 
-use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
