@@ -25,6 +25,7 @@
 
 use Drupal\apigee_api_catalog\SpecFetcherInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -49,8 +50,19 @@ function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) 
  */
 function apigee_api_catalog_entity_type_build(array &$entity_types) {
   if (isset($entity_types['node'])) {
+    // Add the reimport form class and link template. The route access check
+    // makes sure it does not show up for other node types.
     $entity_types['node']->setFormClass('reimport_spec', '\Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
     $entity_types['node']->setLinkTemplate('reimport-spec-form', '/node/{node}/reimport');
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function apigee_api_catalog_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+  if ($entity_type->id() == 'node' && $bundle == 'apidoc' && !empty($fields['field_apidoc_file_link'])) {
+    $fields['field_apidoc_file_link']->addConstraint('ApiDocFileLink', []);
   }
 }
 
@@ -58,11 +70,11 @@ function apigee_api_catalog_entity_type_build(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function apigee_api_catalog_node_presave(EntityInterface $entity) {
+  /* @var \Drupal\node\NodeInterface $entity */
+
   if ($entity->bundle() != 'apidoc') {
     return;
   }
-
-  /* @var \Drupal\node\NodeInterface $entity */
 
   // Fetch spec file.
   \Drupal::service('apigee_api_catalog.spec_fetcher')
