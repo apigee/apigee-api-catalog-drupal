@@ -93,7 +93,6 @@ class SmartdocRoutingTest extends KernelTestBase {
           'format' => 'basic_html',
         ],
         'field_apidoc_spec' => NULL,
-        'field_apidoc_api_product' => NULL,
       ]);
 
     $this->apidoc->save();
