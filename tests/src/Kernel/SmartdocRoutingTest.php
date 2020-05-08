@@ -34,15 +34,6 @@ class SmartdocRoutingTest extends KernelTestBase {
 
   use UserCreationTrait;
 
-  /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   */
-  protected $strictConfigSchema = FALSE;
-
   protected static $modules = [
     'user',
     'node',

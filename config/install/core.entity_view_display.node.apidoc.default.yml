@@ -18,13 +18,6 @@ targetEntityType: node
 bundle: apidoc
 mode: default
 content:
-  apigee_apidoc_spec:
-    label: hidden
-    type: apigee_api_catalog_smartdocs
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   body:
     type: text_default
     weight: 0
@@ -45,7 +38,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  apigee_apidoc_file_link: true
   field_apidoc_fetched_timestamp: true
   field_apidoc_file_link: true
   field_apidoc_spec_file_source: true

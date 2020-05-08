@@ -36,15 +36,6 @@ class ApiDocsAdminTest extends BrowserTestBase {
   use TestFileCreationTrait;
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
