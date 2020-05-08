@@ -89,7 +89,6 @@ class ApiDocsAdminTest extends BrowserTestBase {
       'create apidoc content',
       'edit any apidoc content',
       'delete any apidoc content',
-      'reimport apidoc specs',
     ]);
     $this->drupalLogin($this->adminUser);
   }

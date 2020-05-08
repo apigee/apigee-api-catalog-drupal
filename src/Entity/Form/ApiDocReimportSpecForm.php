@@ -104,7 +104,7 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
     /** @var \Drupal\node\NodeInterface $entity */
     $entity = $route_match->getParameter('node');
 
-    return AccessResult::allowedIf($entity->bundle() == 'apidoc' && $account->hasPermission('reimport apidoc specs'));
+    return AccessResult::allowedIf($entity->bundle() == 'apidoc' && $entity->access('update', $account));
   }
 
   /**

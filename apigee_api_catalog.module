@@ -102,7 +102,7 @@ function apigee_api_catalog_node_presave(EntityInterface $entity) {
 function apigee_api_catalog_entity_operation(EntityInterface $entity) {
   $operations = [];
 
-  if ($entity->bundle() == 'apidoc' && \Drupal::currentUser()->hasPermission('reimport apidoc specs')) {
+  if ($entity->bundle() == 'apidoc' && $entity->access('update')) {
     if ($entity->hasLinkTemplate('reimport-spec-form')) {
       $operations['reimport_spec'] = [
         'title' => t('Re-import OpenAPI spec'),
