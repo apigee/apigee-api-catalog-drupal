@@ -13,7 +13,7 @@ dependencies:
 id: apigee_api_catalog
 label: 'API Catalog'
 module: views
-description: 'APIs published using the Apigee API Catalog module.'
+description: 'Display of the published APIs for the developers.'
 tag: ''
 base_table: node_field_data
 base_field: nid
