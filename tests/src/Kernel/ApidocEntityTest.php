@@ -48,8 +48,6 @@ class ApidocEntityTest extends KernelTestBase {
     'node',
     'field',
     'system',
-    'apigee_edge',
-    'key',
     'options',
     'text',
     'file',

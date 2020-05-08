@@ -10,5 +10,5 @@ dependencies:
 - drupal:user
 - drupal:node
 - drupal:path
+- drupal:options
 - drupal:file_link
-- apigee_edge:apigee_edge
