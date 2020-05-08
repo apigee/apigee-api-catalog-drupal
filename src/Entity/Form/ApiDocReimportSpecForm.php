@@ -138,6 +138,14 @@ class ApiDocReimportSpecForm extends ContentEntityConfirmFormBase {
     /* @var \Drupal\node\NodeInterface $entity */
     $entity = $this->getEntity();
 
+    if ($entity->get('field_apidoc_spec_file_source')->value != SpecFetcherInterface::SPEC_AS_URL) {
+      $this->messenger()->addStatus($this->t('API Doc %label is using a local file as the the source, there nothing to import.', [
+        '%label' => $this->entity->label(),
+      ]));
+
+      return;
+    }
+
     $fetch_status = $this->specFetcher->fetchSpec($entity);
     // If STATUS_ERROR the error is displayed already by the fetchSpec() method.
     if ($fetch_status != SpecFetcherInterface::STATUS_ERROR) {

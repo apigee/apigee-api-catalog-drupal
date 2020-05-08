@@ -76,9 +76,11 @@ function apigee_api_catalog_node_presave(EntityInterface $entity) {
     return;
   }
 
-  // Fetch spec file.
-  \Drupal::service('apigee_api_catalog.spec_fetcher')
-    ->fetchSpec($entity, FALSE, FALSE);
+  // Fetch spec file if using URL.
+  if ($entity->get('field_apidoc_spec_file_source')->value === SpecFetcherInterface::SPEC_AS_URL) {
+    \Drupal::service('apigee_api_catalog.spec_fetcher')
+      ->fetchSpec($entity);
+  }
 
   // API docs that use the "file" source will still need their md5 updated.
   if ($entity->get('field_apidoc_spec_file_source')->value === SpecFetcherInterface::SPEC_AS_FILE) {
@@ -107,7 +109,7 @@ function apigee_api_catalog_entity_operation(EntityInterface $entity) {
       $operations['reimport_spec'] = [
         'title' => t('Re-import OpenAPI spec'),
         'weight' => 100,
-        'url' => $entity->toUrl('reimport-spec-form'),
+        'url' => $entity->toUrl('reimport-spec-form')->setOption('query', \Drupal::destination()->getAsArray()),
       ];
     }
   }
@@ -175,8 +177,19 @@ function apigee_api_catalog_form_node_form_alter(&$form, FormStateInterface $for
   $form['#validate'][] = '_apigee_api_catalog_form_node_form_validate';
 }
 
+/**
+ * Form validator for the "apidoc" node bundle.
+ *
+ * @param array $form
+ *   The form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
 function _apigee_api_catalog_form_node_form_validate(&$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
+
+  // Make sure the field_apidoc_spec (file) or field_apidoc_file_link (link)
+  // is not empty, according to what was selected as the file source.
   $source = $values['field_apidoc_spec_file_source'][0]['value'] ?: NULL;
   if ($source == SpecFetcherInterface::SPEC_AS_FILE && empty($values['field_apidoc_spec'][0]['fids'][0])) {
     $form_state->setErrorByName('field_apidoc_spec', t('Provide an OpenAPI specification file.'));
