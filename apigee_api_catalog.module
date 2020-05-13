@@ -130,11 +130,15 @@ function apigee_api_catalog_node_insert(EntityInterface $entity) {
 function apigee_api_catalog_node_update(EntityInterface $entity) {
   if ($entity->bundle() == 'apidoc') {
     $systemPath = '/node/' . $entity->id();
-    $pathAlias = '/api/' . $entity->id();
     $langCode = $entity->language()->getId();
-    $exists = \Drupal::service('path.alias_manager')->getAliasByPath($systemPath, $langCode);
+    $exists = \Drupal::service('path_alias.manager')->getAliasByPath($systemPath, $langCode);
     if ($exists == $systemPath) {
-      \Drupal::service('path.alias_storage')->save($systemPath, $pathAlias, $langCode);
+      \Drupal::entityTypeManager()->getStorage('path_alias')->create([
+        'path' => $systemPath,
+        'alias' => '/api/' . $entity->id(),
+        'langcode' => $langCode,
+      ])
+      ->save();
     }
   }
 }

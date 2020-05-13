@@ -30,6 +30,9 @@ use Drupal\Tests\BrowserTestBase;
  */
 class SmartdocRoutingTest extends BrowserTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'node',
     'path_alias',
