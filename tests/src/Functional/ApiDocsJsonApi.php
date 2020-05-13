@@ -19,7 +19,6 @@
 
 namespace Drupal\Tests\apigee_api_catalog\Functional;
 
-use Drupal\apigee_api_catalog\Entity\ApiDoc;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Session\AccountInterface;
@@ -48,14 +47,14 @@ class ApiDocsJsonApi extends BrowserTestBase {
   /**
    * A published API Doc.
    *
-   * @var \Drupal\apigee_api_catalog\Entity\ApiDoc
+   * @var \Drupal\node\NodeInterface
    */
   protected $apidocPublished;
 
   /**
    * An unpublished API Doc.
    *
-   * @var \Drupal\apigee_api_catalog\Entity\ApiDoc
+   * @var \Drupal\node\NodeInterface
    */
   protected $apidocUnpublished;
 
@@ -65,25 +64,33 @@ class ApiDocsJsonApi extends BrowserTestBase {
   protected function setUp() {
     parent::setUp();
 
+    $nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
+
     // Create published apidoc.
-    $apidoc_published = ApiDoc::create([
-      'name' => 'Published',
-      'description' => 'Published API',
-      'spec' => NULL,
+    $this->apidocPublished = $nodeStorage->create([
+      'type' => 'apidoc',
+      'title' => 'Published',
+      'body' => [
+        'value' => 'Published API',
+        'format' => 'basic_html',
+      ],
+      'field_apidoc_spec' => NULL,
       'status' => 1,
     ]);
-    $apidoc_published->save();
-    $this->apidocPublished = $apidoc_published;
+    $this->apidocPublished->save();
 
     // Create unpublished apidoc.
-    $apidoc_unpublished = ApiDoc::create([
-      'name' => 'Unpublished',
-      'description' => 'Unpublished API',
-      'spec' => NULL,
+    $this->apidocUnpublished = $nodeStorage->create([
+      'type' => 'apidoc',
+      'title' => 'Unpublished',
+      'body' => [
+        'value' => 'Unpublished API',
+        'format' => 'basic_html',
+      ],
+      'field_apidoc_spec' => NULL,
       'status' => 0,
     ]);
-    $apidoc_unpublished->save();
-    $this->apidocUnpublished = $apidoc_unpublished;
+    $this->apidocUnpublished->save();
   }
 
   /**
@@ -92,13 +99,12 @@ class ApiDocsJsonApi extends BrowserTestBase {
    * Admin should see all API Docs.
    */
   public function testListAdminAccess() {
-    // Test the 'administer apigee api catalog' permission.
     $account = $this->drupalCreateUser([
-      'administer apigee api catalog',
+      'bypass node access',
     ]);
     $this->drupalLogin($account);
 
-    $collection_url = Url::fromRoute('jsonapi.apidoc--apidoc.collection')
+    $collection_url = Url::fromRoute('jsonapi.node--apidoc.collection')
       ->setAbsolute(TRUE)->toString();
 
     $this->verifyAccess($account, [$this->apidocPublished, $this->apidocUnpublished], $collection_url);
@@ -111,16 +117,16 @@ class ApiDocsJsonApi extends BrowserTestBase {
    */
   public function testFilterAdminAccess() {
     $account = $this->drupalCreateUser([
-      'administer apigee api catalog',
+      'bypass node access',
     ]);
     $this->drupalLogin($account);
 
-    $collection_url = Url::fromRoute('jsonapi.apidoc--apidoc.collection')
+    $collection_url = Url::fromRoute('jsonapi.node--apidoc.collection')
       ->setAbsolute(TRUE)->toString();
-    $url = "${collection_url}?filter[name]=Published";
+    $url = "${collection_url}?filter[title]=Published";
     $this->verifyAccess($account, [$this->apidocPublished], $url);
 
-    $url = "${collection_url}?filter[name]=Unpublished";
+    $url = "${collection_url}?filter[title]=Unpublished";
     $this->verifyAccess($account, [$this->apidocUnpublished], $url);
   }
 
@@ -131,51 +137,14 @@ class ApiDocsJsonApi extends BrowserTestBase {
    */
   public function testFilterViewAccessViewPublished() {
     $account = $this->drupalCreateUser([
-      'view published apidoc entities',
+      'access content',
     ]);
     $this->drupalLogin($account);
 
-    $collection_url = Url::fromRoute('jsonapi.apidoc--apidoc.collection')
+    $collection_url = Url::fromRoute('jsonapi.node--apidoc.collection')
       ->setAbsolute(TRUE)->toString();
-    $url = "${collection_url}?filter[name]=Published";
+    $url = "${collection_url}?filter[title]=Published";
     $this->verifyAccess($account, [$this->apidocPublished], $url);
-  }
-
-  /**
-   * View published and unpublished permissions can see published docs.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function testFilterViewPublishedWithViewPublishedAndUnpublishedPermissions() {
-    $account = $this->drupalCreateUser([
-      'view published apidoc entities',
-      'view unpublished apidoc entities',
-    ]);
-    $this->drupalLogin($account);
-
-    $collection_url = Url::fromRoute('jsonapi.apidoc--apidoc.collection')
-      ->setAbsolute(TRUE)->toString();
-    $url = "${collection_url}?filter[name]=Published";
-    $this->verifyAccess($account, [$this->apidocPublished], $url);
-  }
-
-  /**
-   * View published and unpublished permissions can see unpublished docs.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function testFilterViewUnpublishedWithViewPublishedAndUnpublishedPermissions() {
-    $account = $this->drupalCreateUser([
-      'view published apidoc entities',
-      'view unpublished apidoc entities',
-    ]);
-    $this->drupalLogin($account);
-
-    $collection_url = Url::fromRoute('jsonapi.apidoc--apidoc.collection')
-      ->setAbsolute(TRUE)->toString();
-
-    $url = "${collection_url}?filter[name]=Unpublished";
-    $this->verifyAccess($account, [$this->apidocUnpublished], $url);
   }
 
   /**
@@ -225,18 +194,18 @@ class ApiDocsJsonApi extends BrowserTestBase {
     $apidocs_response = $response_document['data'];
     $names = [];
     foreach ($apidocs_response as $apidoc) {
-      $names[] = $apidoc['attributes']['name'];
+      $names[] = $apidoc['attributes']['title'];
     }
 
     // Sort expected and actual response results by name for comparison.
     usort($apidocs_expected, function ($a, $b) {
-      return strcmp($a->getName(), $b->getName());
+      return strcmp($a->label(), $b->label());
     });
     usort($apidocs_response, function ($a, $b) {
-      return strcmp($a['attributes']['name'], $b['attributes']['name']);
+      return strcmp($a['attributes']['title'], $b['attributes']['title']);
     });
     for ($i = 0; $i < count($apidocs_response); $i++) {
-      $this->assertEqual($apidocs_expected[$i]->getName(), $apidocs_response[$i]['attributes']['name']);
+      $this->assertEqual($apidocs_expected[$i]->label(), $apidocs_response[$i]['attributes']['title']);
     }
     // Make sure the count is the same.
     $this->assertCount(count($apidocs_expected), $apidocs_response, 'Count of API Docs returned does not match count of expected.');

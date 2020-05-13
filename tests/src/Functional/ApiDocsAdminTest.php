@@ -36,11 +36,16 @@ class ApiDocsAdminTest extends BrowserTestBase {
   use TestFileCreationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['apigee_api_catalog', 'block', 'field_ui'];
+  public static $modules = ['views', 'apigee_api_catalog', 'block', 'field_ui'];
 
   /**
    * A user with permission to administer site configuration.
@@ -56,7 +61,8 @@ class ApiDocsAdminTest extends BrowserTestBase {
    * to regions.
    */
   protected function setupMenus() {
-    $this->drupalPlaceBlock('local_actions_block', ['region' => 'content']);
+    $this->drupalPlaceBlock('local_actions_block');
+    $this->drupalPlaceBlock('local_tasks_block');
   }
 
   /**
@@ -64,48 +70,39 @@ class ApiDocsAdminTest extends BrowserTestBase {
    */
   protected function setUp() {
     parent::setUp();
+
     // Add the system menu blocks to appropriate regions.
     $this->setupMenus();
 
     $this->adminUser = $this->drupalCreateUser([
-      'add apidoc entities',
-      'delete apidoc entities',
-      'edit apidoc entities',
-      'view published apidoc entities',
-      'view unpublished apidoc entities',
-      'administer apigee api catalog',
-      'administer apidoc display',
-      'administer apidoc fields',
-      'administer apidoc form display',
-      'access administration pages',
-      // Access content is needed to access the referenced files.
       'access content',
+      'access content overview',
+      'create apidoc content',
+      'edit any apidoc content',
+      'delete any apidoc content',
     ]);
     $this->drupalLogin($this->adminUser);
   }
 
   /**
-   * Tests that a user can administer API Doc entities.
+   * Tests that a user can administer API Docs.
    */
   public function testApiDocAdministration() {
-    $header_selector = 'table .empty';
-
     $assert = $this->assertSession();
 
     // Get the API Doc admin page.
-    $this->drupalGet(Url::fromRoute('entity.apidoc.collection'));
+    $this->drupalGet(Url::fromRoute('view.api_catalog_admin.page_1'));
 
     // No API docs yet.
-    $assert->elementTextContains('css', $header_selector, 'There are no API docs yet.');
+    $assert->pageTextContains('There are no API docs yet.');
 
     // User can add entity content.
     $assert->linkExists('Add API Doc');
     $this->clickLink('Add API Doc');
 
     // Fields should have proper defaults.
-    $assert->fieldValueEquals('name[0][value]', '');
-    $assert->fieldValueEquals('description[0][value]', '');
-    $assert->fieldValueEquals('status[value]', '1');
+    $assert->fieldValueEquals('title[0][value]', '');
+    $assert->fieldValueEquals('body[0][value]', '');
 
     // Create a new spec in site.
     $file = File::create([
@@ -126,15 +123,16 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $page = $this->getSession()->getPage();
     $random_name = $this->randomMachineName();
     $random_description = $this->randomGenerator->sentences(5);
-    $page->fillField('name[0][value]', $random_name);
-    $page->fillField('description[0][value]', $random_description);
+    $page->fillField('title[0][value]', $random_name);
+    $page->fillField('body[0][value]', $random_description);
+    $page->fillField('field_apidoc_spec_file_source', 'file');
 
     // Can't use drupalPostForm() to set hidden fields.
-    $this->getSession()->getPage()->find('css', 'input[name="spec[0][fids]"]')->setValue($file->id());
+    $this->getSession()->getPage()->find('css', 'input[name="field_apidoc_spec[0][fids]"]')->setValue($file->id());
     $this->getSession()->getPage()->pressButton(t('Save'));
 
     $assert->statusCodeEquals(200);
-    $assert->pageTextContains(new FormattableMarkup('Created the @name API Doc.', ['@name' => $random_name]));
+    $assert->pageTextContains(new FormattableMarkup('API Doc @name has been created.', ['@name' => $random_name]));
 
     // Entity listed.
     $assert->linkExists($random_name);
@@ -146,20 +144,12 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $assert->statusCodeEquals(200);
 
     // Edit form should have proper values.
-    $assert->fieldValueEquals('name[0][value]', $random_name);
-    $assert->fieldValueEquals('description[0][value]', $random_description);
-    $assert->fieldValueEquals('status[value]', '1');
+    $assert->fieldValueEquals('title[0][value]', $random_name);
+    $assert->fieldValueEquals('body[0][value]', $random_description);
     $assert->linkExists('specA.yml');
 
     // Delete the entity.
     $this->clickLink('Delete');
-
-    // Confirm deletion.
-    $assert->linkExists('Cancel');
-    $this->drupalPostForm(NULL, [], 'Delete');
-
-    // Back to list, should not longer have API Doc.
-    $assert->pageTextNotContains($random_name);
   }
 
 }

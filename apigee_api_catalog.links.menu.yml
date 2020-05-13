@@ -1,39 +1,6 @@
-entity.apidoc.collection:
+apigee_api_catalog.apidoc.collection:
   title: 'API catalog'
-  route_name: entity.apidoc.collection
+  route_name: view.api_catalog_admin.page_1
   description: 'List of all API documentation.'
   parent: system.admin_content
-  weight: 100
-
-entity.apidoc.settings:
-  title: 'API docs'
-  description: 'Configure API doc entity settings.'
-  route_name: entity.apidoc.settings
-  parent: system.admin_structure
-
-entity.apidoc.field_ui_fields:
-  title: 'Manage fields'
-  description: 'Manage fields for the apidoc entity.'
-  route_name: entity.apidoc.field_ui_fields
-  parent: entity.apidoc.settings
-  weight: 10
-
-entity.entity_form_display.apidoc:
-  title: 'Manage form display'
-  description: 'Configure form display modes for apidoc entities.'
-  route_name: entity.entity_form_display.apidoc.default
-  parent: entity.apidoc.settings
-  weight: 20
-
-entity.entity_view_display.apidoc:
-  title: 'Manage display'
-  description: 'Configure view display modes for apidoc entities.'
-  route_name: entity.entity_view_display.apidoc.default
-  parent: entity.apidoc.settings
-  weight: 30
-
-entity.apidoc.add:
-  title: 'Add API doc'
-  route_name: entity.apidoc.add_form
-  description: 'Menu link to add an apidoc entity.'
-  parent: entity.apidoc.collection
+  weight: 200

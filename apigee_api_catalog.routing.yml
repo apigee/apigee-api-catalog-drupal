@@ -1,0 +1,9 @@
+entity.node.reimport_spec_form:
+  path: '/node/{node}/reimport'
+  defaults:
+    _title: 'Re-import API Doc OpenAPI specification'
+    _entity_form: 'node.reimport_spec'
+  requirements:
+    _custom_access: '\Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm::checkAccess'
+  options:
+    _node_operation_route: TRUE
