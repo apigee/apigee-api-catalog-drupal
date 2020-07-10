@@ -1,5 +1,5 @@
 # SmartDocs Drupal Angular application.
-apigee_api_catalog.smartdocs:
+smartdocs:
   version: 1.0.0
   license:
     name: Proprietary Google Code
@@ -17,7 +17,7 @@ apigee_api_catalog.smartdocs:
 
 # Integration of SmartDocs Angular application with Drupal,
 # passes the OpenAPI spec URL to the SmartDocs ng app.
-apigee_api_catalog.smartdocs_integration:
+smartdocs_integration:
   version: VERSION
   js:
     js/smartdocs_integration.js: {}
@@ -26,7 +26,7 @@ apigee_api_catalog.smartdocs_integration:
     - core/drupal
 
 # Library to parse OpenAPI YAML files to pass to SmartDocs Angular app.
-apigee_api_catalog.js_yaml:
+js_yaml:
   version: 3.13.1
   license:
     name: MIT

@@ -18,8 +18,6 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-use Drupal\Component\Serialization\Yaml;
-
 /**
  * @file
  * Install file for Apigee API Catalog.
@@ -35,6 +33,22 @@ function apigee_api_catalog_requirements($phase) {
       'apigee_api_catalog_module_conflict' => [
         'title' => t('Apigee API Catalog'),
         'description' => t('The "Apigee Edge API Docs" module is currently installed. It is deprecated and should be uninstalled before installing the Apigee API Catalog module.'),
+        'severity' => REQUIREMENT_ERROR,
+      ],
+    ];
+  }
+
+  // Prevent updating the module from 1.x, as there is no update path yet.
+  // @see https://github.com/apigee/apigee-api-catalog-drupal/issues/80
+  $schemaVersion = \Drupal::keyValue('system.schema')->get('apigee_api_catalog');
+  if (in_array($phase, ['update', 'runtime']) && $schemaVersion < 8801) {
+    return [
+      'apigee_api_catalog_update_unsupported' => [
+        'title' => t('Apigee API Catalog'),
+        'description' =>t('The <a href=":link_module">Apigee API Catalog</a> 1.x version is enabled on this site but the module has been replaced with a 2.x version on the filesystem. Currently there is no way to upgrade from 1.x to 2.x. You will need to revert to the latest 1.x version of the module or uninstall the Apigee API Catalog module which will remove the module\'s current content and configuration then install the 2.x version. If you want to upgrade you will need to follow <a href=":link_issue">issue #80</a> for updates on the upgrade path functionality.', [
+          ':link_module' => 'https://github.com/apigee/apigee-api-catalog-drupal/issues/80',
+          ':link_issue' => 'https://github.com/apigee/apigee-api-catalog-drupal/issues/80',
+        ]),
         'severity' => REQUIREMENT_ERROR,
       ],
     ];

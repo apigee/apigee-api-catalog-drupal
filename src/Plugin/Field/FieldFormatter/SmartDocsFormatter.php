@@ -131,9 +131,9 @@ class SmartDocsFormatter extends FileFormatterBase implements ContainerFactoryPl
 
     $elements['#attached'] = [
       'library' => [
-        'apigee_api_catalog/apigee_api_catalog.js_yaml',
-        'apigee_api_catalog/apigee_api_catalog.smartdocs_integration',
-        'apigee_api_catalog/apigee_api_catalog.smartdocs'
+        'apigee_api_catalog/js_yaml',
+        'apigee_api_catalog/smartdocs_integration',
+        'apigee_api_catalog/smartdocs'
       ],
     ];
 

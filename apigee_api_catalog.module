@@ -24,11 +24,10 @@
  */
 
 use Drupal\apigee_api_catalog\SpecFetcherInterface;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_help().
@@ -51,8 +50,19 @@ function apigee_api_catalog_help($route_name, RouteMatchInterface $route_match) 
  */
 function apigee_api_catalog_entity_type_build(array &$entity_types) {
   if (isset($entity_types['node'])) {
+    // Add the reimport form class and link template. The route access check
+    // makes sure it does not show up for other node types.
     $entity_types['node']->setFormClass('reimport_spec', '\Drupal\apigee_api_catalog\Entity\Form\ApiDocReimportSpecForm');
     $entity_types['node']->setLinkTemplate('reimport-spec-form', '/node/{node}/reimport');
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function apigee_api_catalog_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+  if ($entity_type->id() == 'node' && $bundle == 'apidoc' && !empty($fields['field_apidoc_file_link'])) {
+    $fields['field_apidoc_file_link']->addConstraint('ApiDocFileLink', []);
   }
 }
 
@@ -60,15 +70,17 @@ function apigee_api_catalog_entity_type_build(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function apigee_api_catalog_node_presave(EntityInterface $entity) {
+  /* @var \Drupal\node\NodeInterface $entity */
+
   if ($entity->bundle() != 'apidoc') {
     return;
   }
 
-  /* @var \Drupal\node\NodeInterface $entity */
-
-  // Fetch spec file.
-  \Drupal::service('apigee_api_catalog.spec_fetcher')
-    ->fetchSpec($entity, FALSE, FALSE);
+  // Fetch spec file if using URL.
+  if ($entity->get('field_apidoc_spec_file_source')->value === SpecFetcherInterface::SPEC_AS_URL) {
+    \Drupal::service('apigee_api_catalog.spec_fetcher')
+      ->fetchSpec($entity);
+  }
 
   // API docs that use the "file" source will still need their md5 updated.
   if ($entity->get('field_apidoc_spec_file_source')->value === SpecFetcherInterface::SPEC_AS_FILE) {
@@ -92,12 +104,12 @@ function apigee_api_catalog_node_presave(EntityInterface $entity) {
 function apigee_api_catalog_entity_operation(EntityInterface $entity) {
   $operations = [];
 
-  if ($entity->bundle() == 'apidoc' && \Drupal::currentUser()->hasPermission('reimport apidoc specs')) {
+  if ($entity->bundle() == 'apidoc' && $entity->access('update')) {
     if ($entity->hasLinkTemplate('reimport-spec-form')) {
       $operations['reimport_spec'] = [
         'title' => t('Re-import OpenAPI spec'),
         'weight' => 100,
-        'url' => $entity->toUrl('reimport-spec-form'),
+        'url' => $entity->toUrl('reimport-spec-form')->setOption('query', \Drupal::destination()->getAsArray()),
       ];
     }
   }
@@ -118,11 +130,75 @@ function apigee_api_catalog_node_insert(EntityInterface $entity) {
 function apigee_api_catalog_node_update(EntityInterface $entity) {
   if ($entity->bundle() == 'apidoc') {
     $systemPath = '/node/' . $entity->id();
-    $pathAlias = '/api/' . $entity->id();
     $langCode = $entity->language()->getId();
-    $exists = \Drupal::service('path.alias_manager')->getAliasByPath($systemPath, $langCode);
+    $exists = \Drupal::service('path_alias.manager')->getAliasByPath($systemPath, $langCode);
     if ($exists == $systemPath) {
-      \Drupal::service('path.alias_storage')->save($systemPath, $pathAlias, $langCode);
+      \Drupal::entityTypeManager()->getStorage('path_alias')->create([
+        'path' => $systemPath,
+        'alias' => '/api/' . $entity->id(),
+        'langcode' => $langCode,
+      ])
+      ->save();
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function apigee_api_catalog_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $node = $form_state->getFormObject()->getEntity();
+  if ($node->bundle() != 'apidoc') {
+    return;
+  }
+
+  $form['field_apidoc_spec']['#states'] = [
+    'visible' => [
+      ':input[name="field_apidoc_spec_file_source"]' => ['value' => SpecFetcherInterface::SPEC_AS_FILE],
+    ],
+  ];
+
+  // @todo: #states does not work on managed files.
+  // @see: https://www.drupal.org/project/drupal/issues/2847425
+  $form['field_apidoc_spec']['widget'][0]['#states'] = [
+    'required' => [
+      ':input[name="field_apidoc_spec_file_source"]' => ['value' => SpecFetcherInterface::SPEC_AS_FILE],
+    ],
+  ];
+
+  $form['field_apidoc_file_link']['#states'] = [
+    'visible' => [
+      [':input[name="field_apidoc_spec_file_source"]' => ['value' => SpecFetcherInterface::SPEC_AS_URL]],
+    ],
+  ];
+
+  $form['field_apidoc_file_link']['widget'][0]['uri']['#states'] = [
+    'required' => [
+      [':input[name="field_apidoc_spec_file_source"]' => ['value' => SpecFetcherInterface::SPEC_AS_URL]],
+    ],
+  ];
+
+  $form['#validate'][] = '_apigee_api_catalog_form_node_form_validate';
+}
+
+/**
+ * Form validator for the "apidoc" node bundle.
+ *
+ * @param array $form
+ *   The form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _apigee_api_catalog_form_node_form_validate(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  // Make sure the field_apidoc_spec (file) or field_apidoc_file_link (link)
+  // is not empty, according to what was selected as the file source.
+  $source = $values['field_apidoc_spec_file_source'][0]['value'] ?: NULL;
+  if ($source == SpecFetcherInterface::SPEC_AS_FILE && empty($values['field_apidoc_spec'][0]['fids'][0])) {
+    $form_state->setErrorByName('field_apidoc_spec', t('Provide an OpenAPI specification file.'));
+  }
+  elseif ($source == SpecFetcherInterface::SPEC_AS_URL && empty($values['field_apidoc_file_link'][0]['uri'])) {
+    $form_state->setErrorByName('field_apidoc_file_link', t('Provide the URL to an OpenAPI specification file.'));
   }
 }

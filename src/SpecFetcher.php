@@ -20,7 +20,6 @@
 
 namespace Drupal\apigee_api_catalog;
 
-use Drupal\apigee_api_catalog\Entity\ApiDocInterface;
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
@@ -159,7 +158,12 @@ class SpecFetcher implements SpecFetcherInterface {
       // Only save file if it hasn't been fetched previously.
       $data_md5 = md5($data);
       $prev_md5 = $apidoc->get('field_apidoc_spec_md5')->isEmpty() ? NULL : $apidoc->get('field_apidoc_spec_md5')->value;
-      if ($prev_md5 != $data_md5) {
+      if ($prev_md5 == $data_md5) {
+        // Files are the same, only update fetched timestamp.
+        $apidoc->set('field_apidoc_fetched_timestamp', time());
+        return self::STATUS_UNCHANGED;
+      }
+      else {
         $filename = $this->fileSystem->basename($source_uri);
         $specs_definition = $apidoc->getFieldDefinition('field_apidoc_spec')->getItemDefinition();
         $target_dir = $specs_definition->getSetting('file_directory');
@@ -191,7 +195,7 @@ class SpecFetcher implements SpecFetcherInterface {
       }
     }
 
-    return self::STATUS_ERROR;
+    return self::STATUS_UNCHANGED;
   }
 
   /**

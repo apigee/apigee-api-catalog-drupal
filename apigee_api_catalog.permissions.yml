@@ -1,3 +1,0 @@
-reimport apidoc specs:
-  title: 'Re-import API Doc OpenAPI specification'
-  description: Allow manually re-importing API Doc OpenAPI specification files.

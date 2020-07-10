@@ -36,15 +36,6 @@ class ApiDocsAdminTest extends BrowserTestBase {
   use TestFileCreationTrait;
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
@@ -89,7 +80,6 @@ class ApiDocsAdminTest extends BrowserTestBase {
       'create apidoc content',
       'edit any apidoc content',
       'delete any apidoc content',
-      'reimport apidoc specs',
     ]);
     $this->drupalLogin($this->adminUser);
   }

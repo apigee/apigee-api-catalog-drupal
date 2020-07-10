@@ -31,37 +31,14 @@ The "/apis" page ("APIs" menu link) is a view. You can modify it by editing the 
 under __Structure > Views__ in the admin menu.
 
 ## API Docs RBAC (Role based access control)
-This API Doc is a node type, so any node access control module from contrib will work to restrict access and play well
-with views. To set up an RBAC, we recommend ["Permissions by term"](https://www.drupal.org/project/permissions_by_term),
-which can cover the following scenarios:
 
-- Restrict access on reading docs or creating apps:
-As an API Provider, I only want certain developers or teams of developers to read documentation or use a given
-API product so that I can hide that API Product from most developers.
-To implement using "Permissions by term":
-1. Create roles that match the API Product RBAC, and assign users accordingly.
-2. Create a new term for each of the roles.
-3. On the API Doc node, tag it with the desired term.
+_API Docs_ are a node type, so any node access control module from contrib will work to restrict access and play well
+with views.
 
-- Restrict access to creating apps
-As an API Provider, I want any developer or teams of developers to be able to read documentation about a given
-API product, but want to only allow certain developers to be able to use that API product so that we can add manual or
-automatic steps before approving access.
-To implement using "Permissions by term":
-1. Create a role for each teams of developers, and assign users accordingly. (The important step here is that the
-API Product RBAC does not need to match the API Doc's.)
-2. Create a new term and allow above the role(s) on it.
-3. On the API Doc node, tag it with the above term.
-
-- Set access defaults for new API Products
-As an API provider, I want to set the access control of a new API Product to be hidden for all users except
-certain people on my team so that developers do not use the product until I have tested it.
-To implement using "Permissions by term":
-1. Create a role for your team, and assign users accordingly.
-2. Create a new term and allow above the role on it.
-3. On the API Doc node, tag it with the above term.
-
-Note: The instructions outlined above will only control access to the API Doc, not to the API product.
+To set up RBAC, we recommend ["Permissions by term"](https://www.drupal.org/project/permissions_by_term), which can
+cover the most frequent scenarios. Refer to the online documentation (to be updated as part of
+[#81](https://github.com/apigee/apigee-api-catalog-drupal/issues/81)) for a "How to" guide on setting up the RBAC:
+https://www.drupal.org/node/3058344
 
 ## Planned Features
 
@@ -69,9 +46,6 @@ Note: The instructions outlined above will only control access to the API Doc, n
 - Add visual notifications when source URL specs have changed on the API Doc admin screen
 
 ### Known issues
-
-- No backwards compatibility with the version 1.x of this module. Follow this issue for updates:
-https://github.com/apigee/apigee-api-catalog-drupal/issues/80
 
 - The Apigee SmartDocs formatter can only render one OpenAPI spec per page and the URL pattern
   must match `/api/{entityId}`.  This means that the formatter will probably not work correctly if

@@ -30,15 +30,6 @@ use Drupal\KernelTests\KernelTestBase;
 class ApidocEntityTest extends KernelTestBase {
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -52,13 +43,14 @@ class ApidocEntityTest extends KernelTestBase {
    */
   protected $nodeStorage;
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'user',
     'node',
     'field',
     'system',
-    'apigee_edge',
-    'key',
     'options',
     'text',
     'file',
@@ -98,7 +90,6 @@ class ApidocEntityTest extends KernelTestBase {
         'format' => 'basic_html',
       ],
       'field_apidoc_spec' => NULL,
-      'field_apidoc_api_product' => NULL,
     ]);
 
     $this->assertNotNull($entity);
@@ -110,7 +101,7 @@ class ApidocEntityTest extends KernelTestBase {
     // Test path alias.
     // This needs to run before the alias can be picked up?
     $entity->toUrl()->toString();
-    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $entity->id(), $entity->language()->getId());
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $entity->id(), $entity->language()->getId());
     $this->assertEqual($alias, '/api/' . $entity->id());
 
     $entity->delete();
@@ -132,7 +123,6 @@ class ApidocEntityTest extends KernelTestBase {
         'format' => 'basic_html',
       ],
       'field_apidoc_spec' => NULL,
-      'field_apidoc_api_product' => NULL,
     ]);
 
     // Test saving a revision.

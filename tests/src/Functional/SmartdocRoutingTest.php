@@ -18,45 +18,23 @@
  * MA 02110-1301, USA.
  */
 
-namespace Drupal\Tests\apigee_api_catalog\Kernel;
+namespace Drupal\Tests\apigee_api_catalog\Functional;
 
 use Drupal\Core\Url;
-use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\user\Traits\UserCreationTrait;
-use Symfony\Component\HttpFoundation\Request;
+use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests smartdoc routing compatibility.
  *
  * @group apigee_api_catalog
  */
-class SmartdocRoutingTest extends KernelTestBase {
-
-  use UserCreationTrait;
+class SmartdocRoutingTest extends BrowserTestBase {
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
+   * {@inheritdoc}
    */
-  protected $strictConfigSchema = FALSE;
-
   protected static $modules = [
-    'user',
     'node',
-    'field',
-    'system',
-    'apigee_edge',
-    'key',
-    'options',
-    'text',
-    'file',
-    'link',
-    'file_link',
-    'filter',
-    'path',
     'path_alias',
     'apigee_api_catalog',
   ];
@@ -66,22 +44,13 @@ class SmartdocRoutingTest extends KernelTestBase {
    *
    * @var \Drupal\node\NodeInterface
    */
-  private $apidoc;
+  protected $apidoc;
 
   /**
    * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();
-
-    $this->installSchema('system', ['sequences']);
-    $this->installSchema('user', ['users_data']);
-    $this->installSchema('node', ['node_access']);
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('node');
-    $this->installEntitySchema('node_type');
-    $this->installEntitySchema('path_alias');
-    $this->installConfig(static::$modules);
 
     $this->apidoc = $this->container->get('entity_type.manager')
       ->getStorage('node')
@@ -93,13 +62,12 @@ class SmartdocRoutingTest extends KernelTestBase {
           'format' => 'basic_html',
         ],
         'field_apidoc_spec' => NULL,
-        'field_apidoc_api_product' => NULL,
       ]);
 
     $this->apidoc->save();
 
-    $user = $this->createUser(['access content']);
-    $this->setCurrentUser($user);
+    $user = $this->drupalCreateUser(['access content']);
+    $this->drupalLogin($user);
   }
 
   /**
@@ -110,22 +78,32 @@ class SmartdocRoutingTest extends KernelTestBase {
 
     // This needs to run before the alias can be picked up?
     $this->apidoc->toUrl()->toString();
-    $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/1', $this->apidoc->language()->getId());
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/1', $this->apidoc->language()->getId());
     $this->assertEqual($alias, '/api/1');
 
+    $assert = $this->assertSession();
+
     // Tests the normal response.
-    $path = Url::fromRoute('entity.node.canonical', ['node' => $this->apidoc->id()])->toString();
-    $request = Request::create($path);
-    $response = $this->container->get('http_kernel')->handle($request);
-    static::assertSame(200, $response->getStatusCode());
-    static::assertEmpty($response->headers->get('location'));
+    $url = Url::fromRoute('entity.node.canonical', ['node' => $this->apidoc->id()]);
+    $this->drupalGet($url);
+    $assert->statusCodeEquals(200);
+    static::assertEmpty($this->getSession()->getResponseHeader('location'));
+
+    // Test the canonical route uses the /api/* path alias.
+    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH), '/api/1');
+
+    // Tests the node alias response.
+    $this->drupalGet('/api/1');
+    $assert->statusCodeEquals(200);
+    static::assertEmpty($this->getSession()->getResponseHeader('location'));
 
     // Test that the smartdoc routes redirect to the canonical route.
-    $request = Request::create('/api/1/1/overview');
-    $response = $this->container->get('http_kernel')->handle($request);
-
-    static::assertSame(302, $response->getStatusCode());
-    static::assertSame('/api/1', $response->headers->get('location'));
+    $url = Url::fromUserInput('/api/1/1/overview')->setAbsolute();
+    $response = $this->getHttpClient()->request('GET', $url->toString(), [
+      'allow_redirects' => FALSE,
+    ]);
+    $this->assertEqual($response->getStatusCode(), 302);
+    $this->assertEqual($response->getHeader('location')[0], '/api/1');
   }
 
 }
