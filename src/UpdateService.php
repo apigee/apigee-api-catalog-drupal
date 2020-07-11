@@ -86,8 +86,8 @@ class UpdateService {
    */
   public function update_8802() {
     $module = 'apigee_api_catalog';
-    $configPath = drupal_get_path('module', $module) . '/config/install';
-    $configToImport = [
+    $configPath = drupal_get_path('module', $module) . '/config';
+    $configToImport['install'] = [
       'node.type.apidoc',
       'core.base_field_override.node.apidoc.title',
       'field.field.node.apidoc.body',
@@ -103,22 +103,24 @@ class UpdateService {
       'field_apidoc_fetched_timestamp',
     ];
     foreach ($fields as $field) {
-      $configToImport[] = 'field.storage.node.' . $field;
-      $configToImport[] = 'field.field.node.apidoc.' . $field;
+      $configToImport['install'][] = 'field.storage.node.' . $field;
+      $configToImport['install'][] = 'field.field.node.apidoc.' . $field;
     }
     if ($this->moduleHandler->moduleExists('views')) {
-      $configToImport[] = 'views.view.api_catalog_admin';
-      $configToImport[] = 'views.view.apigee_api_catalog';
+      $configToImport['optional'][] = 'views.view.api_catalog_admin';
+      $configToImport['optional'][] = 'views.view.apigee_api_catalog';
     }
 
-    foreach ($configToImport as $config) {
-      $raw = file_get_contents("$configPath/$config.yml");
-      $data = Yaml::decode($raw);
-      $this->configFactory
-        ->getEditable($config)
-        ->setData($data)
-        ->set('uuid', $this->uuid->generate())
-        ->save(TRUE);
+    foreach ($configToImport as $dir => $configs) {
+      foreach ($configs as $config) {
+        $raw = file_get_contents("$configPath/$dir/$config.yml");
+        $data = Yaml::decode($raw);
+        $this->configFactory
+          ->getEditable($config)
+          ->setData($data)
+          ->set('uuid', $this->uuid->generate())
+          ->save(TRUE);
+      }
     }
 
     $this->entityTypeManager->clearCachedDefinitions();
