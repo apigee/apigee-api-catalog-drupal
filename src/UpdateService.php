@@ -161,10 +161,10 @@ class UpdateService {
     }
 
     // Add back allowed_values to field_apidoc_spec_file_source.
-    if ($field = FieldStorageConfig::loadByName('node', 'field.storage.node.field_apidoc_spec_file_source')) {
+    if ($field = FieldStorageConfig::loadByName('node', 'field_apidoc_spec_file_source')) {
       $field->setSetting('allowed_values', [
-        ['value' => 'file', 'label' => 'File'],
-        ['value' => 'url', 'label' => 'URL'],
+        'file' => 'File',
+        'url' => 'URL',
       ])
         ->save();
     }
