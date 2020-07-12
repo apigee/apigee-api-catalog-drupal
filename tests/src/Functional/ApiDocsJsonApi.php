@@ -34,15 +34,6 @@ use GuzzleHttp\RequestOptions;
 class ApiDocsJsonApi extends BrowserTestBase {
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @var bool
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * Modules to enable.
    *
    * @var array
