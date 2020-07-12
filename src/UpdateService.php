@@ -101,7 +101,7 @@ class UpdateService {
    * @return string
    *   A message to display.
    */
-  public function update_8802() {
+  public function update8802() {
     $module = 'apigee_api_catalog';
     $configPath = drupal_get_path('module', $module) . '/config';
     $configToImport['install'] = [
@@ -137,7 +137,7 @@ class UpdateService {
       'field_apidoc_spec',
       'field_apidoc_file_link',
     ];
-    $source= new FileStorage("$configPath/install");
+    $source = new FileStorage("$configPath/install");
     foreach ($fields as $field) {
 
       if (!FieldStorageConfig::loadByName('node', $field)) {
@@ -163,8 +163,8 @@ class UpdateService {
     // Add back allowed_values to field_apidoc_spec_file_source.
     if ($field = FieldStorageConfig::loadByName('node', 'field.storage.node.field_apidoc_spec_file_source')) {
       $field->setSetting('allowed_values', [
-        ['value'=> 'file', 'label' => 'File'],
-        ['value'=> 'url', 'label' => 'URL'],
+        ['value' => 'file', 'label' => 'File'],
+        ['value' => 'url', 'label' => 'URL'],
       ])
         ->save();
     }
@@ -180,7 +180,7 @@ class UpdateService {
    * @return string
    *   A message to display.
    */
-  public function update_8803() {
+  public function update8803() {
     $this->entityFieldManager->clearCachedFieldDefinitions();
     $fieldStorageConfig = $this->entityTypeManager->getStorage('field_storage_config');
     $fieldConfig = $this->entityTypeManager->getStorage('field_config');
@@ -229,10 +229,10 @@ class UpdateService {
   /**
    * Convert API Doc entities to nodes, migrating data.
    *
-   * @param $sandbox
+   * @param array|null $sandbox
    *   The sandbox for batch operations.
    */
-  public function update_8804(&$sandbox) {
+  public function update8804(&$sandbox) {
     $fieldMap = $this->getFieldMap();
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $apidocStorage = $this->entityTypeManager->getStorage('apidoc');
@@ -292,7 +292,7 @@ class UpdateService {
   /**
    * Delete API Doc entity definition.
    */
-  public function update_8805() {
+  public function update8805() {
     // Get the last known state of the API Doc entity type.
     $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
     if ($entity_type = $entity_update_manager->getEntityType('apidoc')) {
