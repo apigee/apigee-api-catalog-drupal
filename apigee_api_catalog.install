@@ -94,29 +94,29 @@ function apigee_api_catalog_update_8801() {
 }
 
 /**
- * Create API Doc node type and fields.
+ * Create API Doc node type and fields if updating from 1.x.
  */
 function apigee_api_catalog_update_8802() {
   return \Drupal::service('apigee_api_catalog.updates')->update_8802();
 }
 
 /**
- * Recreate other fields added to the API Doc entity onto the API Doc node type.
+ * Recreate other fields added to the API Doc entity onto the API Doc node type if updating from 1.x.
  */
 function apigee_api_catalog_update_8803() {
   return \Drupal::service('apigee_api_catalog.updates')->update_8803();
 }
 
 /**
- * Convert API Doc entities to nodes, migrating data.
+ * Convert API Doc entities to nodes (migrating data) if updating from 1.x.
  */
 function apigee_api_catalog_update_8804(&$sandbox) {
   return \Drupal::service('apigee_api_catalog.updates')->update_8804($sandbox);
 }
 
 /**
- * Delete API Doc entity definition.
+ * Delete API Doc entity definition if updating from 1.x.
  */
-//function apigee_api_catalog_update_8805() {
-//  return \Drupal::service('apigee_api_catalog.updates')->update_8805();
-//}
+function apigee_api_catalog_update_8805() {
+  return \Drupal::service('apigee_api_catalog.updates')->update_8805();
+}

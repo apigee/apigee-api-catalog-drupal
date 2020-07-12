@@ -23,9 +23,13 @@ namespace Drupal\apigee_api_catalog;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Class UpdateService.
@@ -68,18 +72,31 @@ class UpdateService {
   protected $entityFieldManager;
 
   /**
+   * Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface definition.
+   *
+   * @var \Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface
+   */
+  protected $lastInstalledSchemaRepository;
+
+  /**
    * Constructs a new UpdateService object.
    */
-  public function __construct(UuidInterface $uuid, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager) {
+  public function __construct(UuidInterface $uuid,
+                              ConfigFactoryInterface $config_factory,
+                              ModuleHandlerInterface $module_handler,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityFieldManagerInterface $entity_field_manager,
+                              EntityLastInstalledSchemaRepositoryInterface $last_installed_schema_repository) {
     $this->uuid = $uuid;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
+    $this->lastInstalledSchemaRepository = $last_installed_schema_repository;
   }
 
   /**
-   * Create API Doc node type and fields.
+   * Create API Doc node type and fields if updating from 1.x.
    *
    * @return string
    *   A message to display.
@@ -94,18 +111,6 @@ class UpdateService {
       'core.entity_form_display.node.apidoc.default',
       'core.entity_view_display.node.apidoc.default',
     ];
-    $fields = [
-      'field_apidoc_spec_file_source',
-      'field_apidoc_spec',
-      'field_apidoc_file_link',
-      'field_apidoc_spec_md5',
-      'field_apidoc_api_product',
-      'field_apidoc_fetched_timestamp',
-    ];
-    foreach ($fields as $field) {
-      $configToImport['install'][] = 'field.storage.node.' . $field;
-      $configToImport['install'][] = 'field.field.node.apidoc.' . $field;
-    }
     if ($this->moduleHandler->moduleExists('views')) {
       $configToImport['optional'][] = 'views.view.api_catalog_admin';
       $configToImport['optional'][] = 'views.view.apigee_api_catalog';
@@ -113,14 +118,55 @@ class UpdateService {
 
     foreach ($configToImport as $dir => $configs) {
       foreach ($configs as $config) {
-        $raw = file_get_contents("$configPath/$dir/$config.yml");
-        $data = Yaml::decode($raw);
-        $this->configFactory
-          ->getEditable($config)
-          ->setData($data)
-          ->set('uuid', $this->uuid->generate())
-          ->save(TRUE);
+        if (!$this->configFactory->listAll($config)) {
+          $raw = file_get_contents("$configPath/$dir/$config.yml");
+          $data = Yaml::decode($raw);
+          $this->configFactory
+            ->getEditable($config)
+            ->setData($data)
+            ->set('uuid', $this->uuid->generate())
+            ->save(TRUE);
+        }
       }
+    }
+
+    $fields = [
+      'field_apidoc_spec_md5',
+      'field_apidoc_fetched_timestamp',
+      'field_apidoc_spec_file_source',
+      'field_apidoc_spec',
+      'field_apidoc_file_link',
+    ];
+    $source= new FileStorage("$configPath/install");
+    foreach ($fields as $field) {
+
+      if (!FieldStorageConfig::loadByName('node', $field)) {
+        $contents = $source->read("field.storage.node.$field");
+
+        // Somehow it doesn't take allowed_values...
+        if ($field == 'field_apidoc_spec_file_source') {
+          $contents['settings']['allowed_values'] = [];
+        }
+
+        $this->entityTypeManager->getStorage('field_storage_config')
+          ->create($contents)
+          ->save();
+      }
+
+      if (!FieldConfig::loadByName('node', 'apidoc', $field)) {
+        $this->entityTypeManager->getStorage('field_config')
+          ->create($source->read("field.field.node.apidoc.$field"))
+          ->save();
+      }
+    }
+
+    // Add back allowed_values to field_apidoc_spec_file_source.
+    if ($field = FieldStorageConfig::loadByName('node', 'field.storage.node.field_apidoc_spec_file_source')) {
+      $field->setSetting('allowed_values', [
+        ['value'=> 'file', 'label' => 'File'],
+        ['value'=> 'url', 'label' => 'URL'],
+      ])
+        ->save();
     }
 
     $this->entityTypeManager->clearCachedDefinitions();
@@ -135,22 +181,49 @@ class UpdateService {
    *   A message to display.
    */
   public function update_8803() {
-    /*
-     * @todo:
-     * - Get fields node apidoc bundle.
-     * - Get fields on old apidoc entity (use \Drupal::entityDefinitionUpdateManager()?).
-     * - Compare fields, try to recreate missing ones onto the node bundle.
-     */
     $this->entityFieldManager->clearCachedFieldDefinitions();
-    $fieldDefinitions = $this->entityFieldManager->getFieldDefinitions('node', 'apidoc');
+    $fieldStorageConfig = $this->entityTypeManager->getStorage('field_storage_config');
+    $fieldConfig = $this->entityTypeManager->getStorage('field_config');
 
-    // Get the last known state of the API Doc entity type,
-    // as it has now been removed from code.
-    $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
-    $entity_type = $entity_update_manager->getEntityType('apidoc');
-    // How to get the fields from the entity type?.
+    // Get the last known state of the API Doc entity type.
+    $apidocFieldDefs = $this->lastInstalledSchemaRepository->getLastInstalledFieldStorageDefinitions('apidoc');
 
-    return 'Recreated other fields added to the API Doc entity onto the API Doc node type.';
+    foreach ($apidocFieldDefs as $fieldName => $definition) {
+
+      // Only look for field starting with "field_", as those were added
+      // through the UI.
+      if (substr($fieldName, 0, 6) === 'field_') {
+
+        // Namespace this custom field to avoid collisions.
+        $newFieldName = $fieldName . '_apidoc';
+
+        if (!FieldStorageConfig::loadByName('node', $newFieldName)) {
+          $fieldStorageConfig->create([
+            'entity_type' => 'node',
+            'field_name' => $newFieldName,
+            'type' => $definition->getType(),
+            'cardinality' => $definition->getCardinality(),
+            'settings' => $definition->getSettings(),
+            'label' => $definition->getLabel(),
+          ])->save();
+        }
+
+        if (!FieldConfig::loadByName('node', 'apidoc', $newFieldName)) {
+          $fieldConfig->create([
+            'field_name' => $newFieldName,
+            'entity_type' => 'node',
+            'bundle' => 'apidoc',
+            'label' => $definition->getLabel(),
+            'description' => $definition->getDescription(),
+            'settings' => $definition->getSettings(),
+          ])->save();
+        }
+
+        $this->addToFieldMap($fieldName, $newFieldName);
+      }
+    }
+
+    return 'Recreated custom fields (if any) added to the API Doc entity onto the API Doc node type.';
   }
 
   /**
@@ -160,7 +233,58 @@ class UpdateService {
    *   The sandbox for batch operations.
    */
   public function update_8804(&$sandbox) {
-    // @todo
+    $fieldMap = $this->getFieldMap();
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    $apidocStorage = $this->entityTypeManager->getStorage('apidoc');
+
+    if (!isset($sandbox['progress'])) {
+      $query = $apidocStorage->getQuery();
+      $total = $query->count()->execute();
+
+      $sandbox['progress'] = 0;
+      $sandbox['total'] = $total;
+    }
+
+    if (empty($sandbox['total'])) {
+      $sandbox['#finished'] = 1;
+
+      return 'No API Doc entities found, no data migration needed.';
+    }
+
+    // Migrate in chunks of 20.
+    $query = $apidocStorage->getQuery()
+      ->sort('id')
+      ->range($sandbox['progress'], 20);
+    $ids = $query->execute();
+
+    $apidocs = $apidocStorage->loadMultiple($ids);
+    foreach ($apidocs as $apidoc) {
+      $values = [
+        'type' => 'apidoc',
+        'title' => $apidoc->label(),
+        'body' => ['value' => $apidoc->description->value, 'format' => 'full_html'],
+        'status' => $apidoc->status->value,
+        'created' => $apidoc->created->value,
+        'changed' => $apidoc->changed->value,
+        'field_apidoc_spec_file_source' => $apidoc->spec_file_source->value,
+        'field_apidoc_spec_md5' => $apidoc->spec_md5->value,
+        'field_apidoc_fetched_timestamp' => $apidoc->fetched_timestamp->value,
+        'field_apidoc_spec' => $apidoc->spec->getValue(),
+        'field_apidoc_file_link' => $apidoc->file_link->getValue(),
+      ];
+      foreach ($fieldMap as $old => $new) {
+        $values[$new] = $apidoc->{$old}->getValue();
+      }
+
+      $node = $nodeStorage->create($values);
+      $node->save();
+
+      $apidoc->delete();
+
+      $sandbox['progress']++;
+    }
+
+    $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
 
     return 'Converted API Doc entities to nodes, migrating data.';
   }
@@ -169,13 +293,42 @@ class UpdateService {
    * Delete API Doc entity definition.
    */
   public function update_8805() {
-    // Get the last known state of the API Doc entity type, as it has now been
-    // removed from code.
+    // Get the last known state of the API Doc entity type.
     $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
-    $entity_type = $entity_update_manager->getEntityType('apidoc');
-    $entity_update_manager->uninstallEntityType($entity_type);
+    if ($entity_type = $entity_update_manager->getEntityType('apidoc')) {
+      $entity_update_manager->uninstallEntityType($entity_type);
+
+      // Clear all caches.
+      drupal_flush_all_caches();
+    }
 
     return 'The API Doc entity type has been removed from the system.';
+  }
+
+  /**
+   * Get the field map from apidoc fields to node fields.
+   *
+   * @return array
+   *   The field mapping.
+   */
+  protected function getFieldMap(): array {
+    $map = \Drupal::state()->get('apigee_api_catalog_update_8803_fieldmap', []);
+
+    return $map;
+  }
+
+  /**
+   * Add a field to the field map.
+   *
+   * @param string $old
+   *   The apidoc field name.
+   * @param string $new
+   *   The node field name.
+   */
+  protected function addToFieldMap(string $old, string $new) {
+    $map = $this->getFieldMap();
+    $map[$old] = $new;
+    \Drupal::state()->set('apigee_api_catalog_update_8803_fieldmap', $map);
   }
 
 }
