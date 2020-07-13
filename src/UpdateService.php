@@ -233,6 +233,14 @@ class UpdateService {
    *   The sandbox for batch operations.
    */
   public function update8804(&$sandbox) {
+    // If 1.x was never installed, there is no apidoc entity saved previously.
+    $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+    if (!$entity_update_manager->getEntityType('apidoc')) {
+      $sandbox['#finished'] = 1;
+
+      return 'No API Doc entities found, no data migration needed.';
+    }
+
     $fieldMap = $this->getFieldMap();
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $apidocStorage = $this->entityTypeManager->getStorage('apidoc');
@@ -302,7 +310,7 @@ class UpdateService {
       drupal_flush_all_caches();
     }
 
-    return 'The API Doc entity type has been removed from the system.';
+    return 'The API Doc deprecated entity type has been removed from the system.';
   }
 
   /**

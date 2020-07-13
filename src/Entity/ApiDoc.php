@@ -282,13 +282,15 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE);
 
-    $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('API Product'))
-      ->setDescription(t('The API Product this API is associated with.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'api_product')
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+    if (\Drupal::moduleHandler()->moduleExists('apigee_edge')) {
+      $fields['api_product'] = BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('API Product'))
+        ->setDescription(t('The API Product this API is associated with.'))
+        ->setRevisionable(TRUE)
+        ->setSetting('target_type', 'api_product')
+        ->setDisplayConfigurable('form', FALSE)
+        ->setDisplayConfigurable('view', FALSE);
+    }
 
     $fields['status']
       ->setLabel(t('Publishing status'))
