@@ -47,8 +47,6 @@ https://www.drupal.org/node/3058344
 
 ### Known issues
 
-- [Backwards compatibility with the version 1.x of this module is a separate issue](https://github.com/apigee/apigee-api-catalog-drupal/issues/80), you can subscribe to notifications to follow the status.
-
 - The Apigee SmartDocs formatter can only render one OpenAPI spec per page and the URL pattern
   must match `/api/{entityId}`.  This means that the formatter will probably not work correctly if
   you modify the default API Docs view or try to use this file Formatter on other node types or entities.
