@@ -45,6 +45,10 @@ use Drupal\link\LinkItemInterface;
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "access" = "Drupal\apigee_api_catalog\Entity\Access\ApiDocAccessControlHandler",
+ *     "route_provider" = {
+ *       "html" = "Drupal\apigee_api_catalog\Entity\Routing\ApiDocHtmlRouteProvider",
+ *       "revision" = "Drupal\entity\Routing\RevisionRouteProvider",
+ *     },
  *   },
  *   base_table = "apidoc",
  *   data_table = "apidoc_field_data",
@@ -66,7 +70,19 @@ use Drupal\link\LinkItemInterface;
  *     "revision_user" = "revision_user",
  *     "revision_created" = "revision_created",
  *     "revision_log_message" = "revision_log_message",
- *   }
+ *   },
+ *   links = {
+ *     "canonical" = "/api/{apidoc}",
+ *     "add-form" = "/admin/content/api/add",
+ *     "edit-form" = "/admin/content/api/{apidoc}/edit",
+ *     "delete-form" = "/admin/content/api/{apidoc}/delete",
+ *     "reimport-spec-form" = "/admin/content/api/{apidoc}/reimport",
+ *     "version-history" = "/admin/content/api/{apidoc}/revisions",
+ *     "revision" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/view",
+ *     "revision-revert-form" = "/admin/content/api/{apidoc}/revisions/{apidoc_revision}/revert",
+ *     "collection" = "/admin/content/apis",
+ *   },
+ *   field_ui_base_route = "entity.apidoc.settings"
  * )
  */
 class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
