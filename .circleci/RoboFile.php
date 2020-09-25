@@ -47,6 +47,7 @@ class RoboFile extends \Robo\Tasks
     $config = json_decode(file_get_contents('composer.json'));
     $config->extra->{"enable-patching"} = 'true';
     $config->extra->{"patches"} = new \stdClass();
+    unset($config->require->{"wikimedia/composer-merge-plugin"});
     $config->extra->{"drupal-scaffold"} = new \stdClass();
     $config->extra->{"drupal-scaffold"}->{"locations"} = (object) [
       'web-root' => '.',
@@ -111,6 +112,38 @@ class RoboFile extends \Robo\Tasks
       $base = isset($config->extra->{"patches"}) ?  (array)$config->extra->{"patches"} : [];
       $config->extra->{"patches"} = (object)array_merge($base,
         (array)$this->getPatches($module));
+    }
+
+    file_put_contents('composer.json', json_encode($config));
+  }
+
+  /**
+   * Adds another composer.json requires and requires-dev to this project.
+   *
+   * @param string $composerFilePath
+   *   Path to the composer.json file to merge.
+   */
+  public function addDependenciesFrom(string $composerFilePath)
+  {
+    $config = json_decode(file_get_contents('composer.json'));
+    $additional = json_decode(file_get_contents($composerFilePath));
+
+    if (!empty($additional->require)) {
+      foreach ($additional->require as $key => $value) {
+        if (!isset($config->require->{$key})) {
+          $config->require->{$key} = $value;
+        }
+      }
+    }
+    if (!empty($additional->{"require-dev"})) {
+      foreach ($additional->{"require-dev"} as $key => $value) {
+        if (!isset($config->{"require-dev"}->{$key})) {
+          if (!isset($config->{"require-dev"})) {
+            $config->{"require-dev"} = new \stdClass();
+          }
+          $config->{"require-dev"}->{$key} = $value;
+        }
+      }
     }
 
     file_put_contents('composer.json', json_encode($config));
@@ -489,7 +522,7 @@ class RoboFile extends \Robo\Tasks
 
       // Delete D8 only modules.
       $this->taskFilesystemStack()
-        ->taskDeleteDir('modules/apigee_edge/modules/apigee_edge_actions')
+        ->taskDeleteDir('modules/contrib/apigee_edge/modules/apigee_edge_actions')
         ->run();
     }
   }
