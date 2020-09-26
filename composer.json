@@ -5,6 +5,7 @@
     "description": "Apigee API Catalog for Drupal",
     "require": {
         "php": ">=7.1",
+        "drupal/entity": "^1.1",
         "drupal/file_link": "^2.0"
     },
     "require-dev": {
