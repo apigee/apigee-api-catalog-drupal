@@ -34,6 +34,11 @@ use GuzzleHttp\RequestOptions;
 class ApiDocsJsonApi extends BrowserTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Modules to enable.
    *
    * @var array
