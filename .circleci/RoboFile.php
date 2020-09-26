@@ -466,6 +466,12 @@ class RoboFile extends \Robo\Tasks
         $config->require->{"drupal/core-recommended"} = '^9';
         $config->require->{"drupal/core-dev"} = '^9';
 
+        if (!isset($config->extra->{"patches"}->{"drupal/file_link"})) {
+          $config->extra->{"patches"}->{"drupal/file_link"} = new \stdClass();
+        }
+        $config->extra->{"patches"}->{"drupal/file_link"}
+          ->{"D9 readiness for file_link_test module"} = 'https://www.drupal.org/files/issues/2020-09-26/file-link-test-info-d9-3173363-2.patch';
+
         break;
 
       case '8':
