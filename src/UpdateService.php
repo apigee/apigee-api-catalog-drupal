@@ -270,7 +270,10 @@ class UpdateService {
       $values = [
         'type' => 'apidoc',
         'title' => $apidoc->label(),
-        'body' => ['value' => $apidoc->description->value, 'format' => 'full_html'],
+        'body' => [
+          'value' => $apidoc->description->value,
+          'format' => 'full_html',
+        ],
         'status' => $apidoc->status->value,
         'created' => $apidoc->created->value,
         'changed' => $apidoc->changed->value,

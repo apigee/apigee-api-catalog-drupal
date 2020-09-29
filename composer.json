@@ -5,12 +5,17 @@
     "description": "Apigee API Catalog for Drupal",
     "require": {
         "php": ">=7.1",
+        "drupal/entity": "^1.1",
         "drupal/file_link": "^2.0"
     },
     "require-dev": {
-        "drupal/coder": "^8.3",
-        "phpmd/phpmd": "^2.6",
-        "phpunit/phpunit": "^6.5"
+        "cweagans/composer-patches": "^1.6",
+        "drupal/core-dev": "^8.7 || ^9",
+        "drush/drush": "^9.0 || ^10.0",
+        "mglaman/drupal-check": "^1.1",
+        "phpmd/phpmd": "2.8.2",
+        "phpmetrics/phpmetrics": "^2.5",
+        "phpstan/phpstan": "0.12.42"
     },
     "config": {
         "sort-packages": true

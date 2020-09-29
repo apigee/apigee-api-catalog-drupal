@@ -34,6 +34,11 @@ use GuzzleHttp\RequestOptions;
 class ApiDocsJsonApi extends BrowserTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * Modules to enable.
    *
    * @var array
@@ -107,7 +112,10 @@ class ApiDocsJsonApi extends BrowserTestBase {
     $collection_url = Url::fromRoute('jsonapi.node--apidoc.collection')
       ->setAbsolute(TRUE)->toString();
 
-    $this->verifyAccess($account, [$this->apidocPublished, $this->apidocUnpublished], $collection_url);
+    $this->verifyAccess($account, [
+      $this->apidocPublished,
+      $this->apidocUnpublished,
+    ], $collection_url);
   }
 
   /**

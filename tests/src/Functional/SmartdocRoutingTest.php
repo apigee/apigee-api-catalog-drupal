@@ -33,6 +33,11 @@ class SmartdocRoutingTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = [
     'node',
     'path_alias',
