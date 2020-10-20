@@ -175,7 +175,7 @@ class UpdateService {
   }
 
   /**
-   * Recreate other fields added to the API Doc entity onto the API Doc node type.
+   * Recreate other fields added to API Doc entity onto the API Doc node type.
    *
    * @return string
    *   A message to display.
@@ -314,6 +314,22 @@ class UpdateService {
     }
 
     return 'The API Doc deprecated entity type has been removed from the system.';
+  }
+
+  /**
+   * Recreate API Doc entity definition.
+   *
+   * Rollback update8805().
+   */
+  public function update8806() {
+    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+    $entity_definition_update_manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('apidoc'));
+
+    // Clear all caches.
+    drupal_flush_all_caches();
+
+    return 'Installed API Doc deprecated entity type.';
   }
 
   /**
