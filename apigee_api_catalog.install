@@ -115,8 +115,16 @@ function apigee_api_catalog_update_8804(&$sandbox) {
 }
 
 /**
- * Delete API Doc entity definition if updating from 1.x.
+ * Deprecated step.
  */
 function apigee_api_catalog_update_8805() {
-  return \Drupal::service('apigee_api_catalog.updates')->update8805();
+//  return \Drupal::service('apigee_api_catalog.updates')->update8805();
 }
+
+/**
+ * Re-install if needed deprecated API Doc entity definition.
+ */
+function apigee_api_catalog_update_8806() {
+  return \Drupal::service('apigee_api_catalog.updates')->update8806();
+}
+
