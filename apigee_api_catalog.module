@@ -192,6 +192,10 @@ function apigee_api_catalog_form_node_form_alter(&$form, FormStateInterface $for
 function _apigee_api_catalog_form_node_form_validate(&$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
 
+  if (empty($values['field_apidoc_spec_file_source'])) {
+    return;
+  }
+
   // Make sure the field_apidoc_spec (file) or field_apidoc_file_link (link)
   // is not empty, according to what was selected as the file source.
   $source = $values['field_apidoc_spec_file_source'][0]['value'] ?: NULL;
