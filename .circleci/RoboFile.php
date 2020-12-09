@@ -462,9 +462,10 @@ class RoboFile extends \Robo\Tasks
 
     switch ($drupalCoreVersion) {
       case '9':
-        $config->require->{"drupal/core-composer-scaffold"} = '^9';
-        $config->require->{"drupal/core-recommended"} = '^9';
+        $config->require->{"drupal/core-composer-scaffold"} = '^9.1@stable';
+        $config->require->{"drupal/core-recommended"} = '^9.1@stable';
         $config->require->{"drupal/core-dev"} = '^9';
+        $config->require->{"phpspec/prophecy-phpunit"} = '^2';
 
         if (!isset($config->extra->{"patches"}->{"drupal/file_link"})) {
           $config->extra->{"patches"}->{"drupal/file_link"} = new \stdClass();
