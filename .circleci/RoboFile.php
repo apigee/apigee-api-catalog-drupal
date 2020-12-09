@@ -473,6 +473,19 @@ class RoboFile extends \Robo\Tasks
         $config->extra->{"patches"}->{"drupal/file_link"}
           ->{"D9 readiness for file_link_test module"} = 'https://www.drupal.org/files/issues/2020-09-26/file-link-test-info-d9-3173363-2.patch';
 
+        /**
+         * Allow tests to run against PHP Unit ^9.
+         *
+         * @todo Remove once the following issue has been fixed in a stable
+         * release from Drupal Core.
+         *
+         * @see https://www.drupal.org/project/drupal/issues/3186443
+         */
+        if (!isset($config->extra->{"patches"}->{"drupal/core"})) {
+          $config->extra->{"patches"}->{"drupal/core"} = new \stdClass();
+        }
+        $config->extra->{"patches"}->{"drupal/core"}->{"PHPUnit 9.5 Call to undefined method ::getAnnotations()"} = 'https://www.drupal.org/files/issues/2020-12-04/3186443-1.patch';
+
         break;
 
       case '8':
