@@ -462,15 +462,29 @@ class RoboFile extends \Robo\Tasks
 
     switch ($drupalCoreVersion) {
       case '9':
-        $config->require->{"drupal/core-composer-scaffold"} = '^9';
-        $config->require->{"drupal/core-recommended"} = '^9';
+        $config->require->{"drupal/core-composer-scaffold"} = '^9.1@stable';
+        $config->require->{"drupal/core-recommended"} = '^9.1@stable';
         $config->require->{"drupal/core-dev"} = '^9';
+        $config->require->{"phpspec/prophecy-phpunit"} = '^2';
 
         if (!isset($config->extra->{"patches"}->{"drupal/file_link"})) {
           $config->extra->{"patches"}->{"drupal/file_link"} = new \stdClass();
         }
         $config->extra->{"patches"}->{"drupal/file_link"}
           ->{"D9 readiness for file_link_test module"} = 'https://www.drupal.org/files/issues/2020-09-26/file-link-test-info-d9-3173363-2.patch';
+
+        /**
+         * Allow tests to run against PHP Unit ^9.
+         *
+         * @todo Remove once the following issue has been fixed in a stable
+         * release from Drupal Core.
+         *
+         * @see https://www.drupal.org/project/drupal/issues/3186443
+         */
+        if (!isset($config->extra->{"patches"}->{"drupal/core"})) {
+          $config->extra->{"patches"}->{"drupal/core"} = new \stdClass();
+        }
+        $config->extra->{"patches"}->{"drupal/core"}->{"PHPUnit 9.5 Call to undefined method ::getAnnotations()"} = 'https://www.drupal.org/files/issues/2020-12-04/3186443-1.patch';
 
         break;
 
