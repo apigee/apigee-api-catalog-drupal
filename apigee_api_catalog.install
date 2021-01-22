@@ -128,3 +128,9 @@ function apigee_api_catalog_update_8806() {
   return \Drupal::service('apigee_api_catalog.updates')->update8806();
 }
 
+/**
+ * Removed required atttribute for field_apidoc_spec_file_source.
+ */
+function apigee_api_catalog_update_8807() {
+  return \Drupal::service('apigee_api_catalog.updates')->update8807();
+}

@@ -333,6 +333,20 @@ class UpdateService {
   }
 
   /**
+   * This will set the field field_apidoc_spec_file_source as not required.
+   */
+  public function update8807() {
+    $field = FieldConfig::loadByName('node', 'apidoc', 'field_apidoc_spec_file_source');
+    $field->set('required', FALSE)
+      ->save();
+
+    // Clear all caches.
+    drupal_flush_all_caches();
+
+    return 'Updated field_apidoc_spec_file_source required attribute to false.';
+  }
+
+  /**
    * Get the field map from apidoc fields to node fields.
    *
    * @return array
