@@ -8,8 +8,6 @@ dependencies:
     - field.field.node.apidoc.field_apidoc_spec
     - field.field.node.apidoc.field_apidoc_spec_file_source
     - field.field.node.apidoc.field_apidoc_spec_md5
-    - field.field.node.apidoc.field_categories
-    - field.field.node.apidoc.field_image
     - node.type.apidoc
   module:
     - file
@@ -56,23 +54,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
-  field_categories:
-    weight: 2
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
-  field_image:
-    weight: 3
-    settings:
-      media_types: {  }
-    third_party_settings: {  }
-    type: media_library_widget
     region: content
   path:
     type: path
