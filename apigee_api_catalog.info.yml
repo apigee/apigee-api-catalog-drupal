@@ -12,3 +12,4 @@ dependencies:
 - drupal:path
 - drupal:options
 - drupal:file_link
+- drupal:entity

@@ -112,7 +112,7 @@ class ApidocEntityTest extends KernelTestBase {
    * Test revisioning functionality on an apidocs entity.
    */
   public function testRevisions() {
-    /** @var \Drupal\node\NodeInterface $entity */
+    /* @var \Drupal\node\NodeInterface $entity */
 
     $description_v1 = 'Test API';
     $entity = $this->nodeStorage->create([
