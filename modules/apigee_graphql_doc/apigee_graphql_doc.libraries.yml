@@ -1,0 +1,39 @@
+# Integration module library for GraphQL plugin.
+apigee_graphql_doc_integration:
+  version: 1.0
+  js:
+    js/apigee-graphql-doc.js: {}
+  css:
+    component:
+      css/apigee-graphql-doc.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - apigee_graphql_apidoc/reactjs
+    - apigee_graphql_apidoc/graphiql
+
+# Third-party library (CDN).
+reactjs:
+  remote: https://reactjs.org
+  version: 17.0.2
+  license:
+    name: MIT
+    url: https://github.com/facebook/react/blob/main/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/react@17.0.2/umd/react.development.js: {type: external, minified: true}
+    https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js: {type: external, minified: true}
+
+# Third-party library (CDN).
+graphiql:
+  remote: https://graphql.org
+  version: 1.5.1
+  license:
+    name: MIT
+    url: https://github.com/graphql/graphiql/blob/main/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/graphiql@1.5.1/graphiql.min.js: {type: external, minified: true}
+  css:
+    component:
+      https://unpkg.com/graphiql@1.5.1/graphiql.min.css: {type: external, minified: true}
