@@ -5,6 +5,7 @@ core_version_requirement: ^8.8.0 || ^9
 package: 'Apigee'
 dependencies:
 - drupal:text
+- drupal:entity
 - drupal:file
 - drupal:user
 - drupal:node
