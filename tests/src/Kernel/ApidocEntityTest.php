@@ -57,6 +57,7 @@ class ApidocEntityTest extends KernelTestBase {
     'link',
     'file_link',
     'path_alias',
+    'key',
     'apigee_edge',
     'apigee_api_catalog',
   ];
@@ -73,7 +74,6 @@ class ApidocEntityTest extends KernelTestBase {
     $this->installEntitySchema('node');
     $this->installEntitySchema('node_type');
     $this->installEntitySchema('path_alias');
-    $this->installEntitySchema('apigee_edge');
     $this->installConfig(static::$modules);
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');

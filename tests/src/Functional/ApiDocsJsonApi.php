@@ -44,6 +44,7 @@ class ApiDocsJsonApi extends BrowserTestBase {
    * @var array
    */
   public static $modules = [
+    'apigee_edge',
     'apigee_api_catalog',
     'jsonapi',
     'basic_auth',
