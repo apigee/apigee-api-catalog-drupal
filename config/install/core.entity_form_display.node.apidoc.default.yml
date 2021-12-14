@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.apidoc.body
+    - field.field.node.apidoc.field_api_product
     - field.field.node.apidoc.field_apidoc_fetched_timestamp
     - field.field.node.apidoc.field_apidoc_file_link
     - field.field.node.apidoc.field_apidoc_spec
@@ -53,6 +54,16 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
+    region: content
+  field_api_product:
+    weight: 7
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   path:
     type: path

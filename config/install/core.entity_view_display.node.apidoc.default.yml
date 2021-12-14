@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.apidoc.body
+    - field.field.node.apidoc.field_api_product
     - field.field.node.apidoc.field_apidoc_fetched_timestamp
     - field.field.node.apidoc.field_apidoc_file_link
     - field.field.node.apidoc.field_apidoc_spec
@@ -42,3 +43,4 @@ hidden:
   field_apidoc_file_link: true
   field_apidoc_spec_file_source: true
   field_apidoc_spec_md5: true
+  field_api_product: true
