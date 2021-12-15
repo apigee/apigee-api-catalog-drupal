@@ -499,6 +499,7 @@ class RoboFile extends \Robo\Tasks
       default:
         break;
     }
+    $config->extra->{"patches"}->{"drupal/core"}->{"Support entities that are neither content nor config entities"} = 'https://www.drupal.org/files/issues/2020-12-02/3042467-50.patch';
 
     file_put_contents('composer.json', json_encode($config, JSON_PRETTY_PRINT));
   }
