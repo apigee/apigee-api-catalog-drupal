@@ -28,6 +28,8 @@ use Drupal\Core\Entity\EntityLastInstalledSchemaRepositoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Utility\UpdateException;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
@@ -345,6 +347,70 @@ class UpdateService {
     drupal_flush_all_caches();
 
     return 'Updated field_apidoc_spec_file_source required attribute to false.';
+  }
+
+  /**
+   * This will add the field API Product.
+   */
+  public function update8808() {
+    $module = 'apigee_api_catalog';
+    $configPath = drupal_get_path('module', $module) . '/config';
+    $configToImport['install'] = [
+      'node.type.apidoc',
+      'field.field.node.apidoc.field_api_product',
+      'core.entity_form_display.node.apidoc.default',
+      'core.entity_view_display.node.apidoc.default',
+    ];
+    if (!$this->moduleHandler->moduleExists('apigee_edge')) {
+      throw new UpdateException('Apigee Edge is required to add API Product field, install the Apigee Edge and update again.');
+    }
+
+    foreach ($configToImport as $dir => $configs) {
+      foreach ($configs as $config) {
+        if (!$this->configFactory->listAll($config)) {
+          $raw = file_get_contents("$configPath/$dir/$config.yml");
+          $data = Yaml::decode($raw);
+          $this->configFactory
+            ->getEditable($config)
+            ->setData($data)
+            ->set('uuid', $this->uuid->generate())
+            ->save(TRUE);
+        }
+      }
+    }
+
+    $fields = [
+      'field_api_product',
+    ];
+    $source = new FileStorage("$configPath/install");
+    foreach ($fields as $field) {
+
+      if (!FieldStorageConfig::loadByName('node', $field)) {
+        $contents = $source->read("field.storage.node.$field");
+
+        $this->entityTypeManager->getStorage('field_storage_config')
+          ->create($contents)
+          ->save();
+      }
+
+      if (!FieldConfig::loadByName('node', 'apidoc', $field)) {
+        $this->entityTypeManager->getStorage('field_config')
+          ->create($source->read("field.field.node.apidoc.$field"))
+          ->save();
+      }
+    }
+
+    // Display field_api_product on the form display.
+    \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load('node.apidoc.default')
+      ->setComponent('field_api_product', ['weight' => 7])
+      ->save();
+
+    $this->entityTypeManager->clearCachedDefinitions();
+
+    return 'Added API Product field for apidoc.';
+
   }
 
   /**

@@ -57,6 +57,8 @@ class ApidocEntityTest extends KernelTestBase {
     'link',
     'file_link',
     'path_alias',
+    'key',
+    'apigee_edge',
     'apigee_api_catalog',
   ];
 
