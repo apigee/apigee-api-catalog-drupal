@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - apigee_api_catalog
+  module:
+    - apigee_edge
+    - node
+id: node.field_api_product
+field_name: field_api_product
+entity_type: node
+type: entity_reference
+settings:
+  target_type: api_product
+module: apigee_api_catalog
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

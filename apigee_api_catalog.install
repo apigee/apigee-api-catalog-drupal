@@ -134,3 +134,10 @@ function apigee_api_catalog_update_8806() {
 function apigee_api_catalog_update_8807() {
   return \Drupal::service('apigee_api_catalog.updates')->update8807();
 }
+
+/**
+ * Add API Product field.
+ */
+function apigee_api_catalog_update_8808() {
+  return \Drupal::service('apigee_api_catalog.updates')->update8808();
+}
