@@ -71,52 +71,11 @@ class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Update views on uninstall.
-   *
-   * @param \Drupal\Core\Config\ConfigCrudEvent $event
-   *   Config crud event.
-   */
-  public function configDelete(ConfigCrudEvent $event) {
-    $config = $event->getConfig();
-
-    if ($config->getName() == 'views.view.apigee_api_catalog') {
-      $view = Views::getView('apigee_api_catalog');
-      if (is_object($view)) {
-        $display = $view->getDisplay();
-
-        $filters = $view->display_handler->getOption('filters');
-        if ($filters['type']['value']['graphql_doc']) {
-          unset($filters['type']['value']['graphql_doc']);
-        }
-        $view->display_handler->overrideOption('filters', $filters);
-
-        $view->save();
-        \Drupal::messenger()->addStatus('Updating Views - API Catalog');
-      }
-
-      $view = Views::getView('api_catalog_admin');
-      if (is_object($view)) {
-        $display = $view->getDisplay();
-
-        $filters = $view->display_handler->getOption('filters');
-        if ($filters['type']['value']['graphql_doc']) {
-          unset($filters['type']['value']['graphql_doc']);
-        }
-        $view->display_handler->overrideOption('filters', $filters);
-
-        $view->save();
-        \Drupal::messenger()->addStatus('Updating Views - API Catalog Admin');
-      }
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     return [
       ConfigEvents::SAVE => 'configSave',
-      // ConfigEvents::DELETE => 'configDelete',
     ];
   }
 

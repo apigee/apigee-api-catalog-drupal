@@ -10,7 +10,7 @@ use Drupal\Core\Url;
 use Drupal\views\Views;
 
 /**
- * Prevents uninstalling of module having content and reference in views
+ * Prevents uninstalling of module having content and reference in views.
  */
 class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInterface {
 
@@ -22,7 +22,6 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
 
   /**
    * Constructs a new FilterUninstallValidator.
@@ -47,7 +46,7 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
         $reasons[] = $this->t('To uninstall Apigee GraphQL Doc, first delete all <em>GraphQL Doc</em> content');
       }
 
-      // Restrict uninstall, if reference of graphql_doc is there in apigee_api_catalog view
+      // Restrict uninstall, if reference of graphql_doc is there in apigee_api_catalog view.
       $view = Views::getView('apigee_api_catalog');
       if (is_object($view)) {
         $display = $view->getDisplay();
@@ -62,7 +61,7 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
         }
       }
 
-      // Restrict uninstall, if reference of graphql_doc is there in api_catalog_admin view
+      // Restrict uninstall, if reference of graphql_doc is there in api_catalog_admin view.
       $view = Views::getView('api_catalog_admin');
       if (is_object($view)) {
         $display = $view->getDisplay();
