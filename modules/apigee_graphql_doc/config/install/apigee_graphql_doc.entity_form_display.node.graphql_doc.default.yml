@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.graphql_doc.body
-    - field.field.node.graphql_doc.field_categories
+    - field.field.node.graphql_doc.field_api_product
     - node.type.graphql_doc
   module:
     - file_link
@@ -24,16 +24,6 @@ content:
       show_summary: false
     third_party_settings: {  }
     region: content
-  field_categories:
-    weight: 2
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
   field_graphql_file_link:
     weight: 1
     settings:
@@ -41,6 +31,16 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: file_link_default
+    region: content
+  field_api_product:
+    weight: 7
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   created:
     type: datetime_timestamp
