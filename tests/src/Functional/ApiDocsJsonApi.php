@@ -67,7 +67,7 @@ class ApiDocsJsonApi extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
