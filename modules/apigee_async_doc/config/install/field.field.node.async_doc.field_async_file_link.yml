@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_async_file_link
+    - node.type.async_doc
+  module:
+    - file_link
+id: node.async_doc.field_async_file_link
+field_name: field_async_file_link
+entity_type: node
+bundle: async_doc
+label: 'URL to AsyncAPI file'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+  file_extensions: ''
+  no_extension: true
+  deferred_request: false
+field_type: file_link
