@@ -18,12 +18,12 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 3
+    weight: 1
     settings: {  }
     third_party_settings: {  }
     region: content
   field_graphql_file_link:
-    weight: 1
+    weight: 3
     label: hidden
     settings:
       trim_length: 80

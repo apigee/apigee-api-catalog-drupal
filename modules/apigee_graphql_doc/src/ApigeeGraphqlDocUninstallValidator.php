@@ -65,17 +65,14 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
       }
 
       // Restrict uninstall, if reference of graphql_doc is there in apigee_api_catalog view.
+      $is_views_references = false;
       $view = Views::getView('apigee_api_catalog');
       if (is_object($view)) {
         $display = $view->getDisplay();
 
         $filters = $view->display_handler->getOption('filters');
         if (isset($filters['type']['value']['graphql_doc'])) {
-          $message_arguments = [
-            ':url' => Url::fromRoute('entity.view.edit_form', ['view' => 'apigee_api_catalog'])->toString(),
-            '@label' => 'apigee_api_catalog',
-          ];
-          $reasons[] = $this->t('Please remove GraphQL Doc option from the view <a href=":url">@label</a>', $message_arguments);
+          $is_views_references = true;
         }
       }
 
@@ -86,12 +83,14 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
 
         $filters = $view->display_handler->getOption('filters');
         if (isset($filters['type']['value']['graphql_doc'])) {
-          $message_arguments = [
-            ':url' => Url::fromRoute('entity.view.edit_form', ['view' => 'api_catalog_admin'])->toString(),
-            '@label' => 'api_catalog_admin',
-          ];
-          $reasons[] = $this->t('Please remove GraphQL Doc option from the view <a href=":url">@label</a>', $message_arguments);
+          $is_views_references = true;
         }
+      }
+      if ($is_views_references) {
+        $message_arguments = [
+          ':url' => Url::fromRoute('apigee_graphql_doc.remove_views_references')->toString(),
+        ];
+        $reasons[] = $this->t('Please <a href=":url">remove GraphQL Doc references</a> from both "apigee_api_catalog" and "api_catalog_admin" views', $message_arguments);
       }
     }
 
