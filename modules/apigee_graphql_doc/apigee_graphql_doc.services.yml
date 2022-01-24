@@ -10,3 +10,8 @@ services:
     tags:
       - { name: module_install.uninstall_validator }
     arguments: ['@entity_type.manager', '@string_translation']
+
+  apigee_graphql_doc.breadcrumb:
+    class: Drupal\apigee_graphql_doc\ApigeeGraphqlDocBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1000 }
