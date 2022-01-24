@@ -65,14 +65,14 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
       }
 
       // Restrict uninstall, if reference of graphql_doc is there in apigee_api_catalog view.
-      $is_views_references = false;
+      $is_views_references = FALSE;
       $view = Views::getView('apigee_api_catalog');
       if (is_object($view)) {
         $display = $view->getDisplay();
 
         $filters = $view->display_handler->getOption('filters');
         if (isset($filters['type']['value']['graphql_doc'])) {
-          $is_views_references = true;
+          $is_views_references = TRUE;
         }
       }
 
@@ -83,7 +83,7 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
 
         $filters = $view->display_handler->getOption('filters');
         if (isset($filters['type']['value']['graphql_doc'])) {
-          $is_views_references = true;
+          $is_views_references = TRUE;
         }
       }
       if ($is_views_references) {

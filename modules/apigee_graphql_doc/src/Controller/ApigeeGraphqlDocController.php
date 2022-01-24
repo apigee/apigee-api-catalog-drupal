@@ -31,7 +31,7 @@ class ApigeeGraphqlDocController extends ControllerBase {
   /**
    * Remove_views_references, before uninstall.
    */
-  public function remove_views_references() {
+  public function removeViewsReferences() {
 
     $view = Views::getView('apigee_api_catalog');
     if (is_object($view)) {

@@ -2,6 +2,6 @@ apigee_graphql_doc.remove_views_references:
   path: '/admin/apigee-graphql-doc/remove-views-references'
   defaults:
     _title: 'Remove Views References'
-    _controller: '\Drupal\apigee_graphql_doc\Controller\ApigeeGraphqlDocController::remove_views_references'
+    _controller: '\Drupal\apigee_graphql_doc\Controller\ApigeeGraphqlDocController::removeViewsReferences'
   requirements:
     _permission: 'administer modules'
