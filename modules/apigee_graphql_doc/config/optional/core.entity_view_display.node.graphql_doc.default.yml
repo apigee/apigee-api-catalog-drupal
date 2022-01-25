@@ -33,7 +33,7 @@ content:
       target: ''
       format_size: true
     third_party_settings: {  }
-    type: apigee_graphql_doc_graphql
+    type: apigee_graphql_doc_graphiql
     region: content
   links:
     weight: 0

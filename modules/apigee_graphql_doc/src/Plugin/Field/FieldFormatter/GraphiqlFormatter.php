@@ -24,17 +24,17 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 
 /**
- * Plugin implementation of the 'Graphql' formatter.
+ * Plugin implementation of the 'GraphiQL' formatter.
  *
  * @FieldFormatter(
- *   id = "apigee_graphql_doc_graphql",
- *   label = @Translation("GraphQL"),
+ *   id = "apigee_graphql_doc_graphiql",
+ *   label = @Translation("GraphiQL"),
  *   field_types = {
  *     "file_link"
  *   }
  * )
  */
-class GraphqlFormatter extends FormatterBase {
+class GraphiqlFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}

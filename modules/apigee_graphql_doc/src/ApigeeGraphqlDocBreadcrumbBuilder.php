@@ -28,7 +28,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
 /**
- * Provides a breadcrumb builder for articles.
+ * Provides a breadcrumb builder for graphql_doc.
  */
 class ApigeeGraphqlDocBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
@@ -39,7 +39,7 @@ class ApigeeGraphqlDocBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     $node = $route_match->getParameter('node');
-    return $node instanceof NodeInterface && $node->getType() == 'graphql_doc';
+    return $node instanceof NodeInterface && $node->getType() === 'graphql_doc';
   }
 
   /**
@@ -50,10 +50,11 @@ class ApigeeGraphqlDocBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     $links[] = Link::createFromRoute($this->t('Home'), '<front>');
 
-    // Articles page is a view.
-    $links[] = Link::createFromRoute($this->t('APIs'), 'view.apigee_api_catalog.page_1');
+    // API Catalog page is a view.
+    $links[] = Link::createFromRoute($this->t('API Catalog'), 'view.apigee_api_catalog.page_1');
 
     $breadcrumb->setLinks($links);
+    $breadcrumb->addCacheContexts(['route']);
 
     return $breadcrumb;
   }

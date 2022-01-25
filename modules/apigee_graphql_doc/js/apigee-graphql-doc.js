@@ -22,7 +22,7 @@
 
  (function ($, window, Drupal, drupalSettings) {
 
-  Drupal.behaviors.apigeeGraphqlFormatter = {
+  Drupal.behaviors.apigeeGraphiqlFormatter = {
     attach: function(context) {
       // Iterate over fields and render each field item.
       for (var fieldName in drupalSettings.apigeeGraphqlDocFormatter) {
