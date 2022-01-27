@@ -25,30 +25,6 @@ smartdocs:
     # https://www.gstatic.com/smartdocs/1.1.0/vendor.js: { type: external, minified: true }
     http://localhost:4200/vendor.js: { type: external }
 
-smartdocs_react:
-  version: 1.0.0
-  license:
-    name: Proprietary Google Code
-    gpl-compatible: false
-  js:
-    http://localhost:3000/static/js/bundle.js: { type: external }
-
-smartdocs_base:
-  version: 1.0.0
-  license:
-    name: Proprietary Google Code
-    gpl-compatible: false
-  css:
-    component:
-      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external } # default
-      https://fonts.googleapis.com/css?family=Roboto:400,500,700: { type: external }
-      https://fonts.googleapis.com/css?family=Roboto+Mono: { type: external }
-      http://localhost:4201/resources/app.css: { type: external }
-  js:
-    http://localhost:4201/polyfills.js: { type: external }    
-    http://localhost:4201/main.js: { type: external }    
-    http://localhost:4201/runtime.js: { type: external }
-    http://localhost:4201/vendor.js: { type: external }
 
 smartdocs_web:
   version: 1.0.0
