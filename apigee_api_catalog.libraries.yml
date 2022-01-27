@@ -6,14 +6,68 @@ smartdocs:
     gpl-compatible: false
   css:
     component:
-      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external }
-      https://www.gstatic.com/smartdocs/1.1.0/styles.css: { type: external }
+      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external } # default
+      # https://fonts.googleapis.com/css?family=Roboto:400,500,700: { type: external }
+      # https://fonts.googleapis.com/css?family=Roboto+Mono: { type: external }
+      # http://localhost:4201/resources/app.css: { type: external }
+      https://www.gstatic.com/smartdocs/1.1.0/styles.css: { type: external } # default
   js:
-    https://www.gstatic.com/smartdocs/1.1.0/es2015-polyfills.js: { type: external, minified: true }
-    https://www.gstatic.com/smartdocs/1.1.0/main.js: { type: external, minified: true }
-    https://www.gstatic.com/smartdocs/1.1.0/polyfills.js: { type: external, minified: true }
-    https://www.gstatic.com/smartdocs/1.1.0/runtime.js: { type: external, minified: true }
-    https://www.gstatic.com/smartdocs/1.1.0/vendor.js: { type: external, minified: true }
+    # https://www.gstatic.com/smartdocs/1.1.0/es2015-polyfills.js: { type: external, minified: true }
+    http://localhost:4200/polyfills.js: { type: external }
+    
+    # https://www.gstatic.com/smartdocs/1.1.0/main.js: { type: external, minified: true }
+    http://localhost:4200/main.js: { type: external }
+    
+    # https://www.gstatic.com/smartdocs/1.1.0/polyfills.js: { type: external, minified: true }
+    # https://www.gstatic.com/smartdocs/1.1.0/runtime.js: { type: external, minified: true }
+    http://localhost:4200/runtime.js: { type: external }
+    
+    # https://www.gstatic.com/smartdocs/1.1.0/vendor.js: { type: external, minified: true }
+    http://localhost:4200/vendor.js: { type: external }
+
+smartdocs_react:
+  version: 1.0.0
+  license:
+    name: Proprietary Google Code
+    gpl-compatible: false
+  js:
+    http://localhost:3000/static/js/bundle.js: { type: external }
+
+smartdocs_base:
+  version: 1.0.0
+  license:
+    name: Proprietary Google Code
+    gpl-compatible: false
+  css:
+    component:
+      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external } # default
+      https://fonts.googleapis.com/css?family=Roboto:400,500,700: { type: external }
+      https://fonts.googleapis.com/css?family=Roboto+Mono: { type: external }
+      http://localhost:4201/resources/app.css: { type: external }
+  js:
+    http://localhost:4201/polyfills.js: { type: external }    
+    http://localhost:4201/main.js: { type: external }    
+    http://localhost:4201/runtime.js: { type: external }
+    http://localhost:4201/vendor.js: { type: external }
+
+smartdocs_web:
+  version: 1.0.0
+  license:
+    name: Proprietary Google Code
+    gpl-compatible: false
+  css:
+    component:
+      https://fonts.googleapis.com/icon?family=Material+Icons: { type: external } # default
+      https://fonts.googleapis.com/css?family=Roboto:400,500,700: { type: external }
+      https://fonts.googleapis.com/css?family=Roboto+Mono: { type: external }
+      http://localhost:5200/resources/app.css: { type: external }
+      css/custom.css: {}
+  js:
+    http://localhost:5200/runtime.js: { type: external }
+    http://localhost:5200/polyfills.js: { type: external }    
+    http://localhost:5200/styles.js: { type: external }
+    http://localhost:5200/vendor.js: { type: external }
+    http://localhost:5200/main.js: { type: external }    
 
 # Integration of SmartDocs Angular application with Drupal,
 # passes the OpenAPI spec URL to the SmartDocs ng app.

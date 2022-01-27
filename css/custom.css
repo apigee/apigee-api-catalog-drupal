@@ -1,0 +1,11 @@
+.page__header .container {
+    max-width: none !important;
+}
+
+.page__tasks .container {
+    max-width: none !important;
+}
+
+.main .container {
+    max-width: none !important;
+}
