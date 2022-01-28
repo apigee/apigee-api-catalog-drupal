@@ -88,7 +88,7 @@ class ApigeeGraphqlDocUninstallValidator implements ModuleUninstallValidatorInte
       }
       if ($is_views_references) {
         $message_arguments = [
-          ':url' => Url::fromRoute('apigee_graphql_doc.remove_views_references')->toString(),
+          ':url' => Url::fromRoute('apigee_graphql_doc.confirm_remove_views_references')->toString(),
         ];
         $reasons[] = $this->t('Please <a href=":url">remove GraphQL Doc references</a> from both "apigee_api_catalog" and "api_catalog_admin" views', $message_arguments);
       }

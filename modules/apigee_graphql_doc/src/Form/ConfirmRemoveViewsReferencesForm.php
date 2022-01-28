@@ -18,21 +18,43 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_graphql_doc\Controller;
+namespace Drupal\apigee_graphql_doc\Form;
 
-use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Form\ConfirmFormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\views\Views;
 
 /**
- * Returns responses for Apigee GraphQL Doc routes.
+ * Provides a confirmation form before clearing out the references in views.
  */
-class ApigeeGraphqlDocController extends ControllerBase {
+class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
 
   /**
-   * Remove_views_references, before uninstall.
+   * {@inheritdoc}
    */
-  public function removeViewsReferences() {
+  public function getFormId() {
+    return 'apigee_graphql_doc_confirm_remove_views_references';
+  }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getQuestion() {
+    return $this->t('Are you sure you want to remove references of GraphQL in views before uninstallation of the module?');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCancelUrl() {
+    return new Url('system.modules_uninstall');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $view = Views::getView('apigee_api_catalog');
     if (is_object($view)) {
       $display = $view->getDisplay();
@@ -48,7 +70,7 @@ class ApigeeGraphqlDocController extends ControllerBase {
 
       $view->save();
 
-      \Drupal::messenger()->addStatus('Updating Views - API Catalog');
+      $this->messenger()->addStatus($this->t('Updating Views - API Catalog'));
     }
 
     $view = Views::getView('api_catalog_admin');
@@ -63,10 +85,10 @@ class ApigeeGraphqlDocController extends ControllerBase {
 
       $view->save();
 
-      \Drupal::messenger()->addStatus('Updating Views - API Catalog Admin');
+      $this->messenger()->addStatus($this->t('Updating Views - API Catalog Admin'));
     }
 
-    return $this->redirect('system.modules_uninstall');
+    $form_state->setRedirectUrl($this->getCancelUrl());
   }
 
 }
