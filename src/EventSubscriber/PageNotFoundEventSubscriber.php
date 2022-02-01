@@ -74,7 +74,7 @@ class PageNotFoundEventSubscriber implements EventSubscriberInterface {
     if ($event->getException() instanceof NotFoundHttpException
       && ($uri = $event->getRequest()->getRequestUri())
       && $this->pathMatcher->matchPath($uri, '/api/*/*')
-      && (list(,, $id) = explode('/', $uri))
+      && ([$apitrail, $api, $id] = explode('/', $uri))
       && ($path = "/api/{$id}")
       && $this->pathValidator->isValid($path)
     ) {
