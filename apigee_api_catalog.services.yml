@@ -17,3 +17,8 @@ services:
   apigee_api_catalog.updates:
     class: Drupal\apigee_api_catalog\UpdateService
     arguments: ['@uuid', '@config.factory', '@module_handler', '@entity_type.manager', '@entity_field.manager', '@entity.last_installed_schema.repository']
+
+  apigee_api_catalog.breadcrumb:
+    class: Drupal\apigee_api_catalog\ApigeeApiCatalogBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1000 }
