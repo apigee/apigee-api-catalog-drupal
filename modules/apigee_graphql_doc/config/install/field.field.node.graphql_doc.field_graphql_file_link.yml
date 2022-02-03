@@ -10,8 +10,8 @@ id: node.graphql_doc.field_graphql_file_link
 field_name: field_graphql_file_link
 entity_type: node
 bundle: graphql_doc
-label: 'URL to GraphQL file'
-description: ''
+label: 'GraphQL Endpoint'
+description: 'Enter the the GraphQL endpoint'
 required: true
 translatable: true
 default_value: {  }

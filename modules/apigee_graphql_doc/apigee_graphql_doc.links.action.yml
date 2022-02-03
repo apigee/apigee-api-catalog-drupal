@@ -1,6 +1,6 @@
 node.graphql_doc.add_form:
   route_name: node.add
-  title: 'Add GraphQL Doc'
+  title: 'GraphQL Doc'
   route_parameters:
     node_type: 'graphql_doc'
   appears_on:

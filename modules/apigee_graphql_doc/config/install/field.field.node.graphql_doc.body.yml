@@ -10,7 +10,7 @@ id: node.graphql_doc.body
 field_name: body
 entity_type: node
 bundle: graphql_doc
-label: Body
+label: Description
 description: ''
 required: false
 translatable: true

@@ -1,6 +1,6 @@
-name: Apigee GraphQL Doc
+name: GraphQL for Apigee
 type: module
-description: Apigee GraphQL Doc
+description: GraphQL for Apigee
 package: Apigee
 core_version_requirement: ^9
 dependencies:
