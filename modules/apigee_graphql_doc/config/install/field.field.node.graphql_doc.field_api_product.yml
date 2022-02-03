@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_api_product
+    - node.type.graphql_doc
+id: node.graphql_doc.field_api_product
+field_name: field_api_product
+entity_type: node
+bundle: graphql_doc
+label: 'API Product'
+description: 'Apigee API Product'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:api_product'
+  handler_settings:
+    target_bundles: null
+    auto_create: false
+field_type: entity_reference

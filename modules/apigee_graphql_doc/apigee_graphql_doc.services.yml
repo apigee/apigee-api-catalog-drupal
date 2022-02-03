@@ -1,0 +1,17 @@
+services:
+  apigee_graphql_doc.event_subscriber:
+    class: Drupal\apigee_graphql_doc\EventSubscriber\ApigeeGraphqlDocSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
+
+  apigee_graphql_doc.uninstall_validator:
+    class: Drupal\apigee_graphql_doc\ApigeeGraphqlDocUninstallValidator
+    tags:
+      - { name: module_install.uninstall_validator }
+    arguments: ['@entity_type.manager', '@string_translation']
+
+  apigee_graphql_doc.breadcrumb:
+    class: Drupal\apigee_graphql_doc\ApigeeGraphqlDocBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1000 }
