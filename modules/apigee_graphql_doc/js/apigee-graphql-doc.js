@@ -32,15 +32,7 @@
             ReactDOM.render(
               React.createElement(GraphiQL, {
                 fetcher: GraphiQL.createFetcher({ url: field.graphqlUrls[fieldDelta] }),
-                // query: parameters.query,
-                // variables: parameters.variables,
-                // headers: parameters.headers,
-                // operationName: parameters.operationName,
-                // onEditQuery: onEditQuery,
-                // onEditVariables: onEditVariables,
-                // onEditHeaders: onEditHeaders,
                 defaultSecondaryEditorOpen: true,
-                // onEditOperationName: onEditOperationName,
                 headerEditorEnabled: true,
                 shouldPersistHeaders: true,
               }),

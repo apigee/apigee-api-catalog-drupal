@@ -33,7 +33,7 @@ graphiql:
     url: https://github.com/graphql/graphiql/blob/main/LICENSE
     gpl-compatible: true
   js:
-    https://unpkg.com/graphiql@1.5.1/graphiql.min.js: {type: external, minified: true}
+    https://unpkg.com/graphiql@1.5.16/graphiql.min.js: {type: external, minified: true}
   css:
     component:
-      https://unpkg.com/graphiql@1.5.1/graphiql.min.css: {type: external, minified: true}
+      https://unpkg.com/graphiql@1.5.16/graphiql.min.css: {type: external, minified: true}
