@@ -10,10 +10,10 @@ id: node.async_doc.field_async_file_link
 field_name: field_async_file_link
 entity_type: node
 bundle: async_doc
-label: 'URL to AsyncAPI file'
-description: ''
+label: 'AsyncAPI endpoint'
+description: 'Enter the AsyncAPI endpoint'
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

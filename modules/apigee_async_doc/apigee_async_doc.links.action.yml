@@ -1,6 +1,6 @@
 node.async_doc.add_form:
   route_name: node.add
-  title: 'Add Async Doc'
+  title: 'AsyncAPI Doc'
   route_parameters:
     node_type: 'async_doc'
   appears_on:

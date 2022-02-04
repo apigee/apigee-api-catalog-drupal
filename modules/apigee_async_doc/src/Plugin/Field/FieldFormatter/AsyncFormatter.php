@@ -100,4 +100,5 @@ class AsyncFormatter extends FormatterBase {
     }
     return $element;
   }
+
 }

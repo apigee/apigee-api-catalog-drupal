@@ -18,20 +18,12 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 3
+    weight: 1
     settings: {  }
     third_party_settings: {  }
     region: content
-  field_categories:
-    weight: 2
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
   field_async_file_link:
-    weight: 1
+    weight: 3
     label: hidden
     settings:
       trim_length: 80

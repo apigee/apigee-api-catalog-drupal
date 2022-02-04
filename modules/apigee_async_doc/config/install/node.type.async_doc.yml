@@ -7,8 +7,8 @@ dependencies:
     module:
       - apigee_async_doc
 type: async_doc
-name: 'Async Doc'
-description: 'Use <em>Async Doc</em> content to get Aync Doc.'
+name: 'AsyncAPI Doc'
+description: 'Use <em>AsyncAPI Doc</em> to document AyncAPI.'
 help: ''
 new_revision: false
 display_submitted: false

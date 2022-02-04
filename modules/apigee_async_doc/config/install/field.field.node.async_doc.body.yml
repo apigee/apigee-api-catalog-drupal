@@ -10,7 +10,7 @@ id: node.async_doc.body
 field_name: body
 entity_type: node
 bundle: async_doc
-label: Body
+label: Description
 description: ''
 required: false
 translatable: true

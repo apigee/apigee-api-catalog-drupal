@@ -1,9 +1,8 @@
-name: Apigee Async Doc
+name: AsyncAPI for Apigee
 type: module
-description: Apigee Async Doc
+description: AsyncAPI for Apigee
 package: Apigee
-core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9
 dependencies:
   - apigee_api_catalog
   - file_link
