@@ -141,3 +141,10 @@ function apigee_api_catalog_update_8807() {
 function apigee_api_catalog_update_8808() {
   return \Drupal::service('apigee_api_catalog.updates')->update8808();
 }
+
+/**
+ * Rename API Doc content type as OpenAPI Doc.
+ */
+function apigee_api_catalog_update_8811() {
+  return \Drupal::service('apigee_api_catalog.updates')->update8809();
+}

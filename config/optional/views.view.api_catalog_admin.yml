@@ -10,7 +10,7 @@ dependencies:
     - node
     - user
 id: api_catalog_admin
-label: 'API Catalog Admin'
+label: 'APIDoc Catalog Admin'
 module: views
 description: 'The administrative view of the API catalog for adding and updating API specifications.'
 tag: ''
@@ -623,7 +623,7 @@ display:
           entity_type: node
           entity_field: status
       sorts: {  }
-      title: 'API Doc Catalog'
+      title: 'APIDoc Catalog'
       header: {  }
       footer: {  }
       empty:

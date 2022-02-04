@@ -1,6 +1,6 @@
 node.apidoc.add_form:
   route_name: node.add
-  title: 'Add API Doc'
+  title: 'OpenAPI'
   route_parameters:
     node_type: 'apidoc'
   appears_on:
