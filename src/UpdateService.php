@@ -419,11 +419,11 @@ class UpdateService {
   public function update8809() {
     // Display field_api_product on the form display.
     \Drupal::entityTypeManager()
-    ->getStorage('node_type')
-    ->load('apidoc')
-    ->set('name', 'OpenAPI Doc')
-    ->set('description', 'Use <em>OpenAPI Docs</em> to document OpenAPIs')
-    ->save();
+      ->getStorage('node_type')
+      ->load('apidoc')
+      ->set('name', 'OpenAPI Doc')
+      ->set('description', 'Use <em>OpenAPI Docs</em> to document OpenAPIs')
+      ->save();
   }
 
   /**

@@ -97,8 +97,8 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $assert->pageTextContains('There are no API docs yet.');
 
     // User can add entity content.
-    $assert->linkExists('Add API Doc');
-    $this->clickLink('Add API Doc');
+    $assert->linkExists('Add OpenAPI Doc');
+    $this->clickLink('Add OpenAPI Doc');
 
     // Fields should have proper defaults.
     $assert->fieldValueEquals('title[0][value]', '');
@@ -132,7 +132,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $this->getSession()->getPage()->pressButton(t('Save'));
 
     $assert->statusCodeEquals(200);
-    $assert->pageTextContains(new FormattableMarkup('API Doc @name has been created.', ['@name' => $random_name]));
+    $assert->pageTextContains(new FormattableMarkup('OpenAPI Doc @name has been created.', ['@name' => $random_name]));
 
     // Entity listed.
     $assert->linkExists($random_name);
