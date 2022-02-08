@@ -1,17 +1,3 @@
-# Integration module library for Asyncapi plugin.
-apigee_async_doc_integration:
-  version: 1.0
-  js:
-    js/apigee-async-doc.js: {}
-  css:
-    component:
-      css/apigee-async-doc.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
-    - apigee_async_doc/reactjs
-    - apigee_async_doc/asyncapi
-
 # Third-party library (CDN).
 reactjs:
   remote: https://reactjs.org
@@ -35,6 +21,3 @@ asyncapi:
   js:
     https://unpkg.com/@webcomponents/webcomponentsjs@2.6.0/webcomponents-bundle.js: {type: external, minified: true}
     https://unpkg.com/@asyncapi/web-component@0.24.19/lib/asyncapi-web-component.js: {type: external, minified: true}
-  css:
-    component:
-      https://unpkg.com/@asyncapi/react-component@0.24.19/lib/styles/fiori.css: {type: external, minified: true}

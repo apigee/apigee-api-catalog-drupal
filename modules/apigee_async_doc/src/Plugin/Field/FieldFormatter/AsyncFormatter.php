@@ -24,7 +24,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 
 /**
- * Plugin implementation of the 'Async' formatter.
+ * Plugin implementation of the 'AsyncAPI' formatter.
  *
  * @FieldFormatter(
  *   id = "apigee_async_doc_async",
@@ -86,16 +86,8 @@ class AsyncFormatter extends FormatterBase {
       $element['#attached'] = [
         'library' => [
           'apigee_async_doc/reactjs',
-          'apigee_async_doc/graphiql',
-          'apigee_async_doc/apigee_async_doc_integration',
+          'apigee_async_doc/asyncapi',
         ],
-        'drupalSettings' => [
-          'apigeeAsyncDocFormatter' => [
-            $this->fieldDefinition->getName() => [
-              'asyncUrls' => $async_urls,
-            ]
-          ]
-        ]
       ];
     }
     return $element;

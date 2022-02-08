@@ -29,8 +29,9 @@
   */
 #}
 <div id="apigee-async-doc-{{ field_name }}-{{ delta }}">
+  {% set module_path = _self|split('/templates') %}
   <asyncapi-component
     schemaUrl="{{ link }}"
-    cssImportPath="https://unpkg.com/@asyncapi/react-component@0.24.14/lib/styles/fiori.css">
+    cssImportPath="{{ url('<front>') }}{{ module_path[0] }}/css/apigee-async-doc.css">
   </asyncapi-component>
 </div>

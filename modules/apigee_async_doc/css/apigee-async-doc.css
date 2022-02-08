@@ -15,6 +15,18 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-.graphiql-container {
-  height: 99vh;
+ @import url(https://unpkg.com/@asyncapi/react-component@0.24.14/lib/styles/fiori.css);
+
+/* Customization as per Apigee */
+.asyncapi,
+.asyncapi__tag,
+.asyncapi__server-expand-icon:before,
+.asyncapi__error {
+  font-family: Roboto,sans-serif;
+}
+.asyncapi__code-body {
+  font-family: courier;
+}
+h1, h2, h3 {
+  font-weight: 300;
 }
