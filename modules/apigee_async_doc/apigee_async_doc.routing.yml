@@ -1,7 +1,0 @@
-apigee_async_doc.confirm_remove_views_references:
-  path: '/admin/modules/uninstall/apigee-async-doc/confirm-remove-views-references'
-  defaults:
-    _title: 'Confirm remove views references'
-    _form: 'Drupal\apigee_async_doc\Form\ConfirmRemoveViewsReferencesForm'
-  requirements:
-    _permission: 'administer modules'

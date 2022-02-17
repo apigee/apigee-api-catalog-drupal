@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asyncapi_spec_source_type
+    - node.type.asyncapi_doc
+  module:
+    - options
+id: node.asyncapi_doc.field_asyncapi_spec_source_type
+field_name: field_asyncapi_spec_source_type
+entity_type: node
+bundle: asyncapi_doc
+label: 'Specification source type'
+description: 'Indicate if the AsyncAPI spec will be provided as a file for upload or a URL.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

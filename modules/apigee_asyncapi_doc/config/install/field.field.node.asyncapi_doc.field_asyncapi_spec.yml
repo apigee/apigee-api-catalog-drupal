@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asyncapi_spec
+    - node.type.asyncapi_doc
+  module:
+    - file
+id: node.asyncapi_doc.field_asyncapi_spec
+field_name: field_asyncapi_spec
+entity_type: node
+bundle: asyncapi_doc
+label: 'AsyncAPI specification'
+description: 'The spec snapshot.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: asyncapi_specs
+  file_extensions: 'yaml json'
+  max_filesize: ''
+  description_field: false
+field_type: file
