@@ -15,7 +15,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
- @import url(https://unpkg.com/@asyncapi/react-component@0.24.19/lib/styles/fiori.css);
+ @import url(https://unpkg.com/@asyncapi/react-component/lib/styles/fiori.css);
 
 /* Customization as per Apigee */
 .asyncapi,
