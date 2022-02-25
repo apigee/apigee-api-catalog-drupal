@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asyncapi_spec_file_link
+    - node.type.asyncapi_doc
+  module:
+    - file_link
+id: node.asyncapi_doc.field_asyncapi_spec_file_link
+field_name: field_asyncapi_spec_file_link
+entity_type: node
+bundle: asyncapi_doc
+label: 'AsyncAPI endpoint'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+  file_extensions: ''
+  no_extension: true
+  deferred_request: false
+field_type: file_link

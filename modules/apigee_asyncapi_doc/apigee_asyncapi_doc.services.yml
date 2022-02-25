@@ -1,0 +1,17 @@
+services:
+  apigee_asyncapi_doc.event_subscriber:
+    class: Drupal\apigee_asyncapi_doc\EventSubscriber\ApigeeAsyncapiDocSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
+
+  apigee_asyncapi_doc.uninstall_validator:
+    class: Drupal\apigee_asyncapi_doc\ApigeeAsyncapiDocUninstallValidator
+    tags:
+      - { name: module_install.uninstall_validator }
+    arguments: ['@entity_type.manager', '@string_translation']
+
+  apigee_asyncapi_doc.breadcrumb:
+    class: Drupal\apigee_asyncapi_doc\ApigeeAsyncapiDocBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1000 }

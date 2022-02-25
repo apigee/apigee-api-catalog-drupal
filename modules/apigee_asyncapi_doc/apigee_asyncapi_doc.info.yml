@@ -1,0 +1,9 @@
+name: AsyncAPI for Apigee
+type: module
+description: AsyncAPI for Apigee
+package: Apigee
+core_version_requirement: ^9
+dependencies:
+  - apigee_api_catalog
+  - file_link
+  - text

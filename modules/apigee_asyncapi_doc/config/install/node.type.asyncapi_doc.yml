@@ -1,0 +1,16 @@
+langcode: en
+dependencies:
+  module:
+    - apigee_api_catalog
+    - apigee_asyncapi_doc
+  enforced:
+    module:
+      - apigee_asyncapi_doc
+type: asyncapi_doc
+name: 'AsyncAPI Doc'
+description: 'Use <em>AsyncAPI Doc</em> to document AsyncAPI.'
+help: ''
+new_revision: false
+display_submitted: false
+preview_mode: 0
+status: true
