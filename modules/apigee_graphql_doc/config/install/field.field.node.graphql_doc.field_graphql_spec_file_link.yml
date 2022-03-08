@@ -2,18 +2,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_graphql_file_link
+    - field.storage.node.field_graphql_spec_file_link
     - node.type.graphql_doc
   module:
     - file_link
-id: node.graphql_doc.field_graphql_file_link
-field_name: field_graphql_file_link
+id: node.graphql_doc.field_graphql_spec_file_link
+field_name: field_graphql_spec_file_link
 entity_type: node
 bundle: graphql_doc
 label: 'GraphQL Endpoint'
 description: 'Enter the the GraphQL endpoint'
-required: true
-translatable: true
+required: false
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

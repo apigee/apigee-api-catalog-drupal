@@ -5,3 +5,16 @@ apigee_graphql_doc.confirm_remove_views_references:
     _form: 'Drupal\apigee_graphql_doc\Form\ConfirmRemoveViewsReferencesForm'
   requirements:
     _permission: 'administer modules'
+
+entity.node.graphqlserver:
+  path: '/node/{node}/graphql'
+  defaults:
+    _title: 'Mock graphql server'
+    _controller: '\Drupal\apigee_graphql_doc\Controller\ApigeeGraphqlServerController::build'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
+    node: \d+
+  options:
+      node:
+        type: entity:node

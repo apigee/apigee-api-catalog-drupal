@@ -21,21 +21,140 @@
 /**
  * Primary module hooks for Apigee GraphQL Doc module.
  *
- * @DCG
- * This file is no longer required in Drupal 8.
- * @see https://www.drupal.org/node/2217931
  */
 
- /**
-  * Implements hook_theme().
-  */
- function apigee_graphql_doc_theme($existing, $type, $theme, $path) {
-   return [
-     'apigee_graphql_doc_file_link_field_item' => [
-       'variables' => [
-         'field_name' => NULL,
-         'delta' => NULL,
-       ],
-     ],
-   ];
- }
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_theme().
+ */
+function apigee_graphql_doc_theme($existing, $type, $theme, $path) {
+  return [
+    'apigee_graphql_doc_file_link_field_item' => [
+      'variables' => [
+        'field_name' => NULL,
+        'delta' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function apigee_graphql_doc_node_insert(EntityInterface $entity) {
+  if ($entity->bundle() == 'graphql_doc') {
+    drupal_register_shutdown_function('_apigee_graphql_doc_mockserver_uri_update',$entity);
+  }
+}
+
+function _apigee_graphql_doc_mockserver_uri_update(EntityInterface $entity) {
+
+  if ($entity->get('field_graphql_spec_source_type')->value === 'file') {
+    $spec_value = $entity->get('field_graphql_spec')->isEmpty() ? [] : $entity->get('field_graphql_spec')->getValue()[0];
+    if (!empty($spec_value['target_id'])) {
+      /* @var \Drupal\file\Entity\File $file */
+      $file = \Drupal::entityTypeManager()
+        ->getStorage('file')
+        ->load($spec_value['target_id']);
+
+      if ($file) {
+        $path = '/node/' . $entity->id() . '/graphql';
+        $entity->set('field_graphql_spec_file_link', ['uri' => Url::fromUri('base:' . $path , ['absolute' => TRUE])->toString()]);
+        $entity->save();
+        }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function apigee_graphql_doc_node_presave(EntityInterface $entity) {
+
+  if ($entity->bundle() != 'graphql_doc') {
+    return;
+  }
+
+  if ($entity->get('field_graphql_spec_source_type')->value === 'file') {
+    $spec_value = $entity->get('field_graphql_spec')->isEmpty() ? [] : $entity->get('field_graphql_spec')->getValue()[0];
+    if (!empty($spec_value['target_id'])) {
+      /* @var \Drupal\file\Entity\File $file */
+      $file = \Drupal::entityTypeManager()
+        ->getStorage('file')
+        ->load($spec_value['target_id']);
+
+
+      if ($file) {
+        $path = '/node/' . $entity->id() . '/graphql';
+        $entity->set('field_graphql_spec_file_link', ['uri' => Url::fromUri('base:' . $path , ['absolute' => TRUE])->toString()]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function apigee_graphql_doc_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $node = $form_state->getFormObject()->getEntity();
+  if ($node->bundle() != 'graphql_doc') {
+    return;
+  }
+
+  $form['field_graphql_spec']['#states'] = [
+    'visible' => [
+      ':input[name="field_graphql_spec_source_type"]' => ['value' => 'file'],
+    ],
+  ];
+
+  // @todo: #states does not work on managed files.
+  // @see: https://www.drupal.org/project/drupal/issues/2847425
+  $form['field_graphql_spec']['widget'][0]['#states'] = [
+    'required' => [
+      ':input[name="field_graphql_spec_source_type"]' => ['value' => 'file'],
+    ],
+  ];
+
+  $form['field_graphql_spec_file_link']['#states'] = [
+    'visible' => [
+      [':input[name="field_graphql_spec_source_type"]' => ['value' => 'url']],
+    ],
+  ];
+
+  $form['field_graphql_spec_file_link']['widget'][0]['uri']['#states'] = [
+    'required' => [
+      [':input[name="field_graphql_spec_source_type"]' => ['value' => 'url']],
+    ],
+  ];
+
+  $form['#validate'][] = '_apigee_graphql_form_node_form_validate';
+}
+
+/**
+ * Form validator for the "graphql_doc" node bundle.
+ *
+ * @param array $form
+ *   The form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _apigee_graphql_form_node_form_validate(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  if (empty($values['field_graphql_spec_source_type'])) {
+    return;
+  }
+
+  // Make sure the field_graphql_spec (file) or field_graphql_spec_file_link (link)
+  // is not empty, according to what was selected as the file source.
+  $source = $values['field_graphql_spec_source_type'][0]['value'] ?: NULL;
+  if ($source == 'file' && empty($values['field_graphql_spec'][0]['fids'][0])) {
+    $form_state->setErrorByName('field_graphql_spec', t('Provide an GraphQL specification file.'));
+  }
+  elseif ($source == 'url' && empty($values['field_graphql_spec_file_link'][0]['uri'])) {
+    $form_state->setErrorByName('field_graphql_spec_file_link', t('Provide the URL to an GraphQL specification file.'));
+  }
+}

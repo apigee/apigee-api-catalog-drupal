@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_graphql_spec
+    - node.type.graphql_doc
+  module:
+    - file
+id: node.graphql_doc.field_graphql_spec
+field_name: field_graphql_spec
+entity_type: node
+bundle: graphql_doc
+label: 'GraphQL specification'
+description: 'The spec snapshot. Please note that it will be rendered by mock server and only schema will be accessible.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: graphql_specs
+  file_extensions: 'graphql'
+  max_filesize: ''
+  description_field: false
+field_type: file
