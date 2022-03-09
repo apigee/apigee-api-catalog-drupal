@@ -1,7 +1,7 @@
 name: 'Apigee API Catalog'
 type: module
 description: 'Display OpenAPI documentation of your APIs to your developers.'
-core_version_requirement: ^8.8.0 || ^9
+core_version_requirement: ^9
 package: 'Apigee'
 dependencies:
 - drupal:text
