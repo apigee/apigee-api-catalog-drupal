@@ -36,7 +36,7 @@
                 headerEditorEnabled: true,
                 shouldPersistHeaders: true,
               }),
-              document.getElementById('apigee-graphql-doc-' + fieldName + '-' + fieldDelta),
+              document.getElementById(`graphql-explorer-${fieldName}-${fieldDelta}`),
             );
           }
         }

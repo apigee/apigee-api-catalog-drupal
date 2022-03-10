@@ -9,31 +9,31 @@ apigee_graphql_doc_integration:
   dependencies:
     - core/jquery
     - core/drupalSettings
-    - apigee_graphql_apidoc/reactjs
-    - apigee_graphql_apidoc/graphiql
+    - apigee_graphql_doc/reactjs
+    - apigee_graphql_doc/graphiql
 
 # Third-party library (CDN).
 reactjs:
   remote: https://reactjs.org
-  version: 17.0.2
+  version: VERSION
   license:
     name: MIT
     url: https://github.com/facebook/react/blob/main/LICENSE
     gpl-compatible: true
   js:
-    https://unpkg.com/react@17.0.2/umd/react.development.js: {type: external, minified: true}
-    https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js: {type: external, minified: true}
+    https://unpkg.com/react/umd/react.production.min.js: {type: external, minified: true}
+    https://unpkg.com/react-dom/umd/react-dom.production.min.js: {type: external, minified: true}
 
 # Third-party library (CDN).
 graphiql:
   remote: https://graphql.org
-  version: 1.5.1
+  version: VERSION
   license:
     name: MIT
     url: https://github.com/graphql/graphiql/blob/main/LICENSE
     gpl-compatible: true
   js:
-    https://unpkg.com/graphiql@1.5.16/graphiql.min.js: {type: external, minified: true}
+    https://unpkg.com/graphiql/graphiql.min.js: {type: external, minified: true}
   css:
     component:
-      https://unpkg.com/graphiql@1.5.16/graphiql.min.css: {type: external, minified: true}
+      https://unpkg.com/graphiql/graphiql.min.css: {type: external, minified: true}

@@ -4,7 +4,9 @@ dependencies:
   config:
     - field.field.node.graphql_doc.body
     - field.field.node.graphql_doc.field_api_product
-    - field.field.node.graphql_doc.field_graphql_file_link
+    - field.field.node.graphql_doc.field_graphql_spec
+    - field.field.node.graphql_doc.field_graphql_spec_file_link
+    - field.field.node.graphql_doc.field_graphql_spec_source_type
     - node.type.graphql_doc
   module:
     - file_link

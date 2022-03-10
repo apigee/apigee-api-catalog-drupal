@@ -16,7 +16,8 @@
         "mglaman/drupal-check": "^1.1",
         "phpmd/phpmd": "2.8.2",
         "phpmetrics/phpmetrics": "^2.5",
-        "phpstan/phpstan": "0.12.42"
+        "phpstan/phpstan": "0.12.42",
+        "webonyx/graphql-php": "^14.11"
     },
     "config": {
         "sort-packages": true

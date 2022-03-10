@@ -63,7 +63,7 @@ class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
       if ($filters['type']['value']['graphql_doc']) {
         unset($filters['type']['value']['graphql_doc']);
       }
-      if ($filters['type_1'] && $filters['type_1']['value']['graphql_doc']) {
+      if (isset($filters['type_1']) && $filters['type_1']['value']['graphql_doc']) {
         unset($filters['type_1']['value']['graphql_doc']);
       }
       $view->display_handler->overrideOption('filters', $filters);

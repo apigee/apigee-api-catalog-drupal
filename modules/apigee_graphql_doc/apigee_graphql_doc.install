@@ -37,7 +37,7 @@
   * Implements hook_uninstall().
   */
  function apigee_graphql_doc_uninstall() {
-   // Allow to delete a async_doc's node type.
+   // Allow to delete a graphql_doc's node type.
    $locked = \Drupal::state()->get('node.type.locked');
    unset($locked['graphql_doc']);
    \Drupal::state()->set('node.type.locked', $locked);
