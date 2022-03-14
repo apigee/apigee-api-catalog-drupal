@@ -1,7 +1,7 @@
 name: GraphQL for Apigee
 type: module
 description: GraphQL for Apigee
-package: Apigee
+package: Apigee (Experimental)
 core_version_requirement: ^9
 dependencies:
   - apigee_api_catalog
