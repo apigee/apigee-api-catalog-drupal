@@ -1,7 +1,7 @@
 name: AsyncAPI for Apigee
 type: module
 description: AsyncAPI for Apigee
-package: Apigee
+package: Apigee (Experimental)
 core_version_requirement: ^9
 dependencies:
   - apigee_api_catalog
