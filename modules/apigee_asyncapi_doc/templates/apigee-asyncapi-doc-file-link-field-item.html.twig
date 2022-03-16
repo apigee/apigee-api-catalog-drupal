@@ -30,7 +30,6 @@
 #}
 <div id="apigee-asyncapi-doc-{{ field_name }}-{{ delta }}">
   {% set module_path = _self|split('/templates') %}
-  <i class="fas fa-expand fa-fw fa-3x">Expand</i>
   <asyncapi-component
     schemaUrl="{{ link }}"
     cssImportPath="{{ url('<front>') }}{{ module_path[0] }}/css/apigee-asyncapi-doc.css">
