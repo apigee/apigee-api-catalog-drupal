@@ -7,7 +7,8 @@
         "php": ">=7.1",
         "drupal/entity": "^1.1",
         "drupal/file_link": "^2.0",
-        "drupal/apigee_edge": "^2.0"
+        "drupal/apigee_edge": "^2.0",
+        "webonyx/graphql-php": "^14.11"
     },
     "require-dev": {
         "cweagans/composer-patches": "^1.6",
@@ -16,8 +17,7 @@
         "mglaman/drupal-check": "^1.1",
         "phpmd/phpmd": "2.8.2",
         "phpmetrics/phpmetrics": "^2.5",
-        "phpstan/phpstan": "0.12.42",
-        "webonyx/graphql-php": "^14.11"
+        "phpstan/phpstan": "0.12.42"
     },
     "config": {
         "sort-packages": true

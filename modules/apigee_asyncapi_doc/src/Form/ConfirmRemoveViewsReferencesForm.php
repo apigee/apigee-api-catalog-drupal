@@ -81,6 +81,9 @@ class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
       if ($filters['type']['value']['asyncapi_doc']) {
         unset($filters['type']['value']['asyncapi_doc']);
       }
+      if (isset($filters['type_1']) && $filters['type_1']['value']['asyncapi_doc']) {
+        unset($filters['type_1']['value']['asyncapi_doc']);
+      }
       $view->display_handler->overrideOption('filters', $filters);
 
       $view->save();
