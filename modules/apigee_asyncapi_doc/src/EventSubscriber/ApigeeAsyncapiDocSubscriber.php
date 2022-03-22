@@ -66,7 +66,7 @@ class ApigeeAsyncapiDocSubscriber implements EventSubscriberInterface {
         if ($filters['type']) {
           $filters['type']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
-        if ($filters['type_1']) {
+        if (isset($filters['type_1'])) {
           $filters['type_1']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         $view->display_handler->overrideOption('filters', $filters);
@@ -83,7 +83,7 @@ class ApigeeAsyncapiDocSubscriber implements EventSubscriberInterface {
         if ($filters['type']) {
           $filters['type']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
-        if ($filters['type_1']) {
+        if (isset($filters['type_1'])) {
           $filters['type_1']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         $view->display_handler->overrideOption('filters', $filters);

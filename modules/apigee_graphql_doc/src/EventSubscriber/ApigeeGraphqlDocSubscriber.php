@@ -83,6 +83,9 @@ class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
         if ($filters['type']) {
           $filters['type']['value']['graphql_doc'] = 'graphql_doc';
         }
+        if (isset($filters['type_1'])) {
+          $filters['type_1']['value']['graphql_doc'] = 'graphql_doc';
+        }
         $view->display_handler->overrideOption('filters', $filters);
 
         $view->save();
