@@ -28,8 +28,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Implements hook_theme().
- */
+* Implements hook_theme().
+*/
 function apigee_graphql_doc_theme($existing, $type, $theme, $path) {
   return [
     'apigee_graphql_doc_file_link_field_item' => [
@@ -42,54 +42,25 @@ function apigee_graphql_doc_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
+ * Implements hook_ENTITY_TYPE_load().
  */
-function apigee_graphql_doc_node_insert(EntityInterface $entity) {
-  if ($entity->bundle() == 'graphql_doc') {
-    drupal_register_shutdown_function('_apigee_graphql_doc_mockserver_uri_update',$entity);
-  }
-}
-
-function _apigee_graphql_doc_mockserver_uri_update(EntityInterface $entity) {
-
-  if ($entity->get('field_graphql_spec_source_type')->value === 'file') {
-    $spec_value = $entity->get('field_graphql_spec')->isEmpty() ? [] : $entity->get('field_graphql_spec')->getValue()[0];
-    if (!empty($spec_value['target_id'])) {
-      /* @var \Drupal\file\Entity\File $file */
-      $file = \Drupal::entityTypeManager()
-        ->getStorage('file')
-        ->load($spec_value['target_id']);
-
-      if ($file) {
-        $path = '/node/' . $entity->id() . '/graphql';
-        $entity->set('field_graphql_spec_file_link', ['uri' => Url::fromUri('base:' . $path , ['absolute' => TRUE])->toString()]);
-        $entity->save();
-        }
+function apigee_graphql_doc_node_load($entities) {
+  foreach ($entities as $entity) {
+    if ($entity->bundle() != 'graphql_doc') {
+      return;
     }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function apigee_graphql_doc_node_presave(EntityInterface $entity) {
-
-  if ($entity->bundle() != 'graphql_doc') {
-    return;
-  }
-
-  if ($entity->get('field_graphql_spec_source_type')->value === 'file') {
-    $spec_value = $entity->get('field_graphql_spec')->isEmpty() ? [] : $entity->get('field_graphql_spec')->getValue()[0];
-    if (!empty($spec_value['target_id'])) {
-      /* @var \Drupal\file\Entity\File $file */
-      $file = \Drupal::entityTypeManager()
-        ->getStorage('file')
-        ->load($spec_value['target_id']);
-
-
-      if ($file) {
-        $path = '/node/' . $entity->id() . '/graphql';
-        $entity->set('field_graphql_spec_file_link', ['uri' => Url::fromUri('base:' . $path , ['absolute' => TRUE])->toString()]);
+    if ($entity->get('field_graphql_spec_source_type')->value === 'file') {
+      $spec_value = $entity->get('field_graphql_spec')->isEmpty() ? [] : $entity->get('field_graphql_spec')->getValue()[0];
+      if (!empty($spec_value['target_id'])) {
+        /* @var \Drupal\file\Entity\File $file */
+        $file = \Drupal::entityTypeManager()
+          ->getStorage('file')
+          ->load($spec_value['target_id']);
+  
+        if ($file) {
+          $path = '/node/' . $entity->id() . '/graphql';
+          $entity->set('field_graphql_spec_file_link', ['uri' => Url::fromUri('base:' . $path , ['absolute' => TRUE])->toString()]);
+        }
       }
     }
   }
