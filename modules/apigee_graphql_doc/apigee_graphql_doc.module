@@ -28,8 +28,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
-* Implements hook_theme().
-*/
+ * Implements hook_theme().
+ */
 function apigee_graphql_doc_theme($existing, $type, $theme, $path) {
   return [
     'apigee_graphql_doc_file_link_field_item' => [
