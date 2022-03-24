@@ -1,7 +1,0 @@
-field.value.apigee_graphql_doc_api_spec:
-  type: mapping
-  label: Default value
-  mapping:
-    value:
-      type: label
-      label: Value
