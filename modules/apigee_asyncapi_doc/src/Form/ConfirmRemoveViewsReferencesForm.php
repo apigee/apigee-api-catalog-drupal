@@ -18,7 +18,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_graphql_doc\Form;
+namespace Drupal\apigee_asyncapi_doc\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -34,14 +34,14 @@ class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'apigee_graphql_doc_confirm_remove_views_references';
+    return 'apigee_asyncapi_doc_confirm_remove_views_references';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to remove references of GraphQL in views before uninstallation of the module?');
+    return $this->t('Are you sure you want to remove references of AsyncAPI for Apigee in views before uninstallation of the module?');
   }
 
   /**
@@ -60,11 +60,11 @@ class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
       $display = $view->getDisplay();
 
       $filters = $view->display_handler->getOption('filters');
-      if ($filters['type']['value']['graphql_doc']) {
-        unset($filters['type']['value']['graphql_doc']);
+      if ($filters['type']['value']['asyncapi_doc']) {
+        unset($filters['type']['value']['asyncapi_doc']);
       }
-      if (isset($filters['type_1']) && $filters['type_1']['value']['graphql_doc']) {
-        unset($filters['type_1']['value']['graphql_doc']);
+      if (isset($filters['type_1']) && $filters['type_1']['value']['asyncapi_doc']) {
+        unset($filters['type_1']['value']['asyncapi_doc']);
       }
       $view->display_handler->overrideOption('filters', $filters);
 
@@ -78,11 +78,11 @@ class ConfirmRemoveViewsReferencesForm extends ConfirmFormBase {
       $display = $view->getDisplay();
 
       $filters = $view->display_handler->getOption('filters');
-      if ($filters['type']['value']['graphql_doc']) {
-        unset($filters['type']['value']['graphql_doc']);
+      if ($filters['type']['value']['asyncapi_doc']) {
+        unset($filters['type']['value']['asyncapi_doc']);
       }
-      if (isset($filters['type_1']) && $filters['type_1']['value']['graphql_doc']) {
-        unset($filters['type_1']['value']['graphql_doc']);
+      if (isset($filters['type_1']) && $filters['type_1']['value']['asyncapi_doc']) {
+        unset($filters['type_1']['value']['asyncapi_doc']);
       }
       $view->display_handler->overrideOption('filters', $filters);
 

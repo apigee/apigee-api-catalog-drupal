@@ -1,7 +1,7 @@
 {#
 /**
-  * @file apigee-graphql-doc-file-link-field-item.html.twig
-  * Copyright 2021 Google Inc.
+  * @file apigee-async-doc-file-link-field-item.html.twig
+  * Copyright 2022 Google Inc.
   *
   * This program is free software; you can redistribute it and/or modify it under
   * the terms of the GNU General Public License version 2 as published by the
@@ -18,17 +18,20 @@
   */
 
 /**
-  * Default theme implementation for Apigee GraphQL Doc field items.
+  * Default theme implementation for Apigee AsyncAPI Doc field items.
   *
   * Available variables:
   * - field_name: The name of the field.
   * - delta: The delta of the field item.
+  * - link: A link to the file.
   *
   * @ingroup themeable
   */
 #}
-
-<div id="apigee-graphql-doc-{{ field_name }}-{{ delta }}">
-  <div class="api-explorer-wrapper" id="graphql-explorer-{{ field_name }}-{{ delta }}">
-  </div>
+<div id="apigee-asyncapi-doc-{{ field_name }}-{{ delta }}">
+  {% set module_path = _self|split('/templates') %}
+  <asyncapi-component
+    schemaUrl="{{ link }}"
+    cssImportPath="{{ url('<front>') }}{{ module_path[0] }}/css/apigee-asyncapi-doc.css">
+  </asyncapi-component>
 </div>

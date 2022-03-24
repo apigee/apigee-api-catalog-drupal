@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Copyright 2021 Google Inc.
+ * Copyright 2022 Google Inc.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2 as published by the
@@ -18,7 +18,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Drupal\apigee_graphql_doc\EventSubscriber;
+namespace Drupal\apigee_asyncapi_doc\EventSubscriber;
 
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Config\ConfigCrudEvent;
@@ -27,9 +27,9 @@ use Drupal\views\Views;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Apigee GraphQL Doc event subscriber.
+ * Apigee AsyncAPI Doc event subscriber.
  */
-class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
+class ApigeeAsyncapiDocSubscriber implements EventSubscriberInterface {
 
   /**
    * The messenger.
@@ -56,7 +56,7 @@ class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
    */
   public function configSave(ConfigCrudEvent $event) {
     $config = $event->getConfig();
-    if ($config->getName() == 'core.entity_view_display.node.graphql_doc.default') {
+    if ($config->getName() == 'core.entity_view_display.node.asyncapi_doc.default') {
 
       $view = Views::getView('apigee_api_catalog');
       if (is_object($view)) {
@@ -64,10 +64,10 @@ class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
 
         $filters = $view->display_handler->getOption('filters');
         if ($filters['type']) {
-          $filters['type']['value']['graphql_doc'] = 'graphql_doc';
+          $filters['type']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         if (isset($filters['type_1'])) {
-          $filters['type_1']['value']['graphql_doc'] = 'graphql_doc';
+          $filters['type_1']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         $view->display_handler->overrideOption('filters', $filters);
 
@@ -81,10 +81,10 @@ class ApigeeGraphqlDocSubscriber implements EventSubscriberInterface {
 
         $filters = $view->display_handler->getOption('filters');
         if ($filters['type']) {
-          $filters['type']['value']['graphql_doc'] = 'graphql_doc';
+          $filters['type']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         if (isset($filters['type_1'])) {
-          $filters['type_1']['value']['graphql_doc'] = 'graphql_doc';
+          $filters['type_1']['value']['asyncapi_doc'] = 'asyncapi_doc';
         }
         $view->display_handler->overrideOption('filters', $filters);
 

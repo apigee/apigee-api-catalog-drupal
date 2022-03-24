@@ -7,8 +7,8 @@ dependencies:
   module:
     - file_link
     - node
-id: node.field_graphql_file_link
-field_name: field_graphql_file_link
+id: node.field_graphql_spec_file_link
+field_name: field_graphql_spec_file_link
 entity_type: node
 type: file_link
 settings: {  }

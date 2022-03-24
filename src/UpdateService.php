@@ -414,6 +414,19 @@ class UpdateService {
   }
 
   /**
+   * Rename API Doc content type as OpenAPI Doc.
+   */
+  public function update8809() {
+    // Display field_api_product on the form display.
+    \Drupal::entityTypeManager()
+      ->getStorage('node_type')
+      ->load('apidoc')
+      ->set('name', 'OpenAPI Doc')
+      ->set('description', 'Use <em>OpenAPI Docs</em> to document OpenAPIs')
+      ->save();
+  }
+
+  /**
    * Get the field map from apidoc fields to node fields.
    *
    * @return array

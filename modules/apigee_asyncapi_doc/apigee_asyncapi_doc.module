@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * @file
+ * Copyright 2022 Google Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License version 2 as published by the
+ * Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Primary module hooks for Apigee AsyncAPI Doc module.
+ *
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+  * Implements hook_theme().
+  */
+function apigee_asyncapi_doc_theme($existing, $type, $theme, $path) {
+   return [
+     'apigee_asyncapi_doc_file_link_field_item' => [
+       'variables' => [
+         'field_name' => NULL,
+         'delta' => NULL,
+         'link' => NULL,
+       ],
+     ],
+   ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function apigee_asyncapi_doc_node_presave(EntityInterface $entity) {
+  /* @var \Drupal\node\NodeInterface $entity */
+
+  if ($entity->bundle() != 'asyncapi_doc') {
+    return;
+  }
+
+  if ($entity->get('field_asyncapi_spec_source_type')->value === 'file') {
+    $spec_value = $entity->get('field_asyncapi_spec')->isEmpty() ? [] : $entity->get('field_asyncapi_spec')->getValue()[0];
+    if (!empty($spec_value['target_id'])) {
+      /* @var \Drupal\file\Entity\File $file */
+      $file = \Drupal::entityTypeManager()
+        ->getStorage('file')
+        ->load($spec_value['target_id']);
+
+      if ($file) {
+        $entity->set('field_asyncapi_spec_file_link', ['uri' => $file->createFileUrl(FALSE)]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function apigee_asyncapi_doc_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $node = $form_state->getFormObject()->getEntity();
+  if ($node->bundle() != 'asyncapi_doc') {
+    return;
+  }
+
+  $form['field_asyncapi_spec']['#states'] = [
+    'visible' => [
+      ':input[name="field_asyncapi_spec_source_type"]' => ['value' => 'file'],
+    ],
+  ];
+
+  // @todo: #states does not work on managed files.
+  // @see: https://www.drupal.org/project/drupal/issues/2847425
+  $form['field_asyncapi_spec']['widget'][0]['#states'] = [
+    'required' => [
+      ':input[name="field_asyncapi_spec_source_type"]' => ['value' => 'file'],
+    ],
+  ];
+
+  $form['field_asyncapi_spec_file_link']['#states'] = [
+    'visible' => [
+      [':input[name="field_asyncapi_spec_source_type"]' => ['value' => 'url']],
+    ],
+  ];
+
+  $form['field_asyncapi_spec_file_link']['widget'][0]['uri']['#states'] = [
+    'required' => [
+      [':input[name="field_asyncapi_spec_source_type"]' => ['value' => 'url']],
+    ],
+  ];
+
+  $form['#validate'][] = '_apigee_asyncapi_form_node_form_validate';
+}
+
+/**
+ * Form validator for the "asyncapi_doc" node bundle.
+ *
+ * @param array $form
+ *   The form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _apigee_asyncapi_form_node_form_validate(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  if (empty($values['field_asyncapi_spec_source_type'])) {
+    return;
+  }
+
+  // Make sure the field_asyncapi_spec (file) or field_asyncapi_spec_file_link (link)
+  // is not empty, according to what was selected as the file source.
+  $source = $values['field_asyncapi_spec_source_type'][0]['value'] ?: NULL;
+  if ($source == 'file' && empty($values['field_asyncapi_spec'][0]['fids'][0])) {
+    $form_state->setErrorByName('field_asyncapi_spec', t('Provide an AsyncAPI specification file.'));
+  }
+  elseif ($source == 'url' && empty($values['field_asyncapi_spec_file_link'][0]['uri'])) {
+    $form_state->setErrorByName('field_asyncapi_spec_file_link', t('Provide the URL to an AsyncAPI specification file.'));
+  }
+}

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - apigee_asyncapi_doc
+  module:
+    - node
+    - options
+id: node.field_asyncapi_spec_source_type
+field_name: field_asyncapi_spec_source_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: file
+      label: File
+    -
+      value: url
+      label: URL
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

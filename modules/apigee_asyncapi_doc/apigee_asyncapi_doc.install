@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Copyright 2021 Google Inc.
+ * Copyright 2022 Google Inc.
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License version 2 as published by the
@@ -26,19 +26,19 @@
  /**
   * Implements hook_install().
   */
- function apigee_graphql_doc_install($is_syncing) {
-   // Do not allow to delete the graphql_doc's node type machine name.
+ function apigee_asyncapi_doc_install($is_syncing) {
+   // Do not allow to delete the asyncapi_doc's node type machine name.
    $locked = \Drupal::state()->get('node.type.locked');
-   $locked['graphql_doc'] = 'graphql_doc';
+   $locked['asyncapi_doc'] = 'asyncapi_doc';
    \Drupal::state()->set('node.type.locked', $locked);
  }
 
  /**
   * Implements hook_uninstall().
   */
- function apigee_graphql_doc_uninstall() {
-   // Allow to delete a graphql_doc's node type.
+ function apigee_asyncapi_doc_uninstall() {
+   // Allow to delete a asyncapi_doc's node type.
    $locked = \Drupal::state()->get('node.type.locked');
-   unset($locked['graphql_doc']);
+   unset($locked['asyncapi_doc']);
    \Drupal::state()->set('node.type.locked', $locked);
  }

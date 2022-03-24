@@ -2,19 +2,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.graphql_doc.body
-    - field.field.node.graphql_doc.field_api_product
-    - field.field.node.graphql_doc.field_graphql_spec
-    - field.field.node.graphql_doc.field_graphql_spec_file_link
-    - field.field.node.graphql_doc.field_graphql_spec_source_type
-    - node.type.graphql_doc
+    - field.field.node.asyncapi_doc.body
+    - field.field.node.asyncapi_doc.field_asyncapi_spec
+    - field.field.node.asyncapi_doc.field_asyncapi_spec_file_link
+    - field.field.node.asyncapi_doc.field_asyncapi_spec_source_type
+    - field.field.node.asyncapi_doc.field_api_product
+    - node.type.asyncapi_doc
   module:
     - file_link
     - path
     - text
-id: node.graphql_doc.default
+id: node.asyncapi_doc.default
 targetEntityType: node
-bundle: graphql_doc
+bundle: asyncapi_doc
 mode: default
 content:
   title:
@@ -35,20 +35,20 @@ content:
       show_summary: false
     third_party_settings: {  }
     region: content
-  field_graphql_spec_source_type:
+  field_asyncapi_spec_source_type:
     type: options_select
     weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_graphql_spec:
+  field_asyncapi_spec:
     type: file_generic
     weight: 5
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-  field_graphql_spec_file_link:
+  field_asyncapi_spec_file_link:
     type: file_link_default
     weight: 6
     region: content
@@ -110,4 +110,3 @@ content:
     region: content
     third_party_settings: {  }
 hidden: { }
-
