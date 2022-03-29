@@ -258,7 +258,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setRevisionable(TRUE)
       ->setSettings([
         'file_directory' => 'apidoc_specs',
-        'file_extensions' => 'yml yaml json',
+        'file_extensions' => 'yaml json',
         'handler' => 'default:file',
         'text_processing' => 0,
       ])
@@ -279,7 +279,7 @@ class ApiDoc extends EditorialContentEntityBase implements ApiDocInterface {
       ->setDescription(t('The URL to an OpenAPI file spec.'))
       ->addConstraint('ApiDocFileLink')
       ->setSettings([
-        'file_extensions' => 'yml yaml json',
+        'file_extensions' => 'yaml json',
         'link_type' => LinkItemInterface::LINK_GENERIC,
         'title' => DRUPAL_DISABLED,
       ])
