@@ -148,3 +148,10 @@ function apigee_api_catalog_update_8808() {
 function apigee_api_catalog_update_8809() {
   return \Drupal::service('apigee_api_catalog.updates')->update8809();
 }
+
+/**
+ * Removed yml extension from field_apidoc_file_link and field_apidoc_spec allowed values.
+ */
+function apigee_api_catalog_update_8810() {
+  return \Drupal::service('apigee_api_catalog.updates')->update8810();
+}
