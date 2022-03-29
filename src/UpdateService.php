@@ -348,6 +348,29 @@ class UpdateService {
   }
 
   /**
+   * Removed .yml file upload for security reasons.
+   */
+  public function update8808() {
+    $fields = [
+      'field_apidoc_file_link',
+      'field_apidoc_spec',
+    ];
+
+    foreach ($fields as $field) {
+      $fieldConfig = FieldConfig::loadByName('node', 'apidoc', $field);
+      // Only look for yml extension.
+      $extensions = $fieldConfig->getSetting('file_extensions');
+      if (strpos($extensions, 'yml') !== FALSE) {
+        // Remove yml extension from allowed values.
+        $fieldConfig->setSetting('file_extensions', 'yaml json')
+          ->save();
+      }
+    }
+
+    return 'Removed the yml extension from field_apidoc_file_link and field_apidoc_spec allowed values for security reasons.';
+  }
+
+  /**
    * Get the field map from apidoc fields to node fields.
    *
    * @return array
