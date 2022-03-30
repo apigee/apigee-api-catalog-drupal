@@ -107,8 +107,8 @@ class ApiDocsAdminTest extends BrowserTestBase {
     // Create a new spec in site.
     $file = File::create([
       'uid' => $this->adminUser->id(),
-      'filename' => 'specA.yml',
-      'uri' => 'public://specA.yml',
+      'filename' => 'specA.yaml',
+      'uri' => 'public://specA.yaml',
       'filemime' => 'application/octet-stream',
       'created' => 1,
       'changed' => 1,
@@ -146,7 +146,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
     // Edit form should have proper values.
     $assert->fieldValueEquals('title[0][value]', $random_name);
     $assert->fieldValueEquals('body[0][value]', $random_description);
-    $assert->linkExists('specA.yml');
+    $assert->linkExists('specA.yaml');
 
     // Delete the entity.
     $this->clickLink('Delete');
