@@ -31,8 +31,7 @@ jobs:
       matrix:
         experimental: [false]
         php-version:
-          - "7.4"
-          - "8.0"
+          - "7.3"
         drupal-core:
           # Should update the following as the minimum supported version from Drupal.org
           - "9.2.16"
