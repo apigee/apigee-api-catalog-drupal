@@ -79,12 +79,12 @@ class SmartdocRoutingTest extends BrowserTestBase {
    * Tests the route subscriber will redirect from smartdoc routes.
    */
   public function testNotFoundSubscriber() {
-    $this->assertEqual($this->apidoc->id(), 1);
+    $this->assertEquals($this->apidoc->id(), 1);
 
     // This needs to run before the alias can be picked up?
     $this->apidoc->toUrl()->toString();
     $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/1', $this->apidoc->language()->getId());
-    $this->assertEqual($alias, '/api/1');
+    $this->assertEquals($alias, '/api/1');
 
     $assert = $this->assertSession();
 
@@ -95,7 +95,7 @@ class SmartdocRoutingTest extends BrowserTestBase {
     static::assertEmpty($this->getSession()->getResponseHeader('location'));
 
     // Test the canonical route uses the /api/* path alias.
-    $this->assertEqual(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH), '/api/1');
+    $this->assertEquals(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH), '/api/1');
 
     // Tests the node alias response.
     $this->drupalGet('/api/1');
@@ -107,8 +107,8 @@ class SmartdocRoutingTest extends BrowserTestBase {
     $response = $this->getHttpClient()->request('GET', $url->toString(), [
       'allow_redirects' => FALSE,
     ]);
-    $this->assertEqual($response->getStatusCode(), 302);
-    $this->assertEqual($response->getHeader('location')[0], '/api/1');
+    $this->assertEquals($response->getStatusCode(), 302);
+    $this->assertEquals($response->getHeader('location')[0], '/api/1');
   }
 
 }
