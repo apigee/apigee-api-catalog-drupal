@@ -110,9 +110,9 @@ jobs:
     - name: "PHPUnit functional javascript"
       run: |
         cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional-javascript --stop-on-failure
+        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional-javascript
 
     - name: "PHPUnit functional"
       run: |
         cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional --stop-on-failure
+        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional
