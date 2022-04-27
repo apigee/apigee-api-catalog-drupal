@@ -74,8 +74,9 @@ jobs:
         composer require wikimedia/composer-merge-plugin
         composer config --json extra.merge-plugin.require '["modules/contrib/apigee_api_catalog/composer.json"]'
         composer config platform.php ${{ matrix.php-version }}
-        composer update --with-all-dependencies
+        composer config --json extra.patches."drupal/core" '{ "Support entities that are neither content nor config entities": "https://www.drupal.org/files/issues/2020-12-02/3042467-50.patch"}'
         composer require --dev phpspec/prophecy-phpunit:^2
+        composer update --with-all-dependencies
 
     # Install drupal using minimal installation profile and enable the module.
     - name: Install Drupal
