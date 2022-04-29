@@ -30,7 +30,7 @@ jobs:
         php-version:
           - "7.4"
           - "8.0"
-          - "8.1"
+          # - "8.1"
         drupal-core:
           # Should update the following as the minimum supported version from Drupal.org
           - "9.2.x"
@@ -92,6 +92,13 @@ jobs:
         cd drupal
         cp modules/contrib/apigee_api_catalog/phpcs.xml.dist .
         vendor/bin/phpcs --standard=./phpcs.xml.dist modules/contrib/apigee_api_catalog -p -s -n --colors
+        composer show > composer.show.txt
+
+    - name: Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: composer-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
+        path: drupal/composer.*
 
     - name: "PHPUnit unit"
       run: |
