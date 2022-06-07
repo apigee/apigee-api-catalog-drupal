@@ -172,7 +172,7 @@ class SpecFetcher implements SpecFetcherInterface {
 
         try {
           $this->checkRequirements($destination);
-          $file = file_save_data($data, $destination . $filename, FileSystemInterface::EXISTS_RENAME);
+          $file = \Drupal::service('file.repository')->writeData($data, $destination . $filename, FileSystemInterface::EXISTS_RENAME);
 
           if (empty($file)) {
             throw new \Exception('Could not save API Doc specification file.');
