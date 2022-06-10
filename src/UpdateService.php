@@ -105,7 +105,7 @@ class UpdateService {
    */
   public function update8802() {
     $module = 'apigee_api_catalog';
-    $configPath = drupal_get_path('module', $module) . '/config';
+    $configPath = \Drupal::service('extension.list.module')->getPath($module) . '/config';
     $configToImport['install'] = [
       'node.type.apidoc',
       'core.base_field_override.node.apidoc.title',
@@ -354,7 +354,7 @@ class UpdateService {
    */
   public function update8808() {
     $module = 'apigee_api_catalog';
-    $configPath = drupal_get_path('module', $module) . '/config';
+    $configPath = \Drupal::service('extension.list.module')->getPath($module) . '/config';
     $configToImport['install'] = [
       'node.type.apidoc',
       'field.field.node.apidoc.field_api_product',

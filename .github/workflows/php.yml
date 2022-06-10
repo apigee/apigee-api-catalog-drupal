@@ -30,7 +30,7 @@ jobs:
         php-version:
           - "7.4"
           - "8.0"
-          # - "8.1"
+          - "8.1"
         drupal-core:
           # Should update the following as the minimum supported version from Drupal.org
           - "9.2.x"
@@ -126,3 +126,10 @@ jobs:
       run: |
         cd drupal
         vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional
+
+    - name: Artifacts
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: browser-output-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
+        path: drupal/sites/simpletest/browser_output/*
