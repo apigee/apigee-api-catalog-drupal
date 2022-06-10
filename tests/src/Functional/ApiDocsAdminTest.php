@@ -45,7 +45,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['views', 'apigee_api_catalog', 'block', 'field_ui'];
+  protected static $modules = ['views', 'apigee_api_catalog', 'block', 'field_ui'];
 
   /**
    * A user with permission to administer site configuration.
