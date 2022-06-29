@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_freeformspec
+    - node.type.freeform_doc
+  module:
+    - text
+id: node.freeform_doc.freeformspec
+field_name: field_freeformspec
+entity_type: node
+bundle: freeform_doc
+label: Specification
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

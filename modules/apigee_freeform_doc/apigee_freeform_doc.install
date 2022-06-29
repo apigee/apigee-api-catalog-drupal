@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Copyright 2022 Google Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License version 2 as published by the
+ * Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Apigee Free-form module.
+ */
+
+ /**
+  * Implements hook_install().
+  */
+ function apigee_freeform_doc_install($is_syncing) {
+   // Do not allow to delete the freeform_doc's node type machine name.
+   $locked = \Drupal::state()->get('node.type.locked');
+   $locked['freeform_doc'] = 'freeform_doc';
+   \Drupal::state()->set('node.type.locked', $locked);
+ }
+
+ /**
+  * Implements hook_uninstall().
+  */
+ function apigee_freeform_doc_uninstall() {
+   // Allow to delete a freeform_doc's node type.
+   $locked = \Drupal::state()->get('node.type.locked');
+   unset($locked['freeform_doc']);
+   \Drupal::state()->set('node.type.locked', $locked);
+ }

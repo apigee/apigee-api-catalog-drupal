@@ -1,0 +1,7 @@
+node.freeform_doc.add_form:
+  route_name: node.add
+  title: 'Free-form Doc'
+  route_parameters:
+    node_type: 'freeform_doc'
+  appears_on:
+    - view.api_catalog_admin.page_1
