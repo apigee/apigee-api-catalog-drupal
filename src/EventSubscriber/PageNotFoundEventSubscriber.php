@@ -24,7 +24,7 @@ use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -65,13 +65,13 @@ class PageNotFoundEventSubscriber implements EventSubscriberInterface {
   /**
    * Redirects to the apidoc canonical route if we have a not found exception.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    *   The exception event.
    */
-  public function onNotFoundException(GetResponseForExceptionEvent $event) {
+  public function onNotFoundException(ExceptionEvent $event) {
     // Check if the request uri matches an apidoc canonical route.
     // Also check for apidoc valid path.
-    if ($event->getException() instanceof NotFoundHttpException
+    if ($event->getThrowable() instanceof NotFoundHttpException
       && ($uri = $event->getRequest()->getRequestUri())
       && $this->pathMatcher->matchPath($uri, '/api/*/*')
       && ([$apitrail, $api, $id] = explode('/', $uri))
