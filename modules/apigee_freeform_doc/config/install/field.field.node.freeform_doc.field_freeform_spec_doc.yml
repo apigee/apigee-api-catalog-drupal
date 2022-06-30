@@ -20,7 +20,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: freeform_specs_doc
-  file_extensions: 'zip, jpg, jpeg, gif, png, txt, html, doc, xls, pdf, ppt, pps'
+  file_extensions: 'zip jpg jpeg gif png txt html doc xls pdf ppt pps'
   max_filesize: ''
   description_field: false
 field_type: file
