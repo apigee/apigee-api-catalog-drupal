@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.node.freeform_doc.body
     - field.field.node.freeform_doc.field_api_product
-    - field.field.node.freeform_doc.field_freeform_spec
+    - field.field.node.freeform_doc.field_freeform_spec_doc
     - field.field.node.freeform_doc.field_freeformspec
     - node.type.freeform_doc
   module:
@@ -34,7 +34,7 @@ content:
       show_summary: false
     third_party_settings: {  }
     region: content
-  field_freeform_spec:
+  field_freeform_spec_doc:
     type: file_generic
     weight: 6
     region: content

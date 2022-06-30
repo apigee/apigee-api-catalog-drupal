@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_freeform_spec_doc
+    - node.type.freeform_doc
+  module:
+    - file
+id: node.freeform_doc.field_freeform_spec_doc
+field_name: field_freeform_spec_doc
+entity_type: node
+bundle: freeform_doc
+label: 'Specification Document'
+description: 'The spec snapshot. Please note that it will be rendered by mock server and only schema will be accessible.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: freeform_specs_doc
+  file_extensions: 'zip, jpg, jpeg, gif, png, txt, html, doc, xls, pdf, ppt, pps'
+  max_filesize: ''
+  description_field: false
+field_type: file
