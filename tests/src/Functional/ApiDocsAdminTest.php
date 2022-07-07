@@ -45,7 +45,12 @@ class ApiDocsAdminTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['views', 'apigee_api_catalog', 'block', 'field_ui'];
+  protected static $modules = [
+    'views',
+    'apigee_api_catalog',
+    'block',
+    'field_ui'
+  ];
 
   /**
    * A user with permission to administer site configuration.
@@ -128,11 +133,19 @@ class ApiDocsAdminTest extends BrowserTestBase {
     $page->fillField('field_apidoc_spec_file_source', 'file');
 
     // Can't use drupalPostForm() to set hidden fields.
-    $this->getSession()->getPage()->find('css', 'input[name="field_apidoc_spec[0][fids]"]')->setValue($file->id());
+    $this->getSession()->getPage()->find(
+      'css', 'input[name="field_apidoc_spec[0][fids]"]'
+    )->setValue($file->id());
     $this->getSession()->getPage()->pressButton(t('Save'));
 
     $assert->statusCodeEquals(200);
-    $assert->pageTextContains(new FormattableMarkup('OpenAPI Doc @name has been created.', ['@name' => $random_name]));
+    $assert->pageTextContains(new FormattableMarkup(
+        'OpenAPI Doc @name has been created.',
+        [
+          '@name' => $random_name
+        ]
+      )
+    );
 
     // Entity listed.
     $assert->linkExists($random_name);
