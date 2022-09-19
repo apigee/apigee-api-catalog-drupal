@@ -10,8 +10,8 @@ id: node.freeform_doc.body
 field_name: body
 entity_type: node
 bundle: freeform_doc
-label: Description
-description: ''
+label: 'API Description'
+description: 'If the summary is not set, the trimmed API Description will end at the last full sentence before 200 character limit.'
 required: false
 translatable: true
 default_value: {  }

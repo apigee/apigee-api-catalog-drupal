@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.freeform_doc.body
     - field.field.node.freeform_doc.field_api_product
     - field.field.node.freeform_doc.field_freeform_spec_doc
-    - field.field.node.freeform_doc.field_freeformspec
     - node.type.freeform_doc
   module:
     - file
@@ -26,23 +25,23 @@ content:
     third_party_settings: {  }
   body:
     type: text_textarea_with_summary
-    weight: 1
+    weight: 2
     settings:
-      rows: 9
-      summary_rows: 3
+      rows: 3
+      summary_rows: 2
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
     region: content
   field_freeform_spec_doc:
     type: file_generic
-    weight: 6
+    weight: 3
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   field_api_product:
-    weight: 3
+    weight: 4
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -51,19 +50,9 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_freeformspec:
-    type: text_textarea_with_summary
-    weight: 5
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
-    weight: 9
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -71,12 +60,12 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 10
+    weight: 6
     region: content
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 11
+    weight: 7
     settings:
       match_operator: CONTAINS
       size: 60
@@ -88,12 +77,12 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 12
+    weight: 8
     region: content
     third_party_settings: {  }
   path:
     type: path
-    weight: 13
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -101,7 +90,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 14
+    weight: 10
     region: content
     third_party_settings: {  }
 hidden: { }

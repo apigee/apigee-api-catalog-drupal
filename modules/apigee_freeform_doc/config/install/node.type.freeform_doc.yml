@@ -8,7 +8,7 @@ dependencies:
     module:
       - apigee_freeform_doc
 type: freeform_doc
-name: 'Freeform Doc'
+name: 'Free-form Doc'
 description: 'Use <em>Free-form Doc</em> content to get Free-form Documentation.'
 help: ''
 new_revision: false
