@@ -12,7 +12,7 @@ env:
   BROWSERTEST_OUTPUT_DIRECTORY: "sites/simpletest/browser_output"
   BROWSERTEST_OUTPUT_BASE_URL: ""
   MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", { "chromeOptions": { "w3c": false } }, "http://127.0.0.1:9515/wd/hub"]'
-  
+
 on:
   push:
   pull_request_target:
@@ -48,7 +48,7 @@ jobs:
     - name: "Install PHP"
       uses: "shivammathur/setup-php@v2"
       with:
-        coverage: "none"
+        coverage: "xdebug"
         php-version: "${{ matrix.php-version }}"
         tools: composer:v2
         extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv, opcache, imagick
@@ -104,16 +104,6 @@ jobs:
         name: composer-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
         path: drupal/composer.*
 
-    - name: "PHPUnit unit"
-      run: |
-        cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite unit
-
-    - name: "PHPUnit kernel"
-      run: |
-        cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite kernel
-
     - uses: nanasess/setup-chromedriver@v1
 
     - run: |
@@ -121,15 +111,18 @@ jobs:
         chromedriver --url-base=/wd/hub &
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
-    - name: "PHPUnit functional javascript"
+    - name: "Run PHPUnit Tests"
+      if: ${{ matrix.drupal-core != '9.4.x' || matrix.php-version != '8.1' }}
       run: |
         cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional-javascript
+        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript modules/contrib/apigee_api_catalog
 
-    - name: "PHPUnit functional"
+    - name: "Run PHPUnit Tests with Code Coverage"
+      if: ${{ matrix.drupal-core == '9.4.x' && matrix.php-version == '8.1' }}
       run: |
         cd drupal
-        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite functional
+        cp modules/contrib/apigee_api_catalog/phpunit.core.xml.dist core/phpunit.xml
+        vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript --coverage-clover /tmp/coverage.xml modules/contrib/apigee_api_catalog
 
     - name: Artifacts
       if: failure()
@@ -137,3 +130,12 @@ jobs:
       with:
         name: browser-output-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
         path: drupal/sites/simpletest/browser_output/*
+
+    - name: Upload Coverage to Codecov
+      if: ${{ matrix.drupal-core == '9.4.x' && matrix.php-version == '8.1' }}
+      uses: codecov/codecov-action@v3
+      with:
+        files: /tmp/coverage.xml
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
