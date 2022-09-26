@@ -1,0 +1,9 @@
+name: Free-form documentation for Apigee
+type: module
+description: Free-form documentation for Apigee
+package: Apigee (Experimental)
+core_version_requirement: ^9
+dependencies:
+  - apigee_api_catalog
+  - file
+  - text
