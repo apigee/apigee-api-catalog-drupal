@@ -66,23 +66,13 @@
   </listeners>
   <!-- Filter for coverage reports. -->
   <filter>
-    <whitelist>
-      <directory>./includes</directory>
-      <directory>./lib</directory>
-      <!-- Extensions can have their own test directories, so exclude those. -->
-      <directory>./modules</directory>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory>../modules/contrib/apigee_api_catalog</directory>
+      <!-- By definition test classes have no tests. -->
       <exclude>
-        <directory>./modules/*/src/Tests</directory>
-        <directory>./modules/*/tests</directory>
+        <directory>../modules/contrib/apigee_api_catalog/tests</directory>
+        <directory>../modules/contrib/apigee_api_catalog/test_modules</directory>
       </exclude>
-      <directory>../modules</directory>
-      <exclude>
-        <directory>../modules/*/src/Tests</directory>
-        <directory>../modules/*/tests</directory>
-        <directory>../modules/*/*/src/Tests</directory>
-        <directory>../modules/*/*/tests</directory>
-      </exclude>
-      <directory>../sites</directory>
-     </whitelist>
+    </whitelist>
   </filter>
 </phpunit>
