@@ -1,0 +1,17 @@
+services:
+  apigee_freeform_doc.event_subscriber:
+    class: Drupal\apigee_freeform_doc\EventSubscriber\ApigeeFreeformDocSubscriber
+    arguments: ['@messenger']
+    tags:
+      - { name: event_subscriber }
+
+  apigee_freeform_doc.uninstall_validator:
+    class: Drupal\apigee_freeform_doc\ApigeeFreeformDocUninstallValidator
+    tags:
+      - { name: module_install.uninstall_validator }
+    arguments: ['@entity_type.manager', '@string_translation']
+
+  apigee_freeform_doc.breadcrumb:
+    class: Drupal\apigee_freeform_doc\ApigeeFreeformDocBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1000 }
