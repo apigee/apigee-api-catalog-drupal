@@ -23,6 +23,7 @@ namespace Drupal\Tests\apigee_api_catalog\Functional;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\TestFileCreationTrait;
 
@@ -117,11 +118,12 @@ class ApiDocsAdminTest extends BrowserTestBase {
       'filemime' => 'application/octet-stream',
       'created' => 1,
       'changed' => 1,
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     file_put_contents($file->getFileUri(), "swagger: '2.0'");
 
     // Save it, inserting a new record.
+    $file->setPermanent();
     $file->save();
     $this->assertTrue($file->id() > 0, 'The file was added to the database.');
 
