@@ -88,12 +88,12 @@ class ApiDocsBreadcrumbTest extends BrowserTestBase {
     $this->drupalGet($url);
 
     // Fetch each node title in the current breadcrumb.
-    $links = $this->xpath('//nav[@class="breadcrumb"]/ol/li/a');
+    $links = $this->xpath('//nav[@class="breadcrumb"]/div/ol/li/a');
     $got_breadcrumb = [];
     foreach ($links as $link) {
       $got_breadcrumb[] = $link->getText();
     }
-    // print_r($got_breadcrumb);
+
     $this->assertEquals($got_breadcrumb[0], 'Home');
     $this->assertEquals($got_breadcrumb[1], 'API Catalog');
 
