@@ -249,7 +249,7 @@ class UpdateService {
     $apidocStorage = $this->entityTypeManager->getStorage('apidoc');
 
     if (!isset($sandbox['progress'])) {
-      $query = $apidocStorage->getQuery();
+      $query = $apidocStorage->getQuery()->accessCheck(FALSE);
       $total = $query->count()->execute();
 
       $sandbox['progress'] = 0;
@@ -264,6 +264,7 @@ class UpdateService {
 
     // Migrate in chunks of 20.
     $query = $apidocStorage->getQuery()
+      ->accessCheck(FALSE)
       ->sort('id')
       ->range($sandbox['progress'], 20);
     $ids = $query->execute();
