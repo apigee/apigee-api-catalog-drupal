@@ -79,7 +79,6 @@ jobs:
         composer config --no-plugins allow-plugins.composer/package-versions-deprecated true
         composer config --no-plugins allow-plugins.cweagans/composer-patches true
         composer config --no-plugins allow-plugins.php-http/discovery true
-        composer require --dev drush/drush
         composer config minimum-stability dev
         composer require wikimedia/composer-merge-plugin
         composer config --json extra.merge-plugin.require '["modules/contrib/apigee_api_catalog/composer.json"]'
