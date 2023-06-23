@@ -22,11 +22,11 @@ namespace Drupal\apigee_api_catalog\Entity;
 
 use Drupal\apigee_api_catalog\Entity\Form\ApiDocSettingsForm;
 use Drupal\Core\Entity\EditorialContentEntityBase;
+use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Entity\EntityChangedTrait;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\link\LinkItemInterface;
 
 /**
