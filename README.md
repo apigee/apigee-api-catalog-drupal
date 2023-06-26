@@ -1,4 +1,4 @@
-# Apigee API Catalog for Drupal 
+# Apigee API Catalog for Drupal
 
 Render OpenAPI specs as documentation to your API developers.
 
