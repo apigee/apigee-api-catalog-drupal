@@ -20,6 +20,7 @@
 namespace Drupal\apigee_api_catalog\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -27,7 +28,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Serialization\Json;
 
 /**
  * Plugin implementation of the SmartDocs OpenAPI spec formatter.

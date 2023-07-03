@@ -20,9 +20,9 @@
 
 namespace Drupal\apigee_graphql_doc\EventSubscriber;
 
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\views\Views;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
