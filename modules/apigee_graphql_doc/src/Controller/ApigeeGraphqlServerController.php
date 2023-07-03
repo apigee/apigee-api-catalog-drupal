@@ -24,8 +24,8 @@
 
 namespace Drupal\apigee_graphql_doc\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Controller\ControllerBase;
 use Drupal\file\Entity\File;
 use Drupal\node\NodeInterface;
 use GraphQL\GraphQL;
