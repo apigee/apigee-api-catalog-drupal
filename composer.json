@@ -7,7 +7,7 @@
         "php": "~8.0 || ~8.1",
         "drupal/entity": "^1.1",
         "drupal/file_link": "^2.0",
-        "drupal/apigee_edge": "^2.0 || dev-drupal10-prep",
+        "drupal/apigee_edge": "^2.0 || ^3.0.0",
         "webonyx/graphql-php": "^14.11"
     },
     "require-dev": {
