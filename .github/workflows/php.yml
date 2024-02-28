@@ -29,18 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.0"
           - "8.1"
           - "8.2"
         drupal-core:
           # Should update the following as the minimum supported version from Drupal.org
-          - "9.5.x"
           - "10.1.x"
-        exclude:
-          - php-version: "8.2"
-            drupal-core: "9.5.x"
-          - php-version: "8.0"
-            drupal-core: "10.1.x"
 
     steps:
 
@@ -116,13 +109,13 @@ jobs:
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
     - name: "Run PHPUnit Tests"
-      if: ${{ matrix.drupal-core != '9.5.x' || matrix.php-version != '8.1' }}
+      if: ${{ matrix.drupal-core != '10.1.x' || matrix.php-version != '8.1' }}
       run: |
         cd drupal
         vendor/bin/phpunit -c core --verbose --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript modules/contrib/apigee_api_catalog
 
     - name: "Run PHPUnit Tests with Code Coverage"
-      if: ${{ matrix.drupal-core == '9.5.x' && matrix.php-version == '8.1' }}
+      if: ${{ matrix.drupal-core == '10.1.x' && matrix.php-version == '8.1' }}
       run: |
         cd drupal
         cp modules/contrib/apigee_api_catalog/phpunit.core.xml.dist core/phpunit.xml
@@ -136,7 +129,7 @@ jobs:
         path: drupal/sites/simpletest/browser_output/*
 
     - name: Upload Coverage to Codecov
-      if: ${{ matrix.drupal-core == '9.5.x' && matrix.php-version == '8.1' }}
+      if: ${{ matrix.drupal-core == '10.1.x' && matrix.php-version == '8.1' }}
       uses: codecov/codecov-action@v3
       with:
         files: /tmp/coverage.xml
