@@ -1,7 +1,7 @@
 name: test_and_lint
 env:
   SIMPLETEST_DB: "sqlite://localhost//tmp/test.sqlite"
-  SIMPLETEST_BASE_URL: "http://127.0.0.1:8000"  
+  SIMPLETEST_BASE_URL: "http://127.0.0.1:8000"
   APIGEE_EDGE_AUTH_TYPE: ${{ secrets.APIGEE_EDGE_AUTH_TYPE }}
   APIGEE_EDGE_ORGANIZATION: ${{ secrets.APIGEE_EDGE_ORGANIZATION }}
   APIGEE_EDGE_USERNAME: ${{ secrets.APIGEE_EDGE_USERNAME }}
@@ -37,10 +37,10 @@ jobs:
           - "10.3.x"
           - "11.1.x"
         exclude:
-          php-version: "8.1"
-          drupal-core: "11.1.x"
-          php-version: "8.2"
-          drupal-core: "11.1.x"
+          - php-version: "8.1"
+            drupal-core: "11.1.x"
+          - php-version: "8.2"
+            drupal-core: "11.1.x"
 
     steps:
 
