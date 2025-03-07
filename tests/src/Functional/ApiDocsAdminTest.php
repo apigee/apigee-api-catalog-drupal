@@ -24,6 +24,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\TestFileCreationTrait;
+use Drupal\TestTools\Random;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 
@@ -129,7 +130,7 @@ class ApiDocsAdminTest extends BrowserTestBase {
 
     $page = $this->getSession()->getPage();
     $random_name = $this->randomMachineName();
-    $random_description = $this->randomGenerator->sentences(5);
+    $random_description = Random::getGenerator()->sentences(5);
     $page->fillField('title[0][value]', $random_name);
     $page->fillField('body[0][value]', $random_description);
     $page->fillField('field_apidoc_spec_file_source', 'file');
