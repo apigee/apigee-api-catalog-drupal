@@ -13,11 +13,11 @@
     "require-dev": {
         "cweagans/composer-patches": "^1.7",
         "drupal/core-dev": "^10.3 || ^11.1",
-        "drush/drush": "^12.4.3 || ^13.3",
+        "drush/drush": "^13.3.3",
         "mglaman/drupal-check": "^1.5",
         "phpmd/phpmd": "^2.15.0",
         "phpmetrics/phpmetrics": "^2.8",
-        "phpstan/phpstan": "^1.12"
+        "phpstan/phpstan": "^2.1.6"
     },
     "config": {
         "sort-packages": true
