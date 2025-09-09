@@ -17,8 +17,7 @@ asyncapi:
   version: VERSION
   license:
     name: Apache License 2.0
-    url: https://github.com/asyncapi/asyncapi-react/blob/master/LICENSE
+    url: https://www.gstatic.com/apigee-devportal/asyncapi/20250908_RC00/asyncapi-web-component.js.LICENSE.txt
     gpl-compatible: true
   js:
-    https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-bundle.js: {type: external, minified: true}
-    https://unpkg.com/@asyncapi/web-component/lib/asyncapi-web-component.js: {type: external, minified: true}
+    https://www.gstatic.com/apigee-devportal/asyncapi/20250908_RC00/asyncapi-web-component.js: {type: external, minified: true}
