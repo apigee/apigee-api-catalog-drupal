@@ -7,7 +7,7 @@
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "drupal/entity": "^1.6",
         "drupal/file_link": "^2.2",
-        "drupal/apigee_edge": "^3.0.8 || ^4.0.0",
+        "drupal/apigee_edge": "dev-appgroup-mint-3.x || dev-appgroup-mint-4.x",
         "webonyx/graphql-php": "^15.19"
     },
     "require-dev": {
