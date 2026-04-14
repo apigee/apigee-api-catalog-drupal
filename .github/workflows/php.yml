@@ -34,12 +34,16 @@ jobs:
         php-version:
           - "8.2"
           - "8.3"
+          - "8.4"
+          - "8.5"
         drupal-core:
           - "10.6.x"
           - "11.3.x"
         exclude:
           - php-version: "8.2"
             drupal-core: "11.3.x"
+          - php-version: "8.5"
+            drupal-core: "10.6.x"
 
     steps:
 

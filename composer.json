@@ -4,7 +4,7 @@
     "type": "drupal-module",
     "description": "Apigee API Catalog for Drupal",
     "require": {
-        "php": "~8.2.0 || ~8.3.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "drupal/entity": "^1.6",
         "drupal/file_link": "^2.2",
         "drupal/apigee_edge": "^3.0.8 || ^4.0.0",
