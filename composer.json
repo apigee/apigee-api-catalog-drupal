@@ -7,7 +7,7 @@
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "drupal/entity": "^1.6",
         "drupal/file_link": "^2.2",
-        "drupal/apigee_edge": "^3.0.8 || ^4.0.0",
+        "drupal/apigee_edge": "dev-issue-1262 || dev-php-8.4-4.x",
         "webonyx/graphql-php": "^15.19"
     },
     "require-dev": {
@@ -23,5 +23,10 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [{
+        "name": "forked-apigee_edge",
+        "type": "vcs",
+        "url": "https://github.com/shailesh-google/apigee-edge-drupal"
+    }]
 }
