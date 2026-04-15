@@ -24,9 +24,21 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [{
-        "name": "forked-apigee_edge",
-        "type": "vcs",
-        "url": "https://github.com/shailesh-google/apigee-edge-drupal"
-    }]
+    "repositories": [
+        {
+            "name": "forked-apigee_edge",
+            "type": "vcs",
+            "url": "https://github.com/shailesh-google/apigee-edge-drupal"
+        },
+        {
+            "name": "forked-apigee-client-php",
+            "type": "vcs",
+            "url": "https://github.com/shailesh-google/apigee-client-php"
+        },
+        {
+            "name": "forked-apigee-mock-client-php",
+            "type": "vcs",
+            "url": "https://github.com/shailesh-google/apigee-mock-client-php"
+        }
+    ]
 }
