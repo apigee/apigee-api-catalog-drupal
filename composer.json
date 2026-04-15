@@ -33,12 +33,14 @@
         {
             "name": "forked-apigee-client-php",
             "type": "vcs",
-            "url": "https://github.com/shailesh-google/apigee-client-php"
+            "url": "https://github.com/shailesh-google/apigee-client-php",
+            "canonical": false
         },
         {
             "name": "forked-apigee-mock-client-php",
             "type": "vcs",
-            "url": "https://github.com/shailesh-google/apigee-mock-client-php"
+            "url": "https://github.com/shailesh-google/apigee-mock-client-php",
+            "canonical": false
         }
     ]
 }
