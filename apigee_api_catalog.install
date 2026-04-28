@@ -155,3 +155,13 @@ function apigee_api_catalog_update_8809() {
 function apigee_api_catalog_update_8810() {
   return \Drupal::service('apigee_api_catalog.updates')->update8810();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Readded yml extension to field_apidoc_file_link and
+ * field_apidoc_spec allowed values.
+ */
+function apigee_api_catalog_update_11001() {
+  return \Drupal::service('apigee_api_catalog.updates')->addYmlExtension();
+}
