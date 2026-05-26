@@ -119,7 +119,7 @@ jobs:
         name: composer-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
         path: drupal/composer.*
 
-    - uses: nanasess/setup-chromedriver@v2
+    - uses: nanasess/setup-chromedriver@master
 
     - run: |
         export DISPLAY=:99
