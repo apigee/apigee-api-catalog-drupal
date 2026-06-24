@@ -47,11 +47,15 @@ jobs:
 
     steps:
 
-    - name: Disable deprecations check for PR
-      if: github.event_name != 'schedule'
+    - name: Configure Deprecations Check
       run: |
-        echo "Disable deprecations check"
-        echo "SYMFONY_DEPRECATIONS_HELPER=disabled" >> $GITHUB_ENV
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          echo "Scheduled cron run: Using precision deprecation filters"
+          echo "SYMFONY_DEPRECATIONS_HELPER=ignoreFile=./modules/contrib/apigee_api_catalog/.deprecation-ignore.txt" >> $GITHUB_ENV
+        else
+          echo "Completely disabling deprecation check"
+          echo "SYMFONY_DEPRECATIONS_HELPER=disabled" >> $GITHUB_ENV
+        fi
 
     - name: "Install PHP"
       uses: "shivammathur/setup-php@v2"
@@ -137,7 +141,8 @@ jobs:
       run: |
         cd drupal
         cp modules/contrib/apigee_api_catalog/phpunit.core.xml.dist core/phpunit.xml
-        vendor/bin/phpunit -c core --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript --coverage-clover /tmp/coverage.xml modules/contrib/apigee_api_catalog
+        # Force-disable deprecation checking for codecov test
+        SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/phpunit -c core --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript --coverage-clover /tmp/coverage.xml modules/contrib/apigee_api_catalog
 
     - name: Artifacts
       if: failure()
