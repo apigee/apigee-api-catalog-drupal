@@ -1,2 +1,29 @@
-# 1. MemoryBackend constructor
+# 1. Yaml parser class setting deprecation
+%The "yaml_parser_class" setting is deprecated%
+
+# 2. TwigSandboxPolicy checkSecurity argument signature update
+%Since twig/twig .*: The "Drupal\\Core\\Template\\TwigSandboxPolicy::checkSecurity\(\)" method will take a 4th%
+
+# 3. Behat Mink ElementInterface return types (getText and waitFor)
+%Method "Behat\\Mink\\Element\\ElementInterface::.*" might add ".*" as a native return type declaration%
+
+# 4. Tabbable jQuery shim asset library removal
+%The core/tabbable.jquery.shim asset library is deprecated%
+
+# 5. Twig spaceless filter deprecation (catches all template paths and line numbers)
+%Since twig/twig .*: Twig Filter "spaceless" is deprecated%
+
+# 6. PHPUnit DefaultResultPrinter internal class notice
+%The "PHPUnit\\TextUI\\DefaultResultPrinter" class is considered internal%
+
+# 7. DrupalListener legacy test runner interface and trait usage
+%The "Drupal\\Tests\\Listeners\\DrupalListener" class (implements|uses) "PHPUnit\\Framework\\TestListener.*" that is deprecated%
+
+# 8. Symfony ContainerAwareTrait dependency injection warning
+%Since symfony/dependency-injection .*: "Symfony\\Component\\DependencyInjection\\ContainerAwareTrait" is deprecated%
+
+# 9. PHPUnit TestCase::addWarning internal method extension notice
+%The "PHPUnit\\Framework\\TestCase::addWarning\(\)" method is considered internal%
+
+# 10. MemoryBackend constructor
 %Calling Drupal\\Core\\Cache\\MemoryBackend::__construct\(\) without the \$time argument is deprecated%
