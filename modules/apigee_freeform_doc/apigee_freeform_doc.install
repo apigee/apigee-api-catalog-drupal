@@ -23,6 +23,8 @@
  * Install, update, and uninstall functions for the Apigee Free-form module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+
  /**
   * Implements hook_install().
   */
@@ -42,3 +44,21 @@
    unset($locked['freeform_doc']);
    \Drupal::state()->set('node.type.locked', $locked);
  }
+
+/**
+ * Re-add yml extension to field_freeform_spec_doc allowed values.
+ */
+function apigee_freeform_doc_update_11001() {
+  $fieldConfig = FieldConfig::loadByName('node', 'freeform_doc', 'field_freeform_spec_doc');
+  if ($fieldConfig) {
+    $extensions = trim((string) $fieldConfig->getSetting('file_extensions'));
+    $extension_list = $extensions === '' ? [] : preg_split('/\s+/', $extensions);
+    if (!in_array('yml', $extension_list, TRUE)) {
+      $extension_list[] = 'yml';
+      $fieldConfig->setSetting('file_extensions', implode(' ', $extension_list))
+        ->save();
+    }
+  }
+
+  return 'Added the yml extension to field_freeform_spec_doc allowed values.';
+}
