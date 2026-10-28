@@ -23,6 +23,8 @@
  * Install, update, and uninstall functions for the Apigee GraphQL module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+
  /**
   * Implements hook_install().
   */
@@ -42,3 +44,21 @@
    unset($locked['asyncapi_doc']);
    \Drupal::state()->set('node.type.locked', $locked);
  }
+
+/**
+ * Re-add yml extension to field_asyncapi_spec allowed values.
+ */
+function apigee_asyncapi_doc_update_11001() {
+  $fieldConfig = FieldConfig::loadByName('node', 'asyncapi_doc', 'field_asyncapi_spec');
+  if ($fieldConfig) {
+    $extensions = trim((string) $fieldConfig->getSetting('file_extensions'));
+    $extension_list = $extensions === '' ? [] : preg_split('/\s+/', $extensions);
+    if (!in_array('yml', $extension_list, TRUE)) {
+      $extension_list[] = 'yml';
+      $fieldConfig->setSetting('file_extensions', implode(' ', $extension_list))
+        ->save();
+    }
+  }
+
+  return 'Added the yml extension to field_asyncapi_spec allowed values.';
+}
