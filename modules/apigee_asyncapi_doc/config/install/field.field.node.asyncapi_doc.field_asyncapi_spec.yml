@@ -20,7 +20,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: asyncapi_specs
-  file_extensions: 'yaml json'
+  file_extensions: 'yml yaml json'
   max_filesize: ''
   description_field: false
 field_type: file
