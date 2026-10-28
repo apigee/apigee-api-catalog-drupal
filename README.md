@@ -79,4 +79,4 @@ development. See [CONTRIBUTING.md] for more information on contributing through 
 
 ## Support
 
-This project, which integrates Drupal 8 with Apigee Edge, is supported by Google.
+This project, which integrates Drupal 10 and 11 with Apigee Edge, is supported by Google.

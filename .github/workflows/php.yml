@@ -15,6 +15,7 @@ env:
 
 on:
   push:
+  # zizmor: ignore[dangerous-triggers] - Checks out trusted base branch ref; required for integration test secrets.
   pull_request_target:
   schedule:
     - cron: '30 01 * * *'
@@ -23,38 +24,39 @@ jobs:
   build:
 
     runs-on: ubuntu-24.04
-    
+    permissions:
+      contents: read
+      security-events: write
+      
     name: "PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal-core }}"
     strategy:
       fail-fast: false
       matrix:
         php-version:
-          - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
+          - "8.5"
         drupal-core:
-          # Should update the following as the minimum supported version from Drupal.org
-          - "10.4.x"
-          - "10.5.x"
-          - "11.1.x"
-          - "11.2.x"
+          - "10.6.x"
+          - "11.3.x"
         exclude:
-          - php-version: "8.1"
-            drupal-core: "11.1.x"
           - php-version: "8.2"
-            drupal-core: "11.1.x"
-          - php-version: "8.1"
-            drupal-core: "11.2.x"
-          - php-version: "8.2"
-            drupal-core: "11.2.x"
+            drupal-core: "11.3.x"
+          - php-version: "8.5"
+            drupal-core: "10.6.x"
 
     steps:
 
-    - name: Disable deprecations check for PR
-      if: github.event_name != 'schedule'
+    - name: Configure Deprecations Check
       run: |
-        echo "Disable deprecations check"
-        echo "SYMFONY_DEPRECATIONS_HELPER=disabled" >> $GITHUB_ENV
+        if [ "${{ github.event_name }}" = "schedule" ]; then
+          echo "Scheduled cron run: Using precision deprecation filters"
+          echo "SYMFONY_DEPRECATIONS_HELPER=ignoreFile=./modules/contrib/apigee_api_catalog/.deprecation-ignore.txt" >> $GITHUB_ENV
+        else
+          echo "Completely disabling deprecation check"
+          echo "SYMFONY_DEPRECATIONS_HELPER=disabled" >> $GITHUB_ENV
+        fi
 
     - name: "Install PHP"
       uses: "shivammathur/setup-php@v2"
@@ -75,9 +77,17 @@ jobs:
       with:
         path: drupal/modules/contrib/apigee_api_catalog
 
+    - name: Delete lock file
+      # Deleting the composer.lock file forces Composer to re-evaluate all dependencies
+      # and ensure the latest, secure versions are resolved during the 'composer update' step.
+      run: |
+        echo "Removing composer.lock to force update latest dependencies."
+        rm -f drupal/composer.lock
+
     - name: "Allow plugins and dev dependencies"
       run: |
         cd drupal
+        composer require "justinrainbow/json-schema:^6.5.1" --no-update
         composer config --no-plugins allow-plugins.composer/installers true
         composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true
         composer config --no-plugins allow-plugins.drupal/core-project-message true
@@ -89,7 +99,7 @@ jobs:
         composer config minimum-stability dev
         composer require wikimedia/composer-merge-plugin
         composer config --json extra.merge-plugin.require '["modules/contrib/apigee_api_catalog/composer.json"]'
-        composer config platform.php ${{ matrix.php-version }}
+        composer config --unset platform.php
         composer config --json extra.patches."drupal/core" '{ "Support entities that are neither content nor config entities": "https://www.drupal.org/files/issues/2020-12-02/3042467-50.patch"}'
         composer update --with-all-dependencies
         composer require --dev phpspec/prophecy-phpunit:^2
@@ -122,17 +132,18 @@ jobs:
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
     - name: "Run PHPUnit Tests"
-      if: ${{ matrix.drupal-core != '10.4.x' || matrix.php-version != '8.2' }}
+      if: ${{ matrix.drupal-core != '10.6.x' || matrix.php-version != '8.2' }}
       run: |
         cd drupal
         vendor/bin/phpunit -c core --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript modules/contrib/apigee_api_catalog
 
     - name: "Run PHPUnit Tests with Code Coverage"
-      if: ${{ matrix.drupal-core == '10.4.x' && matrix.php-version == '8.2' }}
+      if: ${{ matrix.drupal-core == '10.6.x' && matrix.php-version == '8.2' }}
       run: |
         cd drupal
         cp modules/contrib/apigee_api_catalog/phpunit.core.xml.dist core/phpunit.xml
-        vendor/bin/phpunit -c core --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript --coverage-clover /tmp/coverage.xml modules/contrib/apigee_api_catalog
+        # Force-disable deprecation checking for codecov test
+        SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/phpunit -c core --color --group apigee_api_catalog --testsuite unit,kernel,functional,functional-javascript --coverage-clover /tmp/coverage.xml modules/contrib/apigee_api_catalog
 
     - name: Artifacts
       if: failure()
@@ -142,7 +153,7 @@ jobs:
         path: drupal/sites/simpletest/browser_output/*
 
     - name: Upload Coverage to Codecov
-      if: ${{ matrix.drupal-core == '10.4.x' && matrix.php-version == '8.2' }}
+      if: ${{ matrix.drupal-core == '10.6.x' && matrix.php-version == '8.2' }}
       uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
