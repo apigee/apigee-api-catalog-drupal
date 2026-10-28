@@ -448,7 +448,7 @@ class UpdateService {
       }
     }
 
-    return 'Removed the yml extension from field_apidoc_file_link and field_apidoc_spec allowed values for security reasons.';
+    return 'Removed the yml extension from field_apidoc_file_link and field_apidoc_spec allowed values.';
   }
 
   /**
@@ -475,6 +475,29 @@ class UpdateService {
     $map = $this->getFieldMap();
     $map[$old] = $new;
     \Drupal::state()->set('apigee_api_catalog_update_8803_fieldmap', $map);
+  }
+
+  /**
+   * Re-added .yml file upload.
+   */
+  public function addYmlExtension() {
+    $fields = [
+      'field_apidoc_file_link',
+      'field_apidoc_spec',
+    ];
+
+    foreach ($fields as $field) {
+      $fieldConfig = FieldConfig::loadByName('node', 'apidoc', $field);
+      // Check if yml extension present before adding it.
+      $extensions = $fieldConfig->getSetting('file_extensions');
+      if (strpos($extensions, 'yml') === FALSE) {
+        // Readd yml extension from allowed values.
+        $fieldConfig->setSetting('file_extensions', $extensions . ' yml')
+          ->save();
+      }
+    }
+
+    return 'Added the yml extension from field_apidoc_file_link and field_apidoc_spec allowed values.';
   }
 
 }
