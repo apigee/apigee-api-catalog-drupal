@@ -2,21 +2,13 @@ name: test_and_lint
 env:
   SIMPLETEST_DB: "sqlite://localhost//tmp/test.sqlite"
   SIMPLETEST_BASE_URL: "http://127.0.0.1:8000"
-  APIGEE_EDGE_AUTH_TYPE: ${{ secrets.APIGEE_EDGE_AUTH_TYPE }}
-  APIGEE_EDGE_ORGANIZATION: ${{ secrets.APIGEE_EDGE_ORGANIZATION }}
-  APIGEE_EDGE_USERNAME: ${{ secrets.APIGEE_EDGE_USERNAME }}
-  APIGEE_EDGE_PASSWORD: ${{ secrets.APIGEE_EDGE_PASSWORD }}
-  APIGEE_EDGE_INSTANCE_TYPE: ${{ secrets.APIGEE_EDGE_INSTANCE_TYPE }}
-  APIGEE_INTEGRATION_ENABLE: ${{ secrets.APIGEE_INTEGRATION_ENABLE }}
-  APIGEE_EDGE_ENDPOINT: ${{ secrets.APIGEE_EDGE_ENDPOINT }}
   BROWSERTEST_OUTPUT_DIRECTORY: "sites/simpletest/browser_output"
   BROWSERTEST_OUTPUT_BASE_URL: ""
   MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", { "chromeOptions": { "w3c": false } }, "http://127.0.0.1:9515/wd/hub"]'
 
 on:
   push:
-  # zizmor: ignore[dangerous-triggers] - Checks out trusted base branch ref; required for integration test secrets.
-  pull_request_target:
+  pull_request:
   schedule:
     - cron: '30 01 * * *'
 
@@ -26,8 +18,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
-      security-events: write
-      
+
     name: "PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal-core }}"
     strategy:
       fail-fast: false
@@ -59,7 +50,7 @@ jobs:
         fi
 
     - name: "Install PHP"
-      uses: "shivammathur/setup-php@v2"
+      uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
       with:
         coverage: "xdebug"
         php-version: "${{ matrix.php-version }}"
@@ -73,7 +64,7 @@ jobs:
         mkdir -p drupal/sites/simpletest/browser_output
   
     - name: Checkout apigee_api_catalog module
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       with:
         path: drupal/modules/contrib/apigee_api_catalog
 
@@ -119,12 +110,12 @@ jobs:
         composer show > composer.show.txt
 
     - name: Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: composer-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
         path: drupal/composer.*
 
-    - uses: nanasess/setup-chromedriver@v2
+    - uses: nanasess/setup-chromedriver@ef5c64a93512d266b23b80bae95e46a67f30e703 # v2
 
     - run: |
         export DISPLAY=:99
@@ -147,17 +138,17 @@ jobs:
 
     - name: Artifacts
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: browser-output-${{ matrix.php-version }}-${{ matrix.drupal-core }}-artifact
         path: drupal/sites/simpletest/browser_output/*
 
     - name: Upload Coverage to Codecov
       if: ${{ matrix.drupal-core == '10.6.x' && matrix.php-version == '8.2' }}
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: /tmp/coverage.xml
         name: codecov-umbrella
-        fail_ci_if_error: true
+        fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
         verbose: true
